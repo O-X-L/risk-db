@@ -2,6 +2,22 @@
 
 **WARNING**: This project is not yet in a usable state!
 
+This project wants to help admins block large quantities of bad traffic.
+
+Most generic attacks and bots originate from cloud-providers, datacenters or other providers with lax security.
+
+By flagging clients originating from these sources you can achieve a nice security improvement.
+
+See also: [bad-asn-list](https://github.com/brianhama/bad-asn-list)
+
+----
+
+## How it works
+
+We mainly utilize the data of the [PeeringDB](https://www.peeringdb.com/) to map IPs to ASNs and categorize ASNs by analyzing their metadata and peers.
+
+----
+
 ## Report
 
 You can use our reporting API to report IPs!
