@@ -1,7 +1,28 @@
 # Open Risky IP & ASN Database
 
+**WARNING**: This project is not yet in a usable state!
 
-## Examples
+## Report
+
+You can use our reporting API to report IPs!
+
+```bash
+curl -XPOST https://riskyip.oxl.at/report -H 'Accept: application/json' --data-urlencode 'ip=<ip>' --data-urlencode 'category=<bot>' --data-urlencode 'comment=<optional comment>'
+```
+
+Available categories are: `bot, attack, crawler`
+
+----
+
+### Fail2Ban integration
+
+tbd
+
+----
+
+## Use
+
+### Examples
 
 * [ASNs]()
 * [ASNs with comments]()
@@ -10,18 +31,20 @@
 
 ----
 
-## Download
+### Download
 
 * [Networks](https://riskyip.oxl.at/net.txt)
 * [Networks with comments](https://riskyip.oxl.at/net.csv)
 * [ASNs](https://riskyip.oxl.at/asn.txt)
 * [ASNs with comments](https://riskyip.oxl.at/asn.csv)
 
-All lists are free to use. But we have a rate limit of downloading the same list 
+All lists are free to use. But we have a rate limit of downloading the same list - 1 per source IP and Month.
+
+If you want more frequent updates - you can [get a license](https://riskyip.oxl.at/license).
 
 ----
 
-## License
+### License
 
 [Creative Commons Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-sa/4.0/)
 
