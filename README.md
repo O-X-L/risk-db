@@ -8,13 +8,15 @@ Most generic attacks and bots originate from cloud-providers, datacenters or oth
 
 By flagging clients originating from these sources you can achieve a nice security improvement.
 
+The databases created from the gathered data will be and stay open-source!
+
 See also: [bad-asn-list](https://github.com/brianhama/bad-asn-list)
 
 ----
 
 ## How it works
 
-We mainly utilize the data of the [PeeringDB](https://www.peeringdb.com/) to map IPs to ASNs and categorize ASNs by analyzing their metadata and peers.
+TBD
 
 ----
 
@@ -23,44 +25,57 @@ We mainly utilize the data of the [PeeringDB](https://www.peeringdb.com/) to map
 You can use our reporting API to report IPs!
 
 ```bash
-curl -XPOST https://riskyip.oxl.at/report -H 'Accept: application/json' --data-urlencode 'ip=<ip>' --data-urlencode 'category=<bot>' --data-urlencode 'comment=<optional comment>'
+# data: "ip": "<IP>", "cat": "<CATEGORY>", "cmt": "<OPTIONAL COMMENT>"
+
+# minimal example
+curl -XPOST https://risk.oxl.app/api/report --data '{"ip": "1.1.1.1", "cat": "bot"}' -H 'Content-Type: application/json'
+
+# your reporter-reputation will be better if you add a comment (should not exceed 100 characters)
+curl -XPOST https://risk.oxl.app/api/report --data '{"ip": "1.1.1.1", "cat": "attack", "cmt": "Form abuse"}' -H 'Content-Type: application/json'
 ```
 
-Available categories are: `bot, attack, crawler`
+Available categories are: `bot, attack, crawler, rate, hosting, vpn, proxy`
+
+Limits:
+
+* Without token
+  * 500 Requests per IP & 10 min
+  * 5000 Requests per IP & day
+
+* With token
+  * Only Anti-DOS
 
 ----
 
-### Fail2Ban integration
+## Download Databases
 
-tbd
+TBD
 
-----
+Limits:
 
-## Use
-
-### Examples
-
-* [ASNs]()
-* [ASNs with comments]()
-* [Networks]()
-* [Networks with comments]()
+* Without token: 2 Downloads per IP & day
+* With token: 10 Downloads per IP & day
 
 ----
 
-### Download
+## Integrations
 
-* [Networks](https://riskyip.oxl.at/net.txt)
-* [Networks with comments](https://riskyip.oxl.at/net.csv)
-* [ASNs](https://riskyip.oxl.at/asn.txt)
-* [ASNs with comments](https://riskyip.oxl.at/asn.csv)
+### Log-Watcher Script
 
-All lists are free to use. But we have a rate limit of downloading the same list - 1 per source IP and Month.
+A simple script that follows the content of a specific log-file and parses abuser information from it.
 
-If you want more frequent updates - you can [get a license](https://riskyip.oxl.at/license).
+TBD
+
+### Fail2Ban
+
+TBD
+
 
 ----
 
-### License
+## License
+
+### Databases
 
 [Creative Commons Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-sa/4.0/)
 
@@ -69,10 +84,16 @@ If you want more frequent updates - you can [get a license](https://riskyip.oxl.
   Example:
 
   ```html
-  <p>IP address data powered by <a href="https://riskyip.oxl.at">OXL</a></p>
+  <p>IP address data powered by <a href="https://risk.oxl.app">OXL</a></p>
 
   ```
 
 * Allows for commercial usage
 
 * Redistribution must use the same license
+
+----
+
+### Scripts (this repository)
+
+**[GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html)**
