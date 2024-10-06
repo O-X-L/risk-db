@@ -4,7 +4,7 @@
 
 This project wants to help admins block large quantities of bad traffic.
 
-Most generic attacks and bots originate from cloud-providers, datacenters or other providers with lax security.
+Most generic attacks and bots originate from **cloud-providers, datacenters or other providers with lax security**.
 
 By flagging clients originating from these sources you can achieve a nice security improvement.
 
@@ -44,6 +44,22 @@ Limits:
 
 * With token
   * Only Anti-DOS
+
+----
+
+## Usage
+
+You **SHOULD NOT** just drop any requests from these sources.
+
+There might be legit users using a VPN that would match as false-positive.
+
+You might want to **flag** traffic from those sources and restrict their access like:
+
+* Lower the rate-limits
+* Show (more) captcha's on forms
+* Lower lifetime of session cookies
+* Add that flag to your logs so you can use it to analyze the traffic
+* Deny access to administrative locations
 
 ----
 
