@@ -21,9 +21,11 @@ TOKEN=''  # optional supply an API token
 #   regex: \[([:\.a-f0-9]*)\]:[0-9]{1,5}.*\/[0-9]{1,}[^0-9]([0-9]{3})
 #     match1 = ip, match2 = status-code
 
+USER_AGENT='Abuse Reporter'
+
 function report_json() {
   json="$1"
-  curl -s -o /dev/null -XPOST 'https://risk.oxl.app/api/report' --data "$json" -H 'Content-Type: application/json' -H "Token: ${TOKEN}"
+  curl -s -o /dev/null -XPOST 'https://risk.oxl.app/api/report' --data "$json" -H 'Content-Type: application/json' -H "Token: ${TOKEN}" -A "$USER_AGENT"
 }
 
 function log_report() {
@@ -49,6 +51,14 @@ function report_ip_with_msg() {
 }
 
 function analyze_log_line() {
+  l="$1"
+
+  # anti loop
+  if echo "$l" | grep -q "$USER_AGENT"
+  then
+    return
+  fi
+
   if [[ "$l" =~ \[([:\.a-f0-9]*)\]:[0-9]{1,5}.*\/[0-9]{1,}[^0-9]([0-9]{3}) ]]
   then
     ip="${BASH_REMATCH[1]}"
