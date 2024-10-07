@@ -76,6 +76,21 @@ A simple script that follows the content of a specific log-file and parses abuse
 
 See: [report_log_watcher.sh](https://github.com/O-X-L/risky-ip/blob/latest/report_log_watcher.sh)
 
+You can run this script as systemd service:
+
+* Example: [report_log_watcher.service](https://github.com/O-X-L/risky-ip/blob/latest/report_log_watcher.service)
+* Copy script to `/usr/local/bin/risk_report_log_watcher.sh` (*or wherever you want it to be*)
+* Enable/Start:
+
+  ```bash
+  systemctl daemon-reload
+  systemctl enable report-log-watcher.service
+  systemctl start report-log-watcher.service
+  ```
+  
+* You can run the service/script as unprivileged user if you give that user read-privileges on the target log-files
+* You could also watch multiple files with one service
+
 #### Fail2Ban
 
 TBD

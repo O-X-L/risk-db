@@ -1,0 +1,22 @@
+# /etc/systemd/system/report-log-watcher.service
+
+[Unit]
+Description=Service to report abusers to risk.oxl.app
+Documentation=https://github.com/O-X-L/risky-ip
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/risk_report_log_watcher.sh /var/log/<TARGET LOG FILE>
+
+# User=abuse-reporter
+# Group=abuse-reporter
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=abuse-reporter
+
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
