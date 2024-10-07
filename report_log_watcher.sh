@@ -9,6 +9,7 @@ fi
 LOG_FILE="$1"
 
 BLOCK_STATUS='418'  # change to the status-code you use when blocking attacks
+TOKEN=''  # optional supply an API token
 
 # NOTE: Bash regex does not support PCRE like '\d' '\s' or non-greedy '*?'
 
@@ -21,7 +22,7 @@ function report_ip() {
   ip="$1"
   category="$2"
   echo "REPORTING: ${ip} because of ${category}"
-  curl -s -o /dev/null -XPOST https://risk.oxl.app/api/report --data "{\"ip\": \"$ip\", \"cat\": \"$category\"}" -H 'Content-Type: application/json'
+  curl -s -o /dev/null -XPOST https://risk.oxl.app/api/report --data "{\"ip\": \"${ip}\", \"cat\": \"${category}\"}" -H 'Content-Type: application/json' -H "Token: ${TOKEN}"
 }
 
 function analyze_log_line() {
