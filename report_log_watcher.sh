@@ -17,6 +17,7 @@ TOKEN=''  # optional supply an API token
 
 # HAProxy logs
 #   example: 2024-10-06T23:29:22.394984+02:00 lb01 haproxy[94576]: HTTP: [::ffff:93.158.91.10]:45081 [06/Oct/2024:23:29:22.354] fe_main~ be_oxl_files/oxl-files1 1/0/1/1/39 200 165442 - - ---- 4/3/0/0/0 0/0
+#   log-format: '[%ci]:%cp [%tr] %ft %b/%s %TR/%Tw/%Tc/%Tr/%Ta %ST %B %CC %CS %tsc %ac/%fc/%bc/%sc/%rc %sq/%bq %hr %hs %{+Q}r'
 #   regex: \[([:\.a-f0-9]*)\]:[0-9]{1,5}.*\/[0-9]{1,}[^0-9]([0-9]{3})
 #     match1 = ip, match2 = status-code
 
