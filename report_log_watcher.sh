@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# dependencies: curl
+
 if [ -z "$1" ] || [ ! -f "$1" ]
 then
   echo 'Provide a log-file to watch'
@@ -18,11 +20,31 @@ TOKEN=''  # optional supply an API token
 #   regex: \[([:\.a-f0-9]*)\]:[0-9]{1,5}.*\/[0-9]{1,}[^0-9]([0-9]{3})
 #     match1 = ip, match2 = status-code
 
-function report_ip() {
+function report_json() {
+  json="$1"
+  curl -s -o /dev/null -XPOST 'https://risk.oxl.app/api/report' --data "$json" -H 'Content-Type: application/json' -H "Token: ${TOKEN}"
+}
+
+function log_report() {
   ip="$1"
   category="$2"
   echo "REPORTING: ${ip} because of ${category}"
-  curl -s -o /dev/null -XPOST https://risk.oxl.app/api/report --data "{\"ip\": \"${ip}\", \"cat\": \"${category}\"}" -H 'Content-Type: application/json' -H "Token: ${TOKEN}"
+}
+
+function report_ip() {
+  ip="$1"
+  category="$2"
+  log_report "$ip" "$category"
+  report_json "{\"ip\": \"${ip}\", \"cat\": \"${category}\"}"
+}
+
+# NOTE: you may want to add the user-agent as comment ('cmt' field) if you can extract it from your logs
+function report_ip_with_msg() {
+  ip="$1"
+  category="$2"
+  message="$3"
+  log_report "$ip" "$category"
+  report_json "{\"ip\": \"${ip}\", \"cat\": \"${category}\", \"msg\": \"${message}\"}"
 }
 
 function analyze_log_line() {

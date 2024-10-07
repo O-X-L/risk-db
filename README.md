@@ -74,7 +74,7 @@ Limits:
 
 A simple script that follows the content of a specific log-file and parses abuser information from it.
 
-TBD
+See: [report_log_watcher.sh](https://github.com/O-X-L/risky-ip/blob/latest/report_log_watcher.sh)
 
 #### Fail2Ban
 
