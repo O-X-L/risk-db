@@ -21,7 +21,7 @@ function report_ip() {
   ip="$1"
   category="$2"
   echo "REPORTING: ${ip} because of ${category}"
-  curl -XPOST https://risk.oxl.app/api/report --data "{\"ip\": \"$ip\", \"cat\": \"$category\"}" -H 'Content-Type: application/json'
+  curl -s -o /dev/null -XPOST https://risk.oxl.app/api/report --data "{\"ip\": \"$ip\", \"cat\": \"$category\"}" -H 'Content-Type: application/json'
 }
 
 function analyze_log_line() {
