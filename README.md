@@ -30,6 +30,18 @@ You might want to **flag** traffic from those sources and restrict their access 
 
 ----
 
+## Alternative Solutions
+
+This project is still in an early stage.
+
+You may also want to check out these projects: (*not open/free data*)
+
+* [CrowdSec](https://www.crowdsec.net/)
+* [AbuseIP-DB](https://www.abuseipdb.com/)
+* [IPInfo Privacy-DB](https://ipinfo.io/products/proxy-vpn-detection-api)
+
+----
+
 ## Download Databases
 
 TBD
