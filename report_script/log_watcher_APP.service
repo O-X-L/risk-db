@@ -6,10 +6,10 @@ Documentation=https://github.com/O-X-L/risky-ip
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/risk_report_log_watcher.sh /var/log/<TARGET LOG FILE>
+ExecStart=/usr/local/bin/abuse_report_<APP>.sh /var/log/<TARGET LOG FILE>
 
-# User=abuse-reporter
-# Group=abuse-reporter
+User=abuse-reporter
+Group=abuse-reporter
 
 StandardOutput=journal
 StandardError=journal

@@ -55,7 +55,7 @@ curl -XPOST https://risk.oxl.app/api/report --data '{"ip": "1.1.1.1", "cat": "bo
 curl -XPOST https://risk.oxl.app/api/report --data '{"ip": "1.1.1.1", "cat": "attack", "cmt": "Form abuse"}' -H 'Content-Type: application/json'
 ```
 
-Available categories are: `bot, attack, crawler, rate, hosting, vpn, proxy`
+Available categories are: `bot, probe, rate, attack, crawler, hosting, vpn, proxy`
 
 Limits:
 
@@ -70,26 +70,12 @@ Limits:
 
 ### Integrations
 
-#### Log-Watcher Script
+#### Report Script
 
 A simple script that follows the content of a specific log-file and parses abuser information from it.
 
-See: [report_log_watcher.sh](https://github.com/O-X-L/risky-ip/blob/latest/report_log_watcher.sh)
+See: [Report Script](https://github.com/O-X-L/risky-ip/blob/latest/report_script/README.md)
 
-You can run this script as systemd service:
-
-* Example: [report_log_watcher.service](https://github.com/O-X-L/risky-ip/blob/latest/report_log_watcher.service)
-* Copy script to `/usr/local/bin/risk_report_log_watcher.sh` (*or wherever you want it to be*)
-* Enable/Start:
-
-  ```bash
-  systemctl daemon-reload
-  systemctl enable report-log-watcher.service
-  systemctl start report-log-watcher.service
-  ```
-  
-* You can run the service/script as unprivileged user if you give that user read-privileges on the target log-files
-* You could also watch multiple files with one service
 
 #### Fail2Ban
 

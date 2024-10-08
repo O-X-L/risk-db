@@ -10,16 +10,30 @@ fi
 
 LOG_FILE="$1"
 
-BLOCK_STATUS='418'  # change to the status-code you use when blocking attacks
-TOKEN=''  # optional supply an API token
+# change to the status-code you use when blocking attacks
+BLOCK_STATUS_PROBE='418'
+BLOCK_STATUS_BOT='425'
 
-# NOTE: Bash regex does not support PCRE like '\d' '\s' or non-greedy '*?'
+TOKEN=''  # optional supply an API token
+EXCLUDE_REGEX='##########'
+EXCLUDE_IP_REGEX='192.168.|172.16.|10.|127.'
+
+# NOTE: Bash regex does not support PCRE like '\d' '\s' nor non-greedy '*?'
 
 # HAProxy logs
-#   example: 2024-10-06T23:29:22.394984+02:00 lb01 haproxy[94576]: HTTP: [::ffff:93.158.91.10]:45081 [06/Oct/2024:23:29:22.354] fe_main~ be_oxl_files/oxl-files1 1/0/1/1/39 200 165442 - - ---- 4/3/0/0/0 0/0
+#   example: HTTP: [::ffff:93.158.91.0]:45081 [06/Oct/2024:23:29:22.354] fe_main~ be_oxl_files/oxl-files1 1/0/1/1/39 200 165442 - - ---- 4/3/0/0/0 0/0
 #   log-format: '[%ci]:%cp [%tr] %ft %b/%s %TR/%Tw/%Tc/%Tr/%Ta %ST %B %CC %CS %tsc %ac/%fc/%bc/%sc/%rc %sq/%bq %hr %hs %{+Q}r'
 #   regex: \[([:\.a-f0-9]*)\]:[0-9]{1,5}.*\/[0-9]{1,}[^0-9]([0-9]{3})
 #     match1 = ip, match2 = status-code
+
+# rsyslog rule:
+#   file: /etc/rsyslog.d/haproxy.conf
+#   content:
+#     $AddUnixListenSocket /var/lib/haproxy/dev/log
+#     :programname, startswith, "haproxy" {
+#       /var/log/haproxy.log
+#       stop
+#     }
 
 USER_AGENT='Abuse Reporter'
 
@@ -34,20 +48,13 @@ function log_report() {
   echo "REPORTING: ${ip} because of ${category}"
 }
 
-function report_ip() {
-  ip="$1"
-  category="$2"
-  log_report "$ip" "$category"
-  report_json "{\"ip\": \"${ip}\", \"cat\": \"${category}\"}"
-}
-
 # NOTE: you may want to add the user-agent as comment ('cmt' field) if you can extract it from your logs
 function report_ip_with_msg() {
   ip="$1"
   category="$2"
-  message="$3"
+  comment="$3"
   log_report "$ip" "$category"
-  report_json "{\"ip\": \"${ip}\", \"cat\": \"${category}\", \"msg\": \"${message}\"}"
+  report_json "{\"ip\": \"${ip}\", \"cat\": \"${category}\", \"cmt\": \"${comment}\"}"
 }
 
 function analyze_log_line() {
@@ -59,16 +66,39 @@ function analyze_log_line() {
     return
   fi
 
+  # excludes
+  if echo "$l" | grep -E -q "$EXCLUDE_REGEX"
+  then
+    return
+  fi
+
   if [[ "$l" =~ \[([:\.a-f0-9]*)\]:[0-9]{1,5}.*\/[0-9]{1,}[^0-9]([0-9]{3}) ]]
   then
     ip="${BASH_REMATCH[1]}"
     status="${BASH_REMATCH[2]}"
+
+    # excludes by IP
+    if echo "$ip" | grep -E -q "$EXCLUDE_IP_REGEX"
+    then
+      return
+    fi
+
     if [[ "$status" == '429' ]]
     then
-      report_ip "$ip" 'rate'
-    elif [[ "$status" == "$BLOCK_STATUS" ]]
+      report_ip "$ip" 'rate' 'http'
+
+    elif [[ "$status" == "$BLOCK_STATUS_PROBE" ]]
     then
-      report_ip "$ip" 'attack'
+      report_ip "$ip" 'probe' 'http'
+
+    elif [[ "$status" == "$BLOCK_STATUS_BOT" ]]
+    then
+      report_ip "$ip" 'bot' 'http'
+
+    elif [[ "$status" == '400' ]] && echo "$l" | grep -v -q '/api'
+    then
+      report_ip "$ip" 'probe' 'http'
+
     fi
   fi
 }
