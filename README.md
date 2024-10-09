@@ -66,12 +66,31 @@ We recommend the use of our [GeoIP-ASN Database](https://github.com/O-X-L/geoip-
 
 * [Reports of IPv6 in MMDB-format](https://risk.oxl.app/file/risk_ip6_all.mmdb.zip) / [Med](https://risk.oxl.app/file/risk_ip6_med.mmdb.zip) / [High](https://risk.oxl.app/file/risk_ip6_high.mmdb.zip)
 
-
-
-Limits:
+**Limits**:
 
 * Without token: 2 Downloads per IP & day
 * With token: 10 Downloads per IP & day
+
+----
+
+## API
+
+```bash
+# check IP
+curl https://risk.oxl.app/api/check/<IP>
+## example
+curl https://risk.oxl.app/api/check/1.1.1.1
+
+# check ASN/ISP
+curl https://risk.oxl.app/api/asn/<ASN>
+## example
+curl https://risk.oxl.app/api/asn/24940
+```
+
+**Limits**:
+
+* 100 Requests per IP & 10 min
+* 1000 Requests per IP & day
 
 ----
 
@@ -91,7 +110,7 @@ curl -XPOST https://risk.oxl.app/api/report --data '{"ip": "1.1.1.1", "cat": "at
 
 Available categories are: `bot, probe, rate, attack, crawler, hosting, vpn, proxy`
 
-Limits:
+**Limits**:
 
 * Without token
   * 500 Requests per IP & 10 min
