@@ -86,7 +86,7 @@ Limits:
 
 A simple script that follows the content of a specific log-file and parses abuser information from it.
 
-See: [Report Script](https://github.com/O-X-L/risky-ip/blob/latest/report_script/README.md)
+See: [Report Script](https://github.com/O-X-L/risk-db/blob/latest/report_script/README.md)
 
 
 #### Fail2Ban

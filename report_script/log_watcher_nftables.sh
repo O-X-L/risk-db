@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# source: https://github.com/O-X-L/risky-ip
+# source: https://github.com/O-X-L/risk-db
 
 # dependencies: curl
 

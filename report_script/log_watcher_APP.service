@@ -2,7 +2,7 @@
 
 [Unit]
 Description=Service to report abusers to risk.oxl.app
-Documentation=https://github.com/O-X-L/risky-ip
+Documentation=https://github.com/O-X-L/risk-db
 
 [Service]
 Type=simple
