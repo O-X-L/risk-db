@@ -44,7 +44,38 @@ You may also want to check out these projects: (*not open/free data*)
 
 ## Download Databases
 
-TBD
+[![Database Updated At](https://risk.oxl.app/file/updated_at.svg)](https://risk.oxl.app/file/updated_at.svg)
+
+Databases marked with the key `all` include all reports.
+
+The ones marked with `med` and `high` only include reports from reporters that have a certain level of reputation.
+
+### ASN
+
+* [Reports by ASN (all) in JSON-format](https://risk.oxl.app/file/risk_asn_all.json.zip)
+* [Reports by ASN (med) in JSON-format](https://risk.oxl.app/file/risk_asn_med.json.zip)
+* [Reports by ASN (high) in JSON-format](https://risk.oxl.app/file/risk_asn_high.json.zip)
+
+### IPs
+
+* [Reports by IPv4 (all) in JSON-format](https://risk.oxl.app/file/risk_ip4_all.json.zip)
+* [Reports by IPv4 (med) in JSON-format](https://risk.oxl.app/file/risk_ip4_med.json.zip)
+* [Reports by IPv4 (high) in JSON-format](https://risk.oxl.app/file/risk_ip4_high.json.zip)
+
+* [Reports by IPv4 (all) in MMDB-format](https://risk.oxl.app/file/risk_ip4_all.mmdb.zip)
+* [Reports by IPv4 (med) in MMDB-format](https://risk.oxl.app/file/risk_ip4_med.mmdb.zip)
+* [Reports by IPv4 (high) in MMDB-format](https://risk.oxl.app/file/risk_ip4_high.mmdb.zip)
+
+
+* [Reports by IPv6 (all) in JSON-format](https://risk.oxl.app/file/risk_ip6_all.json.zip)
+* [Reports by IPv6 (med) in JSON-format](https://risk.oxl.app/file/risk_ip6_med.json.zip)
+* [Reports by IPv6 (high) in JSON-format](https://risk.oxl.app/file/risk_ip6_high.json.zip)
+
+* [Reports by IPv6 (all) in MMDB-format](https://risk.oxl.app/file/risk_ip6_all.mmdb.zip)
+* [Reports by IPv6 (med) in MMDB-format](https://risk.oxl.app/file/risk_ip6_med.mmdb.zip)
+* [Reports by IPv6 (high) in MMDB-format](https://risk.oxl.app/file/risk_ip6_high.mmdb.zip)
+
+
 
 Limits:
 
