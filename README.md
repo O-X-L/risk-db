@@ -54,18 +54,17 @@ We recommend the use of our [GeoIP-ASN Database](https://github.com/O-X-L/geoip-
 
 ### ASN
 
-* [Reports by ASN in JSON-format](https://risk.oxl.app/file/risk_asn_all.json.zip) / [Med](https://risk.oxl.app/file/risk_asn_med.json.zip)  / [High](https://risk.oxl.app/file/risk_asn_high.json.zip)
+* [Reports of ASN in JSON-format](https://risk.oxl.app/file/risk_asn_all.json.zip) / [Med](https://risk.oxl.app/file/risk_asn_med.json.zip)  / [High](https://risk.oxl.app/file/risk_asn_high.json.zip)
 
 ### IPs
 
-* [Reports by IPv4 in JSON-format](https://risk.oxl.app/file/risk_ip4_all.json.zip) / [Med](https://risk.oxl.app/file/risk_ip4_med.json.zip) / [High](https://risk.oxl.app/file/risk_ip4_high.json.zip)
+* [Reports of IPv4 in JSON-format](https://risk.oxl.app/file/risk_ip4_all.json.zip) / [Med](https://risk.oxl.app/file/risk_ip4_med.json.zip) / [High](https://risk.oxl.app/file/risk_ip4_high.json.zip)
 
-* [Reports by IPv4 in MMDB-format](https://risk.oxl.app/file/risk_ip4_all.mmdb.zip) / [Med](https://risk.oxl.app/file/risk_ip4_med.mmdb.zip) / [High](https://risk.oxl.app/file/risk_ip4_high.mmdb.zip)
+* [Reports of IPv4 in MMDB-format](https://risk.oxl.app/file/risk_ip4_all.mmdb.zip) / [Med](https://risk.oxl.app/file/risk_ip4_med.mmdb.zip) / [High](https://risk.oxl.app/file/risk_ip4_high.mmdb.zip)
 
+* [Reports of IPv6 in JSON-format](https://risk.oxl.app/file/risk_ip6_all.json.zip) / [Med](https://risk.oxl.app/file/risk_ip6_med.json.zip) / [High](https://risk.oxl.app/file/risk_ip6_high.json.zip)
 
-* [Reports by IPv6 in JSON-format](https://risk.oxl.app/file/risk_ip6_all.json.zip) / [Med](https://risk.oxl.app/file/risk_ip6_med.json.zip) / [High](https://risk.oxl.app/file/risk_ip6_high.json.zip)
-
-* [Reports by IPv6 in MMDB-format](https://risk.oxl.app/file/risk_ip6_all.mmdb.zip) / [Med](https://risk.oxl.app/file/risk_ip6_med.mmdb.zip) / [High](https://risk.oxl.app/file/risk_ip6_high.mmdb.zip)
+* [Reports of IPv6 in MMDB-format](https://risk.oxl.app/file/risk_ip6_all.mmdb.zip) / [Med](https://risk.oxl.app/file/risk_ip6_med.mmdb.zip) / [High](https://risk.oxl.app/file/risk_ip6_high.mmdb.zip)
 
 
 
