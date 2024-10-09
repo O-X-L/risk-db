@@ -77,9 +77,9 @@ We recommend the use of our [GeoIP-ASN Database](https://github.com/O-X-L/geoip-
 
 ```bash
 # check IP
-curl https://risk.oxl.app/api/check/<IP>
+curl https://risk.oxl.app/api/ip/<IP>
 ## example
-curl https://risk.oxl.app/api/check/1.1.1.1
+curl https://risk.oxl.app/api/ip/1.1.1.1
 
 # check ASN/ISP
 curl https://risk.oxl.app/api/asn/<ASN>
