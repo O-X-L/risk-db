@@ -33,6 +33,14 @@ usermod -a -G adm abuse-reporter
 
 ----
 
+## Excludes
+
+You can exclude IPs from being reported by using a `regex filter` or an `IP-List lookup`. 
+
+See the scripts for examples.
+
+----
+
 ## Integrations
 
 ### NFTables Firewall

@@ -84,6 +84,12 @@ function analyze_log_line() {
       return
     fi
 
+    # exclude by IP-list
+    if [[ "$(python3 in_ip_list.py --iplist 'iplist.txt' --ip "$ip")" == "1" ]]
+    then
+      return
+    fi
+
     if [[ "$status" == '429' ]]
     then
       report_ip "$ip" 'rate' 'http'

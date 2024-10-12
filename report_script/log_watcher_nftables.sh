@@ -60,6 +60,12 @@ function analyze_log_line() {
     return
   fi
 
+  # exclude by IP-list
+  if [[ "$(python3 in_ip_list.py --iplist 'iplist.txt' --ip "$ip")" == "1" ]]
+  then
+    return
+  fi
+
   if [[ "$l" =~ DROP.*(input|forward).*SRC=(.*).DST ]]
   then
     report_ip "${BASH_REMATCH[2]}" 'probe' 'fw'
