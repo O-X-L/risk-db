@@ -6,7 +6,7 @@ from argparse import ArgumentParser
 from ipaddress import IPv4Address, IPv6Address, IPv4Network, IPv6Network, AddressValueError, NetmaskValueError
 
 
-def _load_safe_ip_list(ip_list_file: str) -> (list, list):
+def _load_ip_list(ip_list_file: str) -> (list, list):
     safe_ips = []
     safe_nets = []
 
@@ -94,5 +94,5 @@ if __name__ == '__main__':
         print(f'IP-List file does not exist: {args.iplist}')
         sys_exit(1)
 
-    iplist_ips, iplist_nets = _load_safe_ip_list(args.iplist)
+    iplist_ips, iplist_nets = _load_ip_list(args.iplist)
     _check(ip=to_check, ips=iplist_ips, nets=iplist_nets)
