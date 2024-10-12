@@ -14,6 +14,7 @@ LOG_FILE="$1"
 
 TOKEN=''  # optional supply an API token
 EXCLUDE_REGEX='ALLOW|output|=lo|=192.168.|=172.16.|=10.|=127.'
+MAX_PARALLEL=10
 
 # NOTE: Bash regex does not support PCRE like '\d' '\s' nor non-greedy '*?'
 
@@ -70,7 +71,10 @@ function read_log_line() {
   read
   while true
   do
-    analyze_log_line "$REPLY" &
+    if [[ "$(jobs | wc -l)" -lt "$MAX_PARALLEL" ]]
+    then
+      analyze_log_line "$REPLY" &
+    fi
     read
   done
 }
