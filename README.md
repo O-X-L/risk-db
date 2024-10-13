@@ -14,6 +14,12 @@ See also: [bad-asn-list](https://github.com/brianhama/bad-asn-list)
 
 ----
 
+## Contribute
+
+Contributions like [reporting issues](https://github.com/O-X-L/risk-db/issues/new), [engaging in discussions](https://github.com/O-X-L/risk-db/discussions) or [PRs](https://github.com/O-X-L/risk-db/pulls) are welcome!
+
+----
+
 ## Usage
 
 You **SHOULD NOT** just drop any requests from these sources.
