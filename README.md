@@ -150,20 +150,15 @@ TBD
 
 ### Databases
 
-[Creative Commons Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-sa/4.0/)
+**[BSD-3-Clause](https://opensource.org/license/bsd-3-clause)**
 
-* The attribution requirements can be met by giving our service credit as your data source. Simply place a link to OXL on the website, application, or social media account that uses our data.
+Free to use.
 
-  Example:
+If you are nice, you can **optionally** mention that you use this IP data: 
 
-  ```html
-  <p>IP address data powered by <a href="https://risk.oxl.app">OXL</a></p>
-
-  ```
-
-* Allows for commercial usage
-
-* Redistribution must use the same license
+```html
+<p>IP address data powered by <a href="https://risk.oxl.app">OXL</a></p>
+```
 
 ----
 
