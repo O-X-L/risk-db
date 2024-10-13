@@ -64,6 +64,8 @@ We recommend the use of our [GeoIP-ASN Database](https://github.com/O-X-L/geoip-
 
 * [Reports of ASN in JSON-format](https://risk.oxl.app/file/risk_asn_all.json.zip) / [Med](https://risk.oxl.app/file/risk_asn_med.json.zip)  / [High](https://risk.oxl.app/file/risk_asn_high.json.zip)
 
+* [Reports of filtered ASN in JSON-format](https://risk.oxl.app/file/risk_asn_kind.json.zip) (*only the ones tagged as hosting-, proxy- or vpn-providers*)
+
 ### IPs
 
 * [Reports of IPv4 in JSON-format](https://risk.oxl.app/file/risk_ip4_all.json.zip) / [Med](https://risk.oxl.app/file/risk_ip4_med.json.zip) / [High](https://risk.oxl.app/file/risk_ip4_high.json.zip)
