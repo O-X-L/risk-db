@@ -24,16 +24,15 @@ with open('example_reports.txt', 'r', encoding='utf-8') as f:
         try:
             # pylint: disable=C0103
             if r['v'] == 4:
-                ip = str(IPv4Address(r['ip']))
+                r['ip'] = str(IPv4Address(r['ip']))
 
             else:
-                ip = str(IPv6Address(r['ip']))
+                r['ip'] = str(IPv6Address(r['ip']))
 
         except AddressValueError:
             continue
 
-        r['ip'] = ip
-        k = f"{r['by']}_{ip}"
+        k = f"{r['by']}_{r['ip']}"
 
         # skip if the same reporter has already reported this exact IP in the last N seconds
         if k in last_hits and r['time'] < (last_hits[k] + REPORT_COOLDOWN):
