@@ -37,7 +37,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements_lint.txt
-          apt install shellcheck
+          sudo apt install shellcheck
         shell: bash
 
       - name: Running PyLint
