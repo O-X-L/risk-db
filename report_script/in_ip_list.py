@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
-from sys import exit as sys_exit
 from pathlib import Path
+from sys import exit as sys_exit
 from argparse import ArgumentParser
 from ipaddress import IPv4Address, IPv6Address, IPv4Network, IPv6Network, AddressValueError, NetmaskValueError
 
 
-def _load_ip_list(ip_list_file: str) -> (list, list):
+def _load_ip_list(ip_list_file: str) -> dict:
     safe_ips = []
     safe_nets = []
 
@@ -53,7 +53,7 @@ def _load_ip_list(ip_list_file: str) -> (list, list):
             except (AddressValueError, NetmaskValueError):
                 pass
 
-    return safe_ips, safe_nets
+    return {'ips': safe_ips, 'nets': safe_nets}
 
 
 def _result(r: int):
@@ -94,5 +94,4 @@ if __name__ == '__main__':
         print(f'IP-List file does not exist: {args.iplist}')
         sys_exit(1)
 
-    iplist_ips, iplist_nets = _load_ip_list(args.iplist)
-    _check(ip=to_check, ips=iplist_ips, nets=iplist_nets)
+    _check(ip=to_check, **_load_ip_list(args.iplist))

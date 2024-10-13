@@ -112,14 +112,14 @@ function analyze_log_line() {
 
 function read_log_line() {
   local l=''
-  read
+  read -r
   while true
   do
     if [[ "$(jobs | wc -l)" -lt "$MAX_PARALLEL" ]]
     then
       analyze_log_line "$REPLY" &
     fi
-    read
+    read -r
   done
 }
 
