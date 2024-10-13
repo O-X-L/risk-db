@@ -1,5 +1,7 @@
 # Open Risky IP & ASN Database
 
+[![Lint](https://github.com/O-X-L/risk-db/actions/workflows/lint.yml/badge.svg)](https://github.com/O-X-L/risk-db/actions/workflows/lint.yml)
+
 **WARNING**: This project is not yet in a usable state!
 
 This project wants to help admins flag large quantities of bad traffic.
