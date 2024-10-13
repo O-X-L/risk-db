@@ -51,4 +51,3 @@ jobs:
           shellcheck --version
           find -type f -name '*.sh' -exec shellcheck -f gcc {} \;
         shell: bash
-
