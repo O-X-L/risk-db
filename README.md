@@ -81,6 +81,13 @@ We recommend the use of our [GeoIP-ASN Database](https://github.com/O-X-L/geoip-
 * Without token: 2 Downloads per IP & day
 * With token: 10 Downloads per IP & day
 
+**Tip**:
+
+You can use `jq` to easily filter the JSON data:
+
+* Get flat list of ASN's: `cat risk_asn_kind.json | jq 'keys[]'`
+* Only get ASN's that are flagged a certain way: `cat risk_asn_kind.json | jq 'map_values(select(.kind.scanner == true)) | keys[]'`
+
 ----
 
 ## API
