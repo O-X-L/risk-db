@@ -92,16 +92,19 @@ You can use `jq` to easily filter the JSON data:
 
 ## API
 
+* [IP Lookup](https://risk.oxl.app/api/ip/)
+* [ASN Lookup](https://risk.oxl.app/api/asn/16509)
+
 ```bash
 # check IP
 curl https://risk.oxl.app/api/ip/<IP>
 ## example
-curl https://risk.oxl.app/api/ip/1.1.1.1
+curl https://risk.oxl.app/api/ip/69.164.207.190
 
 # check ASN/ISP
 curl https://risk.oxl.app/api/asn/<ASN>
 ## example
-curl https://risk.oxl.app/api/asn/24940
+curl https://risk.oxl.app/api/asn/16509
 ```
 
 **Limits**:
