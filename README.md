@@ -141,6 +141,8 @@ Available categories are: `bot, probe, rate, attack, crawler, hosting, vpn, prox
 * With token
   * Only Anti-DOS
 
+If you want to get a token for your systems - feel free to contact us at: [risk-db@oxl.at](mailto:risk-db@oxl.at)
+
 ----
 
 ### Integrations
