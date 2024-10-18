@@ -23,8 +23,8 @@ DATA = {
                 'name': 'Reported abuse originating from this country',
                 'format': '{0}',
                 'thousandSeparator': '.',
-                'thresholdMax': 2_000,
-                'thresholdMin': 500
+                'thresholdMax': 2,
+                'thresholdMin': 1
             },
             'bot': {
                 'name': 'Reported bots',
@@ -46,6 +46,14 @@ DATA = {
                 'name': 'Reported crawlers',
                 'format': '{0}',
             },
+            'ip4': {
+                'name': 'Reports from IPv4',
+                'format': '{0}',
+            },
+            'ip6': {
+                'name': 'Reports from IPv6',
+                'format': '{0}',
+            },
         },
         'values': {},
     }
@@ -54,19 +62,27 @@ DATA = {
 
 # pylint: disable=E0606
 def main():
-    with open(args.file, 'r', encoding='utf-8') as f:
-        raw = json_loads(f.read())
+    with open(args.file_ip4, 'r', encoding='utf-8') as f:
+        raw4 = json_loads(f.read())
+
+    with open(args.file_ip6, 'r', encoding='utf-8') as f:
+        raw6 = json_loads(f.read())
 
     with mmdb_database(args.country_db) as m:
-        for ips in raw.values():
-            for ip, reports in ips.items():
-                ip_md = m.get(ip)
-                if ip_md['country'] not in DATA['data']['values']:
-                    DATA['data']['values'][ip_md['country']] = {c: 0 for c in CATEGORIES}
+        for ipv, ipv_db in {'ip4': raw4, 'ip6': raw6}.items():
+            for ips in ipv_db.values():
+                for ip, reports in ips.items():
+                    ip_md = m.get(ip)
+                    if ip_md['country'] not in DATA['data']['values']:
+                        DATA['data']['values'][ip_md['country']] = {c: 0 for c in CATEGORIES}
+                        DATA['data']['values'][ip_md['country']]['ip4'] = 0
+                        DATA['data']['values'][ip_md['country']]['ip6'] = 0
 
-                for c in CATEGORIES:
-                    if c in reports:
-                        DATA['data']['values'][ip_md['country']][c] += reports[c]
+                    for c in CATEGORIES:
+                        if c in reports:
+                            DATA['data']['values'][ip_md['country']][c] += reports[c]
+
+                    DATA['data']['values'][ip_md['country']][ipv] += reports['all']
 
     DATA['data']['values'] = dict(sorted(DATA['data']['values'].items(), key=lambda item: item[1]['all'], reverse=True))
     with open(SRC_PATH / 'world_map.json', 'w', encoding='utf-8') as f:
@@ -78,7 +94,8 @@ def main():
 
 if __name__ == '__main__':
     parser = ArgumentParser()
-    parser.add_argument('-f', '--file', help='JSON file to parse', default='risk_ip4_med.json')
+    parser.add_argument('-4', '--file-ip4', help='IPv4 JSON file to parse', default='risk_ip4_med.json')
+    parser.add_argument('-6', '--file-ip6', help='IPv6 JSON file to parse', default='risk_ip6_med.json')
     parser.add_argument('-c', '--country-db', help='MMDB country data to use (IPInfo)', default='country_asn.mmdb')
     args = parser.parse_args()
     main()

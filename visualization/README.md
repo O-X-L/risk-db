@@ -11,7 +11,7 @@ Use:
 2. Generate the JSON file
 
     ```bash
-    python3 world_map_data.py -f ~/Downloads/risk_ip4_med.json -c ~/Downloads/country_asn.mmdb
+    python3 world_map_data.py -c ~/Downloads/country_asn.mmdb -4 ~/Downloads/risk_ip4_med.json -6 ~/Downloads/risk_ip6_med.json
     ```
 
 3. For testing - run the minimal python3 webserver to enable JS to access the JSON file:
