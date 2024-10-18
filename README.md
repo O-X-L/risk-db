@@ -2,17 +2,13 @@
 
 [![Lint](https://github.com/O-X-L/risk-db/actions/workflows/lint.yml/badge.svg)](https://github.com/O-X-L/risk-db/actions/workflows/lint.yml)
 
-**WARNING**: This project is not yet in a usable state!
-
-This project wants to help admins flag large quantities of bad traffic.
+This project wants to help admins/systems flag large quantities of bad traffic.
 
 Most generic attacks and bots originate from **cloud-providers, datacenters or other providers with lax security**.
 
 By flagging clients originating from these sources you can achieve a nice security improvement.
 
 The databases created from the gathered data will be and stay open-source!
-
-See also: [bad-asn-list](https://github.com/brianhama/bad-asn-list)
 
 ----
 
