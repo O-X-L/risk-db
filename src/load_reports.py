@@ -1,14 +1,14 @@
 from json import loads as json_loads
 from ipaddress import ip_address, AddressValueError
 
-from config import BASE_PATH, REPORT_COOLDOWN
+from config import SRC_PATH, REPORT_COOLDOWN
 
 
 def load_reports() -> list[dict]:
     filtered_reports = []
     last_hits = {}
 
-    with open(f'{BASE_PATH}/risky_reports.txt', 'r', encoding='utf-8') as f:
+    with open(f'{SRC_PATH}/example_reports.txt', 'r', encoding='utf-8') as f:
         for l in f.readlines():
             r = json_loads(l)
 
