@@ -106,16 +106,16 @@ def build_dbs_ip_asn(reports: dict, ptrs: dict, lookup_lists: dict, networks: di
                     asn_reports[asn]['reports'][report_type] += report_count
 
         # todo: score relative by IP and separate ip4/6
-        for asn in asn_reports:
+        for av in asn_reports.values():
             rel_by_ip4 = round(
-                asn_reports[asn]['reports']['all'] / (asn_reports[asn]['info']['ipv4'] + 1),
+                av['reports']['all'] / (av['info']['ipv4'] + 1),
                 5
             )
             if str(rel_by_ip4).find('-') != -1:
-                asn_reports[asn]['reports']['rel_by_ip4'] = 0.0
+                av['reports']['rel_by_ip4'] = 0.0
 
             else:
-                asn_reports[asn]['reports']['rel_by_ip4'] = rel_by_ip4
+                av['reports']['rel_by_ip4'] = rel_by_ip4
 
         write_ip_asn(
             key=key,

@@ -2,6 +2,7 @@ from ipaddress import IPv4Address, AddressValueError, IPv4Interface, IPv6Interfa
 
 from config import *
 
+# pylint: disable=W0613
 def _reporter_reputation(r: dict) -> int:
     reputation = 0
 
@@ -97,15 +98,15 @@ def reports_by_network_reputation(reports: list[dict]) -> dict:
     for k in [reported_nets_all, reported_nets_med, reported_nets_high]:
         for n, nv in k.items():
             ip_cnt = len(nv['ips'])
-            k[n]['reported_ips'] = ip_cnt
-            k[n][rep_key] = 'ok'
+            nv['reported_ips'] = ip_cnt
+            nv[rep_key] = 'ok'
 
-            for rep, cnt in NETWORK_REPUTATION_IPS[k[n]['ipv']].items():
+            for rep, cnt in NETWORK_REPUTATION_IPS[nv['ipv']].items():
                 if ip_cnt >= cnt:
-                    k[n][rep_key] = rep
+                    nv[rep_key] = rep
                     break
 
-            k[n].pop('ips')
+            nv.pop('ips')
 
     return {
         'all': reported_nets_all,

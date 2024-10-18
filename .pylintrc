@@ -290,7 +290,7 @@ exclude-too-few-public-methods=
 ignored-parents=
 
 # Maximum number of arguments for function / method.
-max-args=5
+max-args=6
 
 # Maximum number of attributes for a class (see R0902).
 max-attributes=7
@@ -302,13 +302,13 @@ max-bool-expr=5
 max-branches=12
 
 # Maximum number of locals for function / method body.
-max-locals=15
+max-locals=16
 
 # Maximum number of parents for a class (see R0901).
 max-parents=7
 
 # Maximum number of positional arguments for function / method.
-max-positional-arguments=5
+max-positional-arguments=6
 
 # Maximum number of public methods for a class (see R0904).
 max-public-methods=20
@@ -345,7 +345,7 @@ indent-after-paren=4
 indent-string='    '
 
 # Maximum number of characters on a single line.
-max-line-length=120
+max-line-length=130
 
 # Maximum number of lines in a module.
 max-module-lines=1000
@@ -440,6 +440,8 @@ disable=raw-checker-failed,
         use-implicit-booleaness-not-comparison-to-string,
         use-implicit-booleaness-not-comparison-to-zero,
         C0114, C0115, C0116,  # inline docs
+        W0401, W0614,  # wildcard import for config
+        W0511,  # todos
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
