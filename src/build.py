@@ -36,6 +36,7 @@ def build_dbs_ip_asn(reports: dict, ptrs: dict, lookup_lists: dict, networks: di
                 lookup_lists=lookup_lists,
             )
             net = {'network': networks[key][networks['ip_to_net'][ip]]}
+            net['network'].pop('ipv')
             net_sm = {'network': {
                 'reported_ips': net['network']['reported_ips'],
                 'reputation': net['network']['reputation'],
