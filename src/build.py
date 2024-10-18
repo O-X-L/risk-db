@@ -10,6 +10,7 @@ from enrich_data import ip_asn_info
 from write import write_ip_asn, write_nets
 
 
+# pylint: disable=R0912,R0914
 def build_dbs_ip_asn(reports: dict, ptrs: dict, lookup_lists: dict, networks: dict):
     for key, ip_list in {
         'all': reports['all'],
@@ -24,13 +25,13 @@ def build_dbs_ip_asn(reports: dict, ptrs: dict, lookup_lists: dict, networks: di
         json6 = {}
         asn_reports = {}
 
-        for ip, reports in ip_list.items():
-            if reports['all'] < MIN_IP_REPORTS:
+        for ip, ip_reports in ip_list.items():
+            if ip_reports['all'] < MIN_IP_REPORTS:
                 continue
 
             asn_info = ip_asn_info(
                 ip=ip,
-                reports=reports,
+                reports=ip_reports,
                 ptrs=ptrs,
                 lookup_lists=lookup_lists,
             )
@@ -63,7 +64,7 @@ def build_dbs_ip_asn(reports: dict, ptrs: dict, lookup_lists: dict, networks: di
                 try:
                     asn_data = lookup_lists['asn'][str(asn)]
                     asn_reports[asn] = {
-                        'reports': reports,
+                        'reports': ip_reports,
                         'kind': {
                             'hosting': asn in lookup_lists['hosting'],
                             'vpn': asn in lookup_lists['vpn'],
@@ -96,10 +97,10 @@ def build_dbs_ip_asn(reports: dict, ptrs: dict, lookup_lists: dict, networks: di
 
                 except KeyError as e:
                     print(f'ERROR: Failed to lookup metadata of ASN {asn} ({e})')
-                    asn_reports[asn] = {'reports': reports}
+                    asn_reports[asn] = {'reports': ip_reports}
 
             else:
-                for report_type, report_count in reports.items():
+                for report_type, report_count in ip_reports.items():
                     if report_type not in asn_reports[asn]['reports']:
                         asn_reports[asn]['reports'][report_type] = 0
 

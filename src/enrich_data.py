@@ -29,7 +29,7 @@ def lookup_ptrs(reports: list[dict]) -> dict:
                 ptrs[ip] = ptr
 
         except (IndexError, NoAnswer, NXDOMAIN, DNSSyntaxError, NoNameservers, LifetimeTimeout):
-            return
+            pass
 
     while batch * PTR_LOOKUP_THREADS < len(reports_lst):
         threads = []
