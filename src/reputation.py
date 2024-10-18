@@ -1,6 +1,6 @@
-from ipaddress import IPv4Address, AddressValueError, IPv4Interface, IPv6Interface
-
 from config import *
+from util import get_ip_version, get_network_address
+
 
 # pylint: disable=W0613
 def _reporter_reputation(r: dict) -> int:
@@ -72,15 +72,8 @@ def reports_by_network_reputation(reports: list[dict]) -> dict:
     ip_to_net = {}
 
     for r in reports:
-        try:
-            IPv4Address(r['ip'])
-            ipv = '4'
-            n = IPv4Interface(f"{r['ip']}/{BGP_NET_SIZE[ipv]}").network.network_address.compressed
-
-        except AddressValueError:
-            ipv = '6'
-            n = IPv6Interface(f"{r['ip']}/{BGP_NET_SIZE[ipv]}").network.network_address.compressed
-
+        ipv = get_ip_version(r['ip'])
+        n = get_network_address(r['ip'])
         reputation = _reporter_reputation(r)
 
         _save_net_report(dst=reported_nets_all, r=r, n=n)

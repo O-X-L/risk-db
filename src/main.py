@@ -27,8 +27,8 @@ def main():
     lookup_lists = load_lookup_lists()
 
     log('Building and writing DBs')
-    build_dbs_ip_asn(reports=reports, ptrs=ptrs, lookup_lists=lookup_lists, networks=networks)
     build_dbs_net(networks=networks)
+    build_dbs_ip_asn(reports=reports, ptrs=ptrs, lookup_lists=lookup_lists, networks=networks)
 
     log('Done')
 

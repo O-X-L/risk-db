@@ -6,7 +6,7 @@ from netaddr.ip import IPNetwork
 
 from config import *
 from util import log
-from enrich_data import ip_asn_info
+from enrich_data import ip_asn_info, net_asn_info
 from write import write_ip_asn, write_nets
 
 
@@ -36,7 +36,9 @@ def build_dbs_ip_asn(reports: dict, ptrs: dict, lookup_lists: dict, networks: di
                 lookup_lists=lookup_lists,
             )
             net = {'network': networks[key][networks['ip_to_net'][ip]]}
-            net['network'].pop('ipv')
+            if 'ipv' in net['network']:
+                net['network'].pop('ipv')
+
             net_sm = {'network': {
                 'reported_ips': net['network']['reported_ips'],
                 'reputation': net['network']['reputation'],
@@ -140,7 +142,9 @@ def build_dbs_net(networks: dict):
 
         for n, nv in net_list.items():
             ipv = nv.pop('ipv')
+            nv = {**nv, **net_asn_info(n)}
             n = f"{n}/{BGP_NET_SIZE[ipv]}"
+
             if ipv =='4':
                 json4[n] = nv
 

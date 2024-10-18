@@ -86,7 +86,7 @@ def load_lookup_lists() -> dict:
 
 
 def ip_asn_info(ip: str, reports: dict, lookup_lists: dict, ptrs: dict) -> dict:
-    with mmdb_database(f'{BASE_PATH}/oxl_geoip_asn.mmdb') as m:
+    with mmdb_database(ASN_MMDB_FILE) as m:
         ip_md = m.get(ip)
 
     try:
@@ -106,6 +106,7 @@ def ip_asn_info(ip: str, reports: dict, lookup_lists: dict, ptrs: dict) -> dict:
         },
         'url': {
             'asn': f'https://risk.oxl.app/api/asn/{asn}',
+            'net': f'https://risk.oxl.app/api/net/{ip}',
             'ipinfo': f'https://ipinfo.io/{ip}',
             'shodan': f'https://www.shodan.io/host/{ip}',
         },
@@ -129,4 +130,22 @@ def ip_asn_info(ip: str, reports: dict, lookup_lists: dict, ptrs: dict) -> dict:
         'nr': asn,
         'full': d,
         'small': d_small,
+    }
+
+
+def net_asn_info(ip: str) -> dict:
+    with mmdb_database(ASN_MMDB_FILE) as m:
+        ip_md = m.get(ip)
+
+    try:
+        asn = int(ip_md['asn'][2:])
+
+    except ValueError:
+        return {}
+
+    return {
+        'asn': asn,
+        'url': {
+            'asn': f'https://risk.oxl.app/api/asn/{asn}',
+        }
     }
