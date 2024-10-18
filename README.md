@@ -10,6 +10,10 @@ By flagging clients originating from these sources you can achieve a nice securi
 
 The databases created from the gathered data will be and stay open-source!
 
+<a href="https://github.com/O-X-L/risk-db/blob/latest/visualization">
+  <img src="https://raw.githubusercontent.com/O-X-L/risk-db/refs/heads/latest/visualization/world_map_example.webp" alt="World Map Example" width="800"/>
+</a>
+
 ----
 
 ## Contribute

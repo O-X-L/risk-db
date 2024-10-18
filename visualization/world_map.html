@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" type="image/svg" href="https://files.oxl.at/img/oxl3_sm.png">
+
+        <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/StephanWagner/svgMap@v2.7.2/dist/svgMap.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/gh/StephanWagner/svgMap@v2.7.2/dist/svgMap.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <!-- see: https://stephanwagner.me/create-world-map-charts-with-svgmap#svgMapDemoGDP -->
+        <div id="svgMap"></div>
+        <script>
+            // start test webserver: 'python3 world_map_test.py'
+            const RISK_DB_MAP_DATA = 'http://localhost:8000/world_map.json';
+
+            function createMap(resp) {
+                console.log(resp);
+                new svgMap(resp);
+            }
+
+            function fetchMapData() {
+                var http = new XMLHttpRequest();
+                http.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        createMap(JSON.parse(this.responseText));
+                    }
+                };
+                http.open("GET", RISK_DB_MAP_DATA, true);
+                http.send();
+            }
+            fetchMapData();
+        </script>
+    </body>
+</html>
