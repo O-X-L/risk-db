@@ -3,8 +3,6 @@ from pathlib import Path
 INFO_CATEGORIES = ['hosting', 'vpn', 'proxy']
 CATEGORIES = ['bot', 'probe', 'rate', 'attack', 'crawler']
 
-TRUSTED_TOKENS = []
-
 BASE_PATH = '/tmp/risk-db'
 MMDB_DESCRIPTION = 'OXL RISK-Database - risk.oxl.app (CC BY-SA 4.0)'
 REPORT_COOLDOWN = 60
