@@ -1,4 +1,4 @@
-# Open Risky IP & ASN Database
+# Open IP, Network & ASN Risk-Databases
 
 [![Lint](https://github.com/O-X-L/risk-db/actions/workflows/lint.yml/badge.svg)](https://github.com/O-X-L/risk-db/actions/workflows/lint.yml)
 
