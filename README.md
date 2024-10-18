@@ -56,25 +56,31 @@ You may also want to check out these projects: (*not open/free data*)
 
 Databases marked with the key `all` include all reports.
 
-The ones marked with `med` and `high` only include reports from reporters that have a certain level of reputation.
+The ones marked with `med` (*default*) and `high` only include reports from reporters that have a certain level of reputation.
 
 We recommend the use of our [GeoIP-ASN Database](https://github.com/O-X-L/geoip-asn) and [IPInfo ASN/Country Databases](https://ipinfo.io/products/free-ip-database) to get more IP-metadata
 
 ### ASN
 
-* [Reports of ASN in JSON-format](https://risk.oxl.app/file/risk_asn_all.json.zip) / [Med](https://risk.oxl.app/file/risk_asn_med.json.zip)  / [High](https://risk.oxl.app/file/risk_asn_high.json.zip)
+* [Reports of ASN in JSON-format](https://risk.oxl.app/file/risk_asn_med.json.zip) / [All](https://risk.oxl.app/file/risk_asn_all.json.zip)  / [High](https://risk.oxl.app/file/risk_asn_high.json.zip)
 
 * [Reports of filtered ASN in JSON-format](https://risk.oxl.app/file/risk_asn_kind.json.zip) (*only the ones tagged as hosting-, proxy- or vpn-providers*)
 
+### Networks
+
+* [Reports of IPv4-Networks in JSON-format](https://risk.oxl.app/file/risk_net4_med.json.zip) / [All](https://risk.oxl.app/file/risk_net4_all.json.zip) / [High](https://risk.oxl.app/file/risk_net4_high.json.zip)
+
+* [Reports of IPv6-Networks in JSON-format](https://risk.oxl.app/file/risk_net6_med.json.zip) / [All](https://risk.oxl.app/file/risk_net6_all.json.zip) / [High](https://risk.oxl.app/file/risk_net6_high.json.zip)
+
 ### IPs
 
-* [Reports of IPv4 in JSON-format](https://risk.oxl.app/file/risk_ip4_all.json.zip) / [Med](https://risk.oxl.app/file/risk_ip4_med.json.zip) / [High](https://risk.oxl.app/file/risk_ip4_high.json.zip)
+* [Reports of IPv4 in JSON-format](https://risk.oxl.app/file/risk_ip4_med.json.zip) / [All](https://risk.oxl.app/file/risk_ip4_all.json.zip) / [High](https://risk.oxl.app/file/risk_ip4_high.json.zip)
 
-* [Reports of IPv4 in MMDB-format](https://risk.oxl.app/file/risk_ip4_all.mmdb.zip) / [Med](https://risk.oxl.app/file/risk_ip4_med.mmdb.zip) / [High](https://risk.oxl.app/file/risk_ip4_high.mmdb.zip)
+* [Reports of IPv4 in MMDB-format](https://risk.oxl.app/file/risk_ip4_med.mmdb.zip) / [All](https://risk.oxl.app/file/risk_ip4_all.mmdb.zip) / [High](https://risk.oxl.app/file/risk_ip4_high.mmdb.zip)
 
-* [Reports of IPv6 in JSON-format](https://risk.oxl.app/file/risk_ip6_all.json.zip) / [Med](https://risk.oxl.app/file/risk_ip6_med.json.zip) / [High](https://risk.oxl.app/file/risk_ip6_high.json.zip)
+* [Reports of IPv6 in JSON-format](https://risk.oxl.app/file/risk_ip6_med.json.zip) / [All](https://risk.oxl.app/file/risk_ip6_all.json.zip) / [High](https://risk.oxl.app/file/risk_ip6_high.json.zip)
 
-* [Reports of IPv6 in MMDB-format](https://risk.oxl.app/file/risk_ip6_all.mmdb.zip) / [Med](https://risk.oxl.app/file/risk_ip6_med.mmdb.zip) / [High](https://risk.oxl.app/file/risk_ip6_high.mmdb.zip)
+* [Reports of IPv6 in MMDB-format](https://risk.oxl.app/file/risk_ip6_med.mmdb.zip) / [All](https://risk.oxl.app/file/risk_ip6_all.mmdb.zip) / [High](https://risk.oxl.app/file/risk_ip6_high.mmdb.zip)
 
 **Limits**:
 
