@@ -5,7 +5,7 @@ from config import SRC_PATH, REPORT_COOLDOWN
 
 
 def load_reports() -> list[dict]:
-    filtered_reports = []
+    reports = []
     last_hits = {}
 
     with open(f'{SRC_PATH}/example_reports.txt', 'r', encoding='utf-8') as f:
@@ -31,6 +31,6 @@ def load_reports() -> list[dict]:
 
             last_hits[k] = r['time']
 
-            filtered_reports.append(r)
+            reports.append(r)
 
-    return filtered_reports
+    return reports
