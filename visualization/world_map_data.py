@@ -52,12 +52,13 @@ DATA = {
 }
 
 
+# pylint: disable=E0606
 def main():
     with open(args.file, 'r', encoding='utf-8') as f:
         raw = json_loads(f.read())
 
     with mmdb_database(args.country_db) as m:
-        for asn, ips in raw.items():
+        for ips in raw.values():
             for ip, reports in ips.items():
                 ip_md = m.get(ip)
                 if ip_md['country'] not in DATA['data']['values']:
