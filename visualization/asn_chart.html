@@ -24,7 +24,7 @@
             #infos {
                 top: 10px;
                 left: 20px;
-                width: 25vw;
+                width: 20vw;
                 height: 30vh;
                 background-color: whitesmoke;
                 opacity: 0.85;
@@ -102,14 +102,12 @@
                     urls.push(`<a href="${v}">${k}</a>`);
                 }
                 infoContainer.innerHTML += `<b>URLs</b>: ${urls.join(', ')}<br><hr>`;
+                infoContainer.innerHTML += `<small><b>Relative Reports</b>: ${infos.reports.rel_by_ip4} (by IPv4)</small><br>`;
                 for (let [k, v] of Object.entries(infos.reports)) {
-                    let r = `<small><b>Reports ${k}</b>: `;
                     if (k == 'rel_by_ip4') {
-                        r += v;
-                    } else {
-                        r += numberWithDot(v);
+                        continue;
                     }
-                    infoContainer.innerHTML += `${r}</small><br>`;
+                    infoContainer.innerHTML += `<small><b>Reports ${k}</b>: ${numberWithDot(v)}</small><br>`;
                 }
             }
 
