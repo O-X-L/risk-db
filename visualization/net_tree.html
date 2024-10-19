@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" type="image/svg" href="https://files.oxl.at/img/oxl3_sm.png">
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+        <style>
+            #chart {
+                width: 100vw;
+                height: 100vh;
+            }
+
+            .net {
+                overflow: hidden;
+                font-weight: bold;
+                transform
+            }
+
+            .net-cidr {
+                display: inline-block;
+                margin-top: 100px;
+            }
+
+            .net-info {
+                visibility: hidden;
+                display: none;
+            }
+
+            #infos {
+                width: 20vw;
+                height: 25vh;
+                background-color: whitesmoke;
+                opacity: 0.85;
+                z-index: 2;
+                border-radius: 10px;
+                border-width: 2px;
+                border-color: black;
+                border-style: solid;
+                position: absolute;
+                padding: 20px;
+                overflow: hidden;
+            }
+
+        </style>
+    </head>
+    <body>
+        <!--
+            see: https://observablehq.com/@d3/treemap/2
+            see2: https://d3-graph-gallery.com/graph/treemap_basic.html
+        -->
+        <div id="infos"></div>
+        <svg id="chart"></svg>
+        <script>
+            // start test webserver: 'python3 test_server.py'
+
+            const WIDTH = window.innerWidth;
+            const HEIGHT = window.innerHeight - 50;
+            const NET_PAD = 5;
+            const CATEGORIES = ['all', 'bot', 'probe', 'rate', 'attack', 'crawler'];
+            const COLORSCHEME = [
+                // red-ish
+                "#B93022", "#FF383D", "#D32669", "#C43F03", "#E70291", "#E211C0", "#6A3D52", "#C75839", "#E7A8B0",
+                "#DB7277", "#A23E48",
+                // purple-ish
+                "#9F8AD2", "#4B2ED1", "#9C1091", "#EA77DF", "#8D0BE8", "#BB65BC", "#993CF3", "#9F09EF", "#CD0099",
+                "#EA2794", "#DC8581", "#9C1686",
+                // orange-ish
+                "#E37F6F", "#C5824E", "#FDCA29", "#D99620", "#E7C014", "#F9C630", "#F6BC55", "#B9AB58", "#DB8E94",
+                "#D27E7E",
+            ];
+
+            function numberWithDot(x) {
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            }
+
+            function showNetInfos(e) {
+                let infos = JSON.parse(e.currentTarget.querySelectorAll(".net-info")[0].textContent);
+
+                var x = event.clientX;
+                var y = event.clientY;
+                console.log(infos, x, y);
+
+                var infoContainer = document.getElementById('infos');
+                infoContainer.style.left = `${x}px`;
+                infoContainer.style.top = `${y}px`;
+
+                infoContainer.innerHTML = `<b>Network</b>: ${infos.name}<br>`;
+                infoContainer.innerHTML += `<b>Reported IPs</b>: ${infos.reported_ips}<br>`;
+                infoContainer.innerHTML += `<b>Reputation</b>: ${infos.reputation.toUpperCase()}<br>`;
+                infoContainer.innerHTML += `<b>ASN</b>: ${infos.asn}<br>`;
+                infoContainer.innerHTML += `<b>Org</b>: ${infos.as_name}<br>`;
+
+                if (infos.country !== undefined) {
+                    infoContainer.innerHTML += `<b>Country</b>: ${infos.country}<br>`;
+                }
+
+                let urls = [];
+                for (let [k, v] of Object.entries(infos.url)) {
+                    urls.push(`<a href="${v}">${k}</a>`);
+                }
+                infoContainer.innerHTML += `<b>URLs</b>: ${urls.join(', ')}<br><hr>`;
+
+                for (let c of CATEGORIES) {
+                    if (c in infos) {
+                        infoContainer.innerHTML += `<small><b>Reports ${c}</b>: ${numberWithDot(infos[c])}</small><br>`;
+                    }
+                }
+            }
+
+            function createChart() {
+                d3.json('net_tree.json', function(data) {
+                    var svg = d3.select("#chart");
+
+                    var root = d3.stratify()
+                        .id(function(d) { return d.name; })
+                        .parentId(function(d) { if (d.name == 'root') { return null } else { return 'root' }; })
+                        (data.children);
+
+                    root.sum(function(d) { return +d.all })
+
+                    d3.treemap()
+                        .size([WIDTH, HEIGHT])
+                        .padding(4)
+                        (root)
+
+                    const colorScale = d3.scaleOrdinal()
+                        .range(COLORSCHEME);
+
+                    const nets = svg.selectAll(".net")
+                        .data(root.descendants().slice(1))
+                        .enter()
+                        .append("g")
+                        .attr("class", "net");
+
+                    nets.append("rect")
+                        .attr('x', function (d) { return d.x0; })
+                        .attr('y', function (d) { return d.y0; })
+                        .attr('width', function (d) { return d.x1 - d.x0; })
+                        .attr('height', function (d) { return d.y1 - d.y0; })
+                        .style("fill", d => colorScale(d.data.reported_ips))
+                        .attr("class", "net");
+
+                    nets.append("text")
+                        .append("tspan")
+                        .attr("class", "net-cidr")
+                        .text(d => d.data.name)
+                        .style('fill', 'whitesmoke');
+
+                    // hover infos
+                    nets.append("text")
+                        .style("text-anchor", "bottom")
+                        .append("tspan")
+                        .attr("class", "net-info")
+                        .text(d => JSON.stringify(d.data));
+
+                    for (let n of document.querySelectorAll(".net")) {
+                        let r = n.querySelectorAll("rect")[0];
+                        if (r === undefined) {
+                            continue;
+                        }
+                        let c = n.querySelectorAll("text")[0];
+                        c.setAttribute("transform", `translate(${r.x.baseVal.value + NET_PAD}, ${r.y.baseVal.value + NET_PAD + 30})`);
+
+                        n.addEventListener("mouseover", showNetInfos);
+                    }
+
+                });
+            }
+
+            createChart();
+        </script>
+    </body>
+</html>

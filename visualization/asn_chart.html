@@ -13,6 +13,7 @@
 
             .bubble-asn {
                 font-weight: bold;
+                text-anchor: middle;
             }
 
             .bubble-info {
@@ -44,7 +45,10 @@
         </style>
     </head>
     <body>
-        <!-- see: https://observablehq.com/@d3/bubble-chart/2 -->
+        <!--
+            see: https://observablehq.com/@d3/bubble-chart/2
+            see2: https://medium.com/@jhren/d3-data-visualization-in-javascript-use-d3-js-to-create-a-bubble-chart-3fba181faacd
+        -->
         <div id="infos"></div>
         <svg id="chart"></svg>
         <script>
@@ -73,13 +77,13 @@
             function showASNInfos(e) {
                 let infos = JSON.parse(e.currentTarget.querySelectorAll(".bubble-info")[0].textContent);
                 let infoContainer = document.getElementById('infos');
-                infoContainer.innerHTML = '<b>ASN</b>: ' + infos.asn + '<br>';
-                infoContainer.innerHTML += '<b>Org</b>: ' + infos.info.org.name + '<br>';
+                infoContainer.innerHTML = `<b>ASN</b>: ${infos.asn}<br>`;
+                infoContainer.innerHTML += `<b>Org</b>: ${infos.info.org.name}<br>`;
                 if (infos.info.org.country != '' && infos.info.org.country !== null) {
-                    infoContainer.innerHTML += '<b>Country</b>: ' + infos.info.org.country + '<br>';
+                    infoContainer.innerHTML += `<b>Country</b>: ${infos.info.org.country}<br>`;
                 }
-                infoContainer.innerHTML += '<b>IPv4 Addresses</b>: ' + numberWithDot(infos.info.ipv4) + '<br>';
-                infoContainer.innerHTML += '<b>IPv6 Addresses</b>: ' + numberWithDot(infos.info.ipv6) + '<br>';
+                infoContainer.innerHTML += `<b>IPv4 Addresses</b>: ${numberWithDot(infos.info.ipv4)}<br>`;
+                infoContainer.innerHTML += `<b>IPv6 Addresses</b>: ${numberWithDot(infos.info.ipv6)}<br>`;
                 let kinds = [];
                 for (let [k, v] of Object.entries(infos.kind)) {
                     if (v === true) {
@@ -87,21 +91,21 @@
                     }
                 }
                 if (kinds.length > 0) {
-                    infoContainer.innerHTML += '<b>Kind</b>: ' + kinds.join(', ') + '<br>';
+                    infoContainer.innerHTML += `<b>Kind</b>: ${kinds.join(', ')}<br>`;
                 }
-                let urls = ['<a href="https://risk.oxl.app/api/asn/' + infos.asn + '">oxl_riskdb</a>'];
+                let urls = [`<a href="https://risk.oxl.app/api/asn/${infos.asn}">oxl_riskdb</a>`];
                 for (let [k, v] of Object.entries(infos.info.url)) {
-                    urls.push('<a href="' + v + '">' + k + '</a>');
+                    urls.push(`<a href="${v}">${k}</a>`);
                 }
-                infoContainer.innerHTML += '<b>URLs</b>: ' + urls.join(', ') + '<br><hr>';
+                infoContainer.innerHTML += `<b>URLs</b>: ${urls.join(', ')}<br><hr>`;
                 for (let [k, v] of Object.entries(infos.reports)) {
-                    let r = '<small><b>Reports ' + k  + '</b>: ';
+                    let r = `<small><b>Reports ${k}</b>: `;
                     if (k == 'rel_by_ip4') {
                         r += v;
                     } else {
                         r += numberWithDot(v);
                     }
-                    infoContainer.innerHTML += r + '</small><br>';
+                    infoContainer.innerHTML += `${r}</small><br>`;
                 }
             }
 
@@ -148,19 +152,15 @@
                         .attr("fill", d => colorScale(d.data.asn));
 
                     bubbles.append("text")
-                        .style("text-anchor", "middle")
                         .append("tspan")
                         .attr("class", "bubble-asn")
                         .text(d => d.data.asn);
 
                     // hover infos
                     bubbles.append("text")
-                        .style("text-anchor", "bottom")
                         .append("tspan")
                         .attr("class", "bubble-info")
                         .text(d => JSON.stringify(d.data));
-
-                    d3.selectAll("text").style("fill", "black");
 
                     for (let b of document.querySelectorAll(".bubble")) {
                         b.addEventListener("mouseover", showASNInfos);
