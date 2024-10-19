@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" type="image/svg" href="https://files.oxl.at/img/oxl3_sm.png">
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+        <style>
+            .bubble {
+                overflow: hidden;
+            }
+
+            .bubble-asn {
+                font-weight: bold;
+            }
+
+            .bubble-info {
+                visibility: hidden;
+                display: none;
+            }
+
+            #infos {
+                top: 10px;
+                left: 20px;
+                width: 40vw;
+                height: 30vh;
+                background-color: whitesmoke;
+                opacity: 0.7;
+                z-index: -1;
+                border-radius: 10px;
+                border-width: 2px;
+                border-color: black;
+                border-style: solid;
+                position: absolute;
+                padding: 20px;
+                overflow: hidden;
+            }
+
+            #chart {
+                display: inline-block;
+            }
+
+        </style>
+    </head>
+    <body>
+        <!-- see: https://observablehq.com/@d3/bubble-chart/2 -->
+        <div id="infos"></div>
+        <svg id="chart"></svg>
+        <script>
+            // start test webserver: 'python3 test_server.py'
+
+            const TOP_N = 30;
+            const WIDTH = window.innerWidth;
+            const HEIGHT = window.innerHeight - 50;
+            const BUBBLE_PAD = 50;
+            const COLORSCHEME = [
+                // red-ish
+                "#B93022", "#FF383D", "#D32669", "#C43F03", "#E70291", "#E211C0", "#6A3D52", "#C75839", "#E7A8B0",
+                "#DB7277", "#A23E48",
+                // purple-ish
+                "#9F8AD2", "#4B2ED1", "#9C1091", "#EA77DF", "#8D0BE8", "#BB65BC", "#993CF3", "#9F09EF", "#CD0099",
+                "#EA2794", "#DC8581", "#9C1686",
+                // orange-ish
+                "#E37F6F", "#C5824E", "#FDCA29", "#D99620", "#E7C014", "#F9C630", "#F6BC55", "#B9AB58", "#DB8E94",
+                "#D27E7E",
+            ];
+
+            function numberWithDot(x) {
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            }
+
+            function showASNInfos(e) {
+                let infos = JSON.parse(e.currentTarget.querySelectorAll(".bubble-info")[0].textContent);
+                let infoContainer = document.getElementById('infos');
+                infoContainer.innerHTML = '<b>ASN</b>: ' + infos.asn + '<br>';
+                infoContainer.innerHTML += '<b>Org</b>: ' + infos.info.org.name + '<br>';
+                if (infos.info.org.country != '' && infos.info.org.country !== null) {
+                    infoContainer.innerHTML += '<b>Country</b>: ' + infos.info.org.country + '<br>';
+                }
+                infoContainer.innerHTML += '<b>IPv4 Addresses</b>: ' + numberWithDot(infos.info.ipv4) + '<br>';
+                infoContainer.innerHTML += '<b>IPv6 Addresses</b>: ' + numberWithDot(infos.info.ipv6) + '<br>';
+                let kinds = [];
+                for (let [k, v] of Object.entries(infos.kind)) {
+                    if (v === true) {
+                        kinds.push(k);
+                    }
+                }
+                if (kinds.length > 0) {
+                    infoContainer.innerHTML += '<b>Kind</b>: ' + kinds.join(', ') + '<br>';
+
+                }
+                for (let [k, v] of Object.entries(infos.reports)) {
+                    let r = '<small><b>Reports ' + k  + '</b>: ';
+                    if (k == 'rel_by_ip4') {
+                        r += v;
+                    } else {
+                        r += numberWithDot(v);
+                    }
+                    infoContainer.innerHTML += r + '</small><br>';
+                }
+            }
+
+            function createChart() {
+                d3.json('risk_asn_med.json', function(resp) {
+                    let data = [];
+
+                    for (let [asn, values] of Object.entries(resp)) {
+                        data.push({
+                            asn: asn, info: values.info, kind: values.kind, reports: values.reports,
+                            sortBy: values.reports.all,
+                        })
+                    }
+
+                    const sortedData = data.sort((a, b) => b.reports.all - a.reports.all).slice(0, TOP_N);
+                    console.log(sortedData);
+
+                    const colorScale = d3.scaleOrdinal()
+                        .domain(sortedData.map(d => d.asn))
+                        .range(COLORSCHEME);
+
+                    const pack = d3.pack()
+                        .size([WIDTH - BUBBLE_PAD, HEIGHT - BUBBLE_PAD])
+                        .padding(5);
+
+                    const hierarchy = d3.hierarchy({children: sortedData})
+                        .sum(d => d.sortBy);
+
+                    const root = pack(hierarchy);
+
+                    const svg = d3.select("#chart")
+                        .attr("width", WIDTH)
+                        .attr("height", HEIGHT);
+
+                    const bubbles = svg.selectAll(".bubble")
+                        .data(root.descendants().slice(1))
+                        .enter()
+                        .append("g")
+                        .attr("class", "bubble")
+                        .attr("transform", d => `translate(${d.x + BUBBLE_PAD}, ${d.y + BUBBLE_PAD})`);
+
+                    bubbles.append("circle")
+                        .attr("r", d => d.r)
+                        .attr("fill", d => colorScale(d.data.asn));
+
+                    bubbles.append("text")
+                        .style("text-anchor", "middle")
+                        .append("tspan")
+                        .attr("class", "bubble-asn")
+                        .text(d => d.data.asn);
+
+                    // hover infos
+                    bubbles.append("text")
+                        .style("text-anchor", "bottom")
+                        .append("tspan")
+                        .attr("class", "bubble-info")
+                        .text(d => JSON.stringify(d.data));
+
+                    d3.selectAll("text").style("fill", "black");
+
+                    for (let b of document.querySelectorAll(".bubble")) {
+                        b.addEventListener("mouseover", showASNInfos);
+                    }
+
+                });
+
+            }
+
+            createChart();
+        </script>
+    </body>
+</html>

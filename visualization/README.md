@@ -17,7 +17,7 @@ Use:
 3. For testing - run the minimal python3 webserver to enable JS to access the JSON file:
 
     ```bash
-    python3 world_map_test.py
+    python3 test_server.py
     ```
 
 4. Open the file in your browser: [http://localhost:8000/world_map.html](http://localhost:8000/world_map.html)
