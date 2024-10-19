@@ -78,13 +78,9 @@
             function showNetInfos(e) {
                 let infos = JSON.parse(e.currentTarget.querySelectorAll(".net-info")[0].textContent);
 
-                var x = event.clientX;
-                var y = event.clientY;
-                console.log(infos, x, y);
-
                 var infoContainer = document.getElementById('infos');
-                infoContainer.style.left = `${x}px`;
-                infoContainer.style.top = `${y}px`;
+                infoContainer.style.left = `${e.clientX}px`;
+                infoContainer.style.top = `${e.clientY}px`;
 
                 infoContainer.innerHTML = `<b>Network</b>: ${infos.name}<br>`;
                 infoContainer.innerHTML += `<b>Reported IPs</b>: ${infos.reported_ips}<br>`;

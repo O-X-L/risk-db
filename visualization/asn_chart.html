@@ -27,7 +27,7 @@
                 width: 25vw;
                 height: 30vh;
                 background-color: whitesmoke;
-                opacity: 0.7;
+                opacity: 0.85;
                 z-index: 2;
                 border-radius: 10px;
                 border-width: 2px;
@@ -76,7 +76,11 @@
 
             function showASNInfos(e) {
                 let infos = JSON.parse(e.currentTarget.querySelectorAll(".bubble-info")[0].textContent);
+
                 let infoContainer = document.getElementById('infos');
+                infoContainer.style.left = `${e.clientX}px`;
+                infoContainer.style.top = `${e.clientY}px`;
+
                 infoContainer.innerHTML = `<b>ASN</b>: ${infos.asn}<br>`;
                 infoContainer.innerHTML += `<b>Org</b>: ${infos.info.org.name}<br>`;
                 if (infos.info.org.country != '' && infos.info.org.country !== null) {
