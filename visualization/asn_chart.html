@@ -23,11 +23,11 @@
             #infos {
                 top: 10px;
                 left: 20px;
-                width: 40vw;
+                width: 25vw;
                 height: 30vh;
                 background-color: whitesmoke;
                 opacity: 0.7;
-                z-index: -1;
+                z-index: 2;
                 border-radius: 10px;
                 border-width: 2px;
                 border-color: black;
@@ -88,8 +88,12 @@
                 }
                 if (kinds.length > 0) {
                     infoContainer.innerHTML += '<b>Kind</b>: ' + kinds.join(', ') + '<br>';
-
                 }
+                let urls = ['<a href="https://risk.oxl.app/api/asn/' + infos.asn + '">oxl_riskdb</a>'];
+                for (let [k, v] of Object.entries(infos.info.url)) {
+                    urls.push('<a href="' + v + '">' + k + '</a>');
+                }
+                infoContainer.innerHTML += '<b>URLs</b>: ' + urls.join(', ') + '<br><hr>';
                 for (let [k, v] of Object.entries(infos.reports)) {
                     let r = '<small><b>Reports ' + k  + '</b>: ';
                     if (k == 'rel_by_ip4') {

@@ -21,3 +21,25 @@ Use:
     ```
 
 4. Open the file in your browser: [http://localhost:8000/world_map.html](http://localhost:8000/world_map.html)
+
+<img src="https://raw.githubusercontent.com/O-X-L/risk-db/refs/heads/latest/visualization/world_map_example.webp" alt="World Map Example" width="800"/>
+
+----
+
+## ASN Chart
+
+It uses this javascript library: [d3js](https://d3js.org/)
+
+Use:
+
+1. Copy the `risk_asn_med.json` into this directory
+
+2. For testing - run the minimal python3 webserver to enable JS to access the JSON file:
+
+    ```bash
+    python3 test_server.py
+    ```
+
+3. Open the file in your browser: [http://localhost:8000/asn_chart.html](http://localhost:8000/world_map.html)
+
+<img src="https://raw.githubusercontent.com/O-X-L/risk-db/refs/heads/latest/visualization/asn_chart_example.webp" alt="ASN Chart Example" width="800"/>
