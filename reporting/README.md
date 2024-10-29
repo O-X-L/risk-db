@@ -6,7 +6,7 @@ Note: Bash regex does not support PCRE like `\d`, `\s` nor non-greedy `*?`
 
 You can run this script as systemd service:
 
-* Example: [report_log_watcher.service](https://github.com/O-X-L/risk-db/blob/latest/report_script/log_watcher_APP.service)
+* Example: [report_log_watcher.service](https://github.com/O-X-L/risk-db/blob/latest/reporting/log_watcher_APP.service)
 * Copy the scripts to `/usr/local/bin/` (*or wherever you want them to be*)
 * Enable/Start:
 
@@ -45,7 +45,7 @@ See the scripts for examples.
 
 ### NFTables Firewall
 
-See: [Report Script - NFTables](https://github.com/O-X-L/risk-db/blob/latest/report_script/log_watcher_nftables.sh)
+See: [Report Script - NFTables](https://github.com/O-X-L/risk-db/blob/latest/reporting/log_watcher_nftables.sh)
 
 #### Logs
 
@@ -94,7 +94,7 @@ Content:
 
 ### HAProxy
 
-See: [Report Script - HAProxy](https://github.com/O-X-L/risk-db/blob/latest/report_script/log_watcher_haproxy.sh)
+See: [Report Script - HAProxy](https://github.com/O-X-L/risk-db/blob/latest/reporting/log_watcher_haproxy.sh)
 
 #### Logs
 

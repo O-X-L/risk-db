@@ -159,7 +159,7 @@ If you want to get a (free) token for your systems - feel free to contact us at:
 
 A simple script that follows the content of a specific log-file and parses abuser information from it.
 
-See: [Report Script](https://github.com/O-X-L/risk-db/blob/latest/report_script/README.md)
+See: [Report Script](https://github.com/O-X-L/risk-db/blob/latest/reporting/README.md)
 
 
 #### Fail2Ban
