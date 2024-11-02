@@ -134,8 +134,8 @@ def report() -> Response:
 
     out_file = RISK_REPORT_DIR / f'{datetime.now().strftime("%Y-%m-%d")}_{gethostname()}.txt'
     with report_lock:
-        with open(out_file, 'a+', encoding='utf-8') as f:
-            f.write(json_dumps(r) + '\n')
+        with open(out_file, 'a+', encoding='utf-8') as fo:
+            fo.write(json_dumps(r) + '\n')
 
     return _response_json(code=200, data={'msg': 'Reported'})
 
@@ -182,6 +182,7 @@ def check_net(ip) -> Response:
     net = f"{net}/{NET_SIZE[ipv]}"
 
     try:
+        # pylint: disable=E0606
         return _response_json(code=200, data={**NET_DATA[ipv][net], 'network': net})
 
     except KeyError:
@@ -194,6 +195,7 @@ def check_asn(nr) -> Response:
         return _response_json(code=400, data={'msg': 'Invalid ASN provided'})
 
     try:
+        # pylint: disable=E0606
         return _response_json(code=200, data=ASN_DATA[str(nr)])
 
     except KeyError:
