@@ -37,7 +37,8 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements_lint.txt
-          pip install -r src/requirements.txt
+          pip install -r src/builder/requirements.txt
+          pip install -r src/api/requirements.txt
           sudo apt install shellcheck
         shell: bash
 

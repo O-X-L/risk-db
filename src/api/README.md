@@ -30,7 +30,7 @@ You need to create a Python3 virtualenv to run this app:
 sudo apt install python3-virtualenv
 python3 -m virtualenv /var/local/lib/risk-db/venv
 source /var/local/lib/risk-db/venv/bin/activate
-pip install flask waitress maxminddb
+pip install -r requirements.txt
 ```
 
 ----
