@@ -143,7 +143,7 @@ def build_dbs_net(networks: dict):
         for n, nv in net_list.items():
             ipv = nv.pop('ipv')
             nv = {**nv, **net_asn_info(n)}
-            n = f"{n}/{BGP_NET_SIZE[ipv]}"
+            n = f"{n}/{NET_SIZE[ipv]}"
 
             if ipv =='4':
                 json4[n] = nv

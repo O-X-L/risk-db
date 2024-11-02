@@ -41,4 +41,4 @@ NETWORK_REPUTATION_IPS = {
         'info': 3
     },
 }
-BGP_NET_SIZE = {'4': '24', '6': '48'}
+NET_SIZE = {'4': '24', '6': '64'}

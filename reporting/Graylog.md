@@ -4,6 +4,8 @@ We can create a Graylog Alert Notification to Report Abusers to this Risk-Databa
 
 You can find an example on how to split HAProxy logs into different fields here: [gist.github.com](https://gist.github.com/superstes/a2f6c5d855857e1f10dcb51255fe08c6#haproxy-split) (*via Pipeline Rules*)
 
+Hint: You can use [Lookup Tables](https://graylog.org/post/how-to-use-graylog-lookup-tables/) to query if an IP-Address is in your custom safe-ip-list and flag it for further filtering. (*exclude them from being reported*)
+
 ## API Service
 
 As Graylog has no option to add advanced filters for the data sent by the notifications, we will have to add a minimal service to do so.
@@ -36,8 +38,8 @@ As Graylog has no option to add advanced filters for the data sent by the notifi
     app = Flask(__name__)
 
 
-    @app.route('/report-abuse/haproxy', methods=['POST'])
-    def report_abuse_haproxy():
+    @app.route('/report-abuse', methods=['POST'])
+    def report_abuse():
         unique_list = []
 
         for log in request.json['backlog']:
@@ -141,9 +143,9 @@ As Graylog has no option to add advanced filters for the data sent by the notifi
 
 `https://<SERVER>/alerts/notifications`
 
-* **Title**: `Report Abuse - HAProxy`
+* **Title**: `Report Abuse`
 * **Notification Type**: `HTTP Notification`
-* **URL**: `http://127.0.0.1:8000/report-abuse/haproxy`
+* **URL**: `http://127.0.0.1:8000/report-abuse`
 
 
 ### Create an Alert-Event
@@ -152,13 +154,13 @@ As Graylog has no option to add advanced filters for the data sent by the notifi
 
 **Event Details**:
 
-  * **Title**: `HAProxy Abuse`
+  * **Title**: `Abuse`
   * **Priority**: `Low`
 
 **Condition**:
 
   * **Condition Type**: `Filter & Aggregation`
-  * **Streams**: Select your HAProxy Access-Log stream
+  * **Streams**: Select your App's Access-Log stream
   * **Search Query**: Filter Logs to only include blocks of your security filters. Also exclude your `safe-ips` and so on
   * **Search within the last**: 1 minute
   * **Execute search every**: 1 minute
@@ -168,6 +170,6 @@ As Graylog has no option to add advanced filters for the data sent by the notifi
 
 **Notifications**:
 
-  * **Choose Notification**: `Report Abuse - HAProxy`
+  * **Choose Notification**: `Report Abuse`
   * **Grace Period**: Disable
   * **Message Backlog**: 500 (duplicates will be filtered by the API-service)

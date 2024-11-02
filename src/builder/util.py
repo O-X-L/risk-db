@@ -1,7 +1,7 @@
 from time import time
 from ipaddress import IPv4Address, AddressValueError, IPv4Interface, IPv6Interface
 
-from config import BGP_NET_SIZE
+from config import NET_SIZE
 
 start_time = time()
 
@@ -22,11 +22,11 @@ def get_ip_version(ip: str) -> str:
 def get_network_address(ip: str) -> str:
     try:
         IPv4Address(ip)
-        return IPv4Interface(f"{ip}/{BGP_NET_SIZE['4']}").network.network_address.compressed
+        return IPv4Interface(f"{ip}/{NET_SIZE['4']}").network.network_address.compressed
 
     except AddressValueError:
-        return IPv6Interface(f"{ip}/{BGP_NET_SIZE['6']}").network.network_address.compressed
+        return IPv6Interface(f"{ip}/{NET_SIZE['6']}").network.network_address.compressed
 
 
 # def get_network_cidr(ip: str) -> str:
-#     return f"{get_network_address(ip)}/{BGP_NET_SIZE[get_ip_version(ip)]}"
+#     return f"{get_network_address(ip)}/{NET_SIZE[get_ip_version(ip)]}"

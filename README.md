@@ -10,6 +10,8 @@ By flagging clients originating from these sources you can achieve a nice securi
 
 The databases created from the gathered data will be and stay open-source!
 
+If you (*just*) want to keep track of abusers internally - you could also host your dedicated instance of [this app](https://github.com/O-X-L/risk-db/blob/latest/src).
+
 <a href="https://github.com/O-X-L/risk-db/blob/latest/visualization">
   <img src="https://raw.githubusercontent.com/O-X-L/risk-db/refs/heads/latest/visualization/world_map_example.webp" alt="World Map Example" width="800"/>
   <img src="https://raw.githubusercontent.com/O-X-L/risk-db/refs/heads/latest/visualization/asn_chart_example.webp" alt="ASN Chart Example" width="800"/>
@@ -48,6 +50,7 @@ You may also want to check out these projects: (*not open/free data*)
 * [CrowdSec](https://www.crowdsec.net/)
 * [AbuseIP-DB](https://www.abuseipdb.com/)
 * [IPInfo Privacy-DB](https://ipinfo.io/products/proxy-vpn-detection-api)
+* [nitefood/asn CLI-Tools](https://github.com/nitefood/asn)
 
 ----
 
