@@ -1,5 +1,4 @@
-from time import sleep
-from threading import Thread, Lock
+from threading import Lock
 from json import loads as json_loads
 from os import system as os_shell
 from ipaddress import ip_address
