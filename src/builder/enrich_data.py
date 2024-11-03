@@ -4,56 +4,29 @@ from json import loads as json_loads
 from os import system as os_shell
 from ipaddress import ip_address
 
-from dns.resolver import Resolver, NoAnswer, NXDOMAIN, LifetimeTimeout, NoNameservers
-from dns.exception import SyntaxError as DNSSyntaxError
+from oxl_utils.ps import process_list_in_threads
+from oxl_utils.net import resolve_dns
 from maxminddb import open_database as mmdb_database
 
 from config import *
 
-dns_resolver = Resolver(configure=False)
-dns_resolver.lifetime = 0.1
-dns_resolver.timeout = 0.1
-dns_resolver.nameservers = NAMESERVERS
+
 ptr_cache_lock = Lock()
 
 
 def lookup_ptrs(reports: list[dict]) -> dict:
-    batch = 0
     ptrs = {}
-    reports_lst = list(reports)
 
     def _ptr_lookup(ip: str):
         try:
-            ptr = [p.to_text() for p in dns_resolver.resolve_address(ip)][0]
+            ptr = resolve_dns(ip, t='PTR')[0]
             with ptr_cache_lock:
                 ptrs[ip] = ptr
 
-        except (IndexError, NoAnswer, NXDOMAIN, DNSSyntaxError, NoNameservers, LifetimeTimeout):
+        except IndexError:
             pass
 
-    while batch * PTR_LOOKUP_THREADS < len(reports_lst):
-        threads = []
-        for i in range(PTR_LOOKUP_THREADS):
-            idx = (batch * PTR_LOOKUP_THREADS) + i
-            if idx > len(reports_lst) - 1:
-                break
-
-            threads.append(Thread(
-                target=_ptr_lookup,
-                kwargs={'ip': list(reports_lst)[idx]},
-            ))
-
-        for t in threads:
-            t.start()
-
-        threads_done = False
-        while not threads_done:
-            threads_done = all(not t.is_alive() for t in threads)
-            sleep(0.05)
-
-        batch += 1
-
-    del reports_lst
+    process_list_in_threads(callback=_ptr_lookup, to_process=list(reports), key='ip', parallel=PTR_LOOKUP_THREADS)
     return ptrs
 
 

@@ -2,3 +2,4 @@ netaddr
 mmdb_writer
 maxminddb
 dnspython
+oxl-utils
