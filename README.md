@@ -89,7 +89,7 @@ We recommend the use of our [GeoIP-ASN Database](https://github.com/O-X-L/geoip-
 **Limits**:
 
 * Without token: 2 Downloads per IP & day
-* With token: 10 Downloads per IP & day
+* With token: 5 Downloads per IP & day
 
 **Tip**:
 
@@ -122,8 +122,8 @@ curl https://risk.oxl.app/api/asn/16509
 
 **Limits**:
 
-* 100 Requests per IP & 10 min
-* 1000 Requests per IP & day
+* 500 Requests per IP & 10 min
+* 5000 Requests per IP & day
 
 ----
 
