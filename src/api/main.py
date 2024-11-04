@@ -51,12 +51,18 @@ def _get_src_ip() -> str:
         return request.remote_addr
 
     if 'X-Real-IP' in request.headers:
-        return request.headers['X-Real-IP'].replace('::ffff:', '')
+        ip = request.headers['X-Real-IP']
 
-    if 'X-Forwarded-For' in request.headers:
-        return request.headers['X-Forwarded-For'].replace('::ffff:', '')
+    elif 'X-Forwarded-For' in request.headers:
+        ip = request.headers['X-Forwarded-For']
 
-    return request.remote_addr
+    else:
+        ip = request.remote_addr
+
+    if ip.startswith('::ffff:'):
+        return ip[7:]
+
+    return ip
 
 
 # curl -XPOST https://risk.oxl.app/api/report --data '{"ip": "1.1.1.1", "cat": "bot"}' -H 'Content-Type: application/json'
@@ -67,8 +73,12 @@ def report() -> Response:
 
     data = request.get_json()
 
-    if 'ip' in data and data['ip'].startswith('::ffff:'):
-        data['ip'] = data['ip'].replace('::ffff:', '')
+    if 'ip' in data:
+        if data['ip'].startswith('::ffff:'):
+            data['ip'] = data['ip'][7:]
+
+        if data['ip'].endswith('.x'):
+            data['ip'] = f"{data['ip'][:-1]}0"
 
     if 'ip' not in data or not valid_public_ip(data['ip']):
         return _response_json(code=400, data={'msg': 'Invalid IP provided'})
@@ -101,7 +111,7 @@ def report() -> Response:
 @app.route('/api/ip/<ip>', methods=['GET'])
 def check(ip) -> Response:
     if ip.startswith('::ffff:'):
-        ip = ip.replace('::ffff:', '')
+        ip = ip[7:]
 
     if not valid_public_ip(ip):
         return _response_json(code=400, data={'msg': 'Invalid IP provided'})
@@ -121,7 +131,7 @@ def check(ip) -> Response:
 @app.route('/api/net/<ip>', methods=['GET'])
 def check_net(ip) -> Response:
     if ip.startswith('::ffff:'):
-        ip = ip.replace('::ffff:', '')
+        ip = ip[7:]
 
     if ip.find('/') != -1:
         ip = ip.split('/', 1)[0]
