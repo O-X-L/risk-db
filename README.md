@@ -145,12 +145,14 @@ Available categories are: `bot, probe, rate, attack, crawler, hosting, vpn, prox
 
 **Limits**:
 
-* Without token
+* Without token:
   * 500 Requests per IP & 10 min
   * 5000 Requests per IP & day
+  * Anti-DOS
 
-* With token
-  * Only Anti-DOS
+* With token:
+  * 5000 Requests per IP & 10 min
+  * Anti-DOS
 
 If you want to get a (free) token for your systems - feel free to contact us at: [risk-db@oxl.at](mailto:risk-db@oxl.at)
 
