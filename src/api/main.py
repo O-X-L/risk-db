@@ -13,6 +13,7 @@ from datetime import datetime
 from flask import Flask, request, Response, json, redirect
 from waitress import serve
 import maxminddb
+from oxl_utils.valid.net import valid_ip4, valid_public_ip, valid_asn
 
 app = Flask('risk-db')
 BASE_DIR = Path('/var/local/lib/risk-db')
@@ -33,42 +34,6 @@ NET_SIZE = {4: '24', 6: '64'}
 report_lock = Lock()
 
 
-def _valid_ipv4(ip: str) -> bool:
-    try:
-        IPv4Address(ip)
-        return True
-
-    except AddressValueError:
-        return False
-
-
-def _valid_public_ip(ip: str) -> bool:
-    ip = str(ip)
-    try:
-        ip = IPv4Address(ip)
-        return ip.is_global and \
-            not ip.is_loopback and \
-            not ip.is_reserved and \
-            not ip.is_multicast and \
-            not ip.is_link_local
-
-    except AddressValueError:
-        try:
-            ip = IPv6Address(ip)
-            return ip.is_global and \
-                not ip.is_loopback and \
-                not ip.is_reserved and \
-                not ip.is_multicast and \
-                not ip.is_link_local
-
-        except AddressValueError:
-            return False
-
-
-def _valid_asn(_asn: str) -> bool:
-    return _asn.isdigit() and 0 <= int(_asn) <= 4_294_967_294
-
-
 def _safe_comment(cmt: str) -> str:
     return regex_replace(r'[^\sa-zA-Z0-9_=+.-]', '', cmt)[:50]
 
@@ -82,14 +47,14 @@ def _response_json(code: int, data: dict) -> Response:
 
 
 def _get_ipv(ip: str) -> int:
-    if _valid_ipv4(ip):
+    if valid_ip4(ip):
         return 4
 
     return 6
 
 
 def _get_src_ip() -> str:
-    if _valid_public_ip(request.remote_addr):
+    if valid_public_ip(request.remote_addr):
         return request.remote_addr
 
     if 'X-Real-IP' in request.headers:
@@ -112,7 +77,7 @@ def report() -> Response:
     if 'ip' in data and data['ip'].startswith('::ffff:'):
         data['ip'] = data['ip'].replace('::ffff:', '')
 
-    if 'ip' not in data or not _valid_public_ip(data['ip']):
+    if 'ip' not in data or not valid_public_ip(data['ip']):
         return _response_json(code=400, data={'msg': 'Invalid IP provided'})
 
     if 'cat' not in data or data['cat'].lower() not in RISK_CATEGORIES:
@@ -123,7 +88,7 @@ def report() -> Response:
 
     r = {
         'ip': data['ip'], 'cat': data['cat'].lower(), 'time': int(time()),
-        'v': 4 if _valid_ipv4(data['ip']) else 6, 'cmt': None, 'token': None, 'by': _get_src_ip,
+        'v': 4 if valid_ip4(data['ip']) else 6, 'cmt': None, 'token': None, 'by': _get_src_ip,
     }
 
     if 'cmt' in data:
@@ -145,7 +110,7 @@ def check(ip) -> Response:
     if ip.startswith('::ffff:'):
         ip = ip.replace('::ffff:', '')
 
-    if not _valid_public_ip(ip):
+    if not valid_public_ip(ip):
         return _response_json(code=400, data={'msg': 'Invalid IP provided'})
 
     try:
@@ -168,7 +133,7 @@ def check_net(ip) -> Response:
     if ip.find('/') != -1:
         ip = ip.split('/', 1)[0]
 
-    if not _valid_public_ip(ip):
+    if not valid_public_ip(ip):
         return _response_json(code=400, data={'msg': 'Invalid IP provided'})
 
     ipv = _get_ipv(ip)
@@ -191,7 +156,7 @@ def check_net(ip) -> Response:
 
 @app.route('/api/asn/<nr>', methods=['GET'])
 def check_asn(nr) -> Response:
-    if not _valid_asn(nr):
+    if not valid_asn(nr):
         return _response_json(code=400, data={'msg': 'Invalid ASN provided'})
 
     try:
