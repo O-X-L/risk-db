@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from ipaddress import IPv4Address, IPv6Address, AddressValueError, IPv4Interface, IPv6Interface
+from ipaddress import IPv4Interface, IPv6Interface
 from re import sub as regex_replace
 from threading import Lock
 from json import dumps as json_dumps
@@ -13,7 +13,7 @@ from datetime import datetime
 from flask import Flask, request, Response, json, redirect
 from waitress import serve
 import maxminddb
-from oxl_utils.valid.net import valid_ip4, valid_public_ip, valid_asn
+from oxl_utils.valid.net import valid_ip4, valid_public_ip, valid_asn, get_ipv
 
 app = Flask('risk-db')
 BASE_DIR = Path('/var/local/lib/risk-db')
@@ -44,13 +44,6 @@ def _response_json(code: int, data: dict) -> Response:
         status=code,
         mimetype='application/json'
     )
-
-
-def _get_ipv(ip: str) -> int:
-    if valid_ip4(ip):
-        return 4
-
-    return 6
 
 
 def _get_src_ip() -> str:
@@ -114,7 +107,7 @@ def check(ip) -> Response:
         return _response_json(code=400, data={'msg': 'Invalid IP provided'})
 
     try:
-        with maxminddb.open_database(RISKY_DB_FILE[_get_ipv(ip)]) as m:
+        with maxminddb.open_database(RISKY_DB_FILE[get_ipv(ip)]) as m:
             r = m.get(ip)
             if r is None:
                 return _response_json(code=404, data={'msg': 'Provided IP not reported'})
@@ -136,7 +129,7 @@ def check_net(ip) -> Response:
     if not valid_public_ip(ip):
         return _response_json(code=400, data={'msg': 'Invalid IP provided'})
 
-    ipv = _get_ipv(ip)
+    ipv = get_ipv(ip)
 
     if ipv == 4:
         net = IPv4Interface(f"{ip}/{NET_SIZE[ipv]}").network.network_address.compressed
