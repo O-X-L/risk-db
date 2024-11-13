@@ -1,6 +1,7 @@
 # Open IP, Network & ASN Risk-Databases
 
 [![Lint](https://github.com/O-X-L/risk-db/actions/workflows/lint.yml/badge.svg)](https://github.com/O-X-L/risk-db/actions/workflows/lint.yml)
+[![API Uptime](https://status.oxl.at/api/v1/endpoints/2--oxl-apis_risk-db/uptimes/7d/badge.svg)](https://status.oxl.at/endpoints/2--oxl-apis_risk-db)
 
 This project wants to help admins/systems flag large quantities of bad traffic.
 
@@ -95,8 +96,18 @@ We recommend the use of our [GeoIP-ASN Database](https://github.com/O-X-L/geoip-
 
 You can use `jq` to easily filter the JSON data:
 
-* Get flat list of ASN's: `cat risk_asn_kind.json | jq 'keys[]'`
-* Only get ASN's that are flagged a certain way: `cat risk_asn_kind.json | jq 'map_values(select(.kind.scanner == true)) | keys[]'`
+```bash
+# Get flat list of ASN's
+cat risk_asn_kind.json | jq 'keys[]'
+
+# Get all networks with bad reputation
+cat risk_net4_med.json | jq 'map_values(select(.reputation == "bad")) | keys[]'
+
+# Only get ASN's that are flagged a certain kind
+cat risk_asn_kind.json | jq 'map_values(select(.kind.scanner == true)) | keys[]' | tr -d '"' | sort
+# or
+cat risk_ip4_med.json | jq 'keys[] | map_values(select(.kind.hosting == true)) | keys[]' | tr -d '"' | sort
+```
 
 ----
 
