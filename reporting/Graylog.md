@@ -10,7 +10,7 @@ Hint: You can use [Lookup Tables](https://graylog.org/post/how-to-use-graylog-lo
 
 As Graylog has no option to add advanced filters for the data sent by the notifications, we will have to add a minimal service to do so.
 
-1. Add the API Service Script: (File: `/usr/local/bin/notification-api.py`)
+1. Add the API Service Script: (File: `/usr/local/bin/abuse-report-api.py`)
 
     ```python3
     #!/usr/bin/env python3
@@ -98,12 +98,12 @@ As Graylog has no option to add advanced filters for the data sent by the notifi
 
     ```bash
     apt install python3-virtualenv
-    python3 -m virtualenv /var/local/graylog-notification-api/venv
-    source /var/local/graylog-notification-api/venv/bin/activate
+    python3 -m virtualenv /var/local/graylog-abuse-report-api/venv
+    source /var/local/graylog-abuse-report-api/venv/bin/activate
     pip install requests flask waitress
     ```
 
-3. Add a systemd service to run the api script: (File: `/etc/systemd/system/graylog-notification-api.service`)
+3. Add a systemd service to run the api script: (File: `/etc/systemd/system/graylog-abuse-report-api.service`)
 
     ```
     [Unit]
@@ -114,11 +114,11 @@ As Graylog has no option to add advanced filters for the data sent by the notifi
     User=graylog
     Group=graylog
     Environment=PYTHONUNBUFFERED=1
-    ExecStart=/bin/bash -c "source /var/local/graylog-notification-api/venv/bin/activate && python3 /usr/local/bin/notification-api.py"
+    ExecStart=/bin/bash -c "source /var/local/graylog-abuse-report-api/venv/bin/activate && python3 /usr/local/bin/abuse-report-api.py"
     
     StandardOutput=journal
     StandardError=journal
-    SyslogIdentifier=notification-api
+    SyslogIdentifier=abuse-report-api
     Restart=on-failure
     RestartSec=10s
     TimeoutStopSec=30s
@@ -131,8 +131,8 @@ As Graylog has no option to add advanced filters for the data sent by the notifi
 
     ```bash
     systemctl daemon-reload
-    systemctl start graylog-notification-api.service
-    systemctl enable graylog-notification-api.service
+    systemctl start graylog-abuse-report-api.service
+    systemctl enable graylog-abuse-report-api.service
     ```
 
 ----
