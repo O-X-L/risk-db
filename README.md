@@ -183,6 +183,9 @@ A simple script that follows the content of a specific log-file and parses abuse
 
 See: [Report Script](https://github.com/O-X-L/risk-db/blob/latest/reporting/README.md)
 
+#### Graylog
+
+See: [Graylog Alert Reporting](https://github.com/O-X-L/risk-db/blob/latest/reporting/Graylog.md)
 
 #### Fail2Ban
 
