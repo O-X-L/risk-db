@@ -133,8 +133,14 @@ curl https://risk.oxl.app/api/asn/16509
 
 **Limits**:
 
-* 500 Requests per IP & 10 min
-* 5000 Requests per IP & day
+* Without token:
+  * 500 Requests per IP & 10 min
+  * 5000 Requests per IP & day
+  * Anti-DOS
+
+* With token:
+  * 5000 Requests per IP & 10 min
+  * Anti-DOS
 
 ----
 
