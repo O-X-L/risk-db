@@ -1,7 +1,6 @@
 # Open IP, Network & ASN Risk-Databases
 
 [![Lint](https://github.com/O-X-L/risk-db/actions/workflows/lint.yml/badge.svg)](https://github.com/O-X-L/risk-db/actions/workflows/lint.yml)
-[![API Uptime](https://status.oxl.at/api/v1/endpoints/2--oxl-apis_risk-db/uptimes/7d/badge.svg)](https://status.oxl.at/endpoints/2--oxl-apis_risk-db)
 
 This project wants to help admins/systems flag large quantities of bad traffic.
 
@@ -113,6 +112,8 @@ cat risk_ip4_med.json | jq 'keys[] | map_values(select(.kind.hosting == true)) |
 
 ## API
 
+[![API Uptime](https://status.oxl.at/api/v1/endpoints/2--oxl-apis_risk-db/uptimes/7d/badge.svg)](https://status.oxl.at/endpoints/2--oxl-apis_risk-db)
+
 * [IP Lookup](https://risk.oxl.app/api/ip/69.164.207.190)
 * [Network Lookup](https://risk.oxl.app/api/net/205.210.31.48)
 * [ASN Lookup](https://risk.oxl.app/api/asn/16509)
@@ -145,6 +146,8 @@ curl https://risk.oxl.app/api/asn/16509
 ----
 
 ## Report
+
+[![API Uptime](https://status.oxl.at/api/v1/endpoints/2--oxl-apis_risk-db/uptimes/7d/badge.svg)](https://status.oxl.at/endpoints/2--oxl-apis_risk-db)
 
 You can use our reporting API to report IPs!
 
