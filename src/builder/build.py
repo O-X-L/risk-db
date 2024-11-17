@@ -10,7 +10,7 @@ from enrich_data import ip_asn_info, net_asn_info
 from write import write_ip_asn, write_nets
 
 
-# pylint: disable=R0912,R0914
+# pylint: disable=R0912,R0914,R0915
 def build_dbs_ip_asn(reports: dict, ptrs: dict, lookup_lists: dict, networks: dict):
     for key, ip_list in {
         'all': reports['all'],

@@ -7,6 +7,7 @@ from config import *
 from util import log
 
 
+# pylint: disable=R0915
 def write_ip_asn(key: str, mmdb4: MMDBWriter, mmdb6: MMDBWriter, json4: dict, json6: dict, asn_reports: dict):
     log(f"Writing type '{key}'")
 

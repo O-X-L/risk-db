@@ -64,6 +64,7 @@ def _save_net_report(dst: dict, n: str, r: dict):
     dst[n][r['cat']] += 1
 
 
+# pylint: disable=R0915
 def reports_by_network_reputation(reports: list[dict]) -> dict:
     rep_key = 'reputation'
     reported_nets_all = {}

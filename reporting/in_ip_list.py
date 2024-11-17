@@ -6,6 +6,7 @@ from argparse import ArgumentParser
 from ipaddress import IPv4Address, IPv6Address, IPv4Network, IPv6Network, AddressValueError, NetmaskValueError
 
 
+# pylint: disable=R0915
 def _load_ip_list(ip_list_file: str) -> dict:
     safe_ips = []
     safe_nets = []
