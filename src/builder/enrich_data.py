@@ -62,10 +62,15 @@ def ip_asn_info(ip: str, reports: dict, lookup_lists: dict, ptrs: dict) -> dict:
         ip_md = m.get(ip)
 
     try:
-        asn = int(ip_md['asn'][2:])
+        asn = int(ip_md['asn'])
+        # asn = int(ip_md['asn'][2:])  # ipinfo DB
 
     except ValueError:
-        return {}
+        return {
+            'nr': 0,
+            'full': {},
+            'small': {},
+        }
 
     d = {
         'asn': asn,
@@ -110,7 +115,8 @@ def net_asn_info(ip: str) -> dict:
         ip_md = m.get(ip)
 
     try:
-        asn = int(ip_md['asn'][2:])
+        asn = int(ip_md['asn'])
+        # asn = int(ip_md['asn'][2:])  # ipinfo DB
 
     except ValueError:
         return {}

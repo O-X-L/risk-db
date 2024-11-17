@@ -50,18 +50,23 @@ def build_dbs_ip_asn(reports: dict, ptrs: dict, lookup_lists: dict, networks: di
                 IPv4Address(ip)
                 mmdb4.insert_network(ipset, {**asn_info['full'], **net})
 
-                if asn not in json4:
-                    json4[asn] = {}
+                if asn != 0:
+                    if asn not in json4:
+                        json4[asn] = {}
 
-                json4[asn][ip] = {**asn_info['small'], **net_sm}
+                    json4[asn][ip] = {**asn_info['small'], **net_sm}
 
             except AddressValueError:
                 mmdb6.insert_network(ipset, {**asn_info['full'], **net})
 
-                if asn not in json6:
-                    json6[asn] = {}
+                if asn != 0:
+                    if asn not in json6:
+                        json6[asn] = {}
 
-                json6[asn][ip] = {**asn_info['small'], **net_sm}
+                    json6[asn][ip] = {**asn_info['small'], **net_sm}
+
+            if asn == 0:
+                continue
 
             if asn not in asn_reports:
                 try:
@@ -94,13 +99,13 @@ def build_dbs_ip_asn(reports: dict, ptrs: dict, lookup_lists: dict, networks: di
                     }
 
                     if not asn_reports[asn]['kind']['hosting']:
-                        asn_info = str(asn_reports[asn]['info']['org']).lower()
-                        if asn_info.find('cloud') != -1 or asn_info.find('hosting') != -1:
+                        asn_org = str(asn_reports[asn]['info']['org']).lower()
+                        if asn_org.find('cloud') != -1 or asn_org.find('host') != -1:
                             asn_reports[asn]['kind']['hosting'] = True
 
                 except KeyError as e:
-                    print(f'ERROR: Failed to lookup metadata of ASN {asn} ({e})')
-                    asn_reports[asn] = {'reports': ip_reports}
+                    print(f'ERROR: Failed to lookup metadata of ASN {asn} (KeyError: {e})')
+                    continue
 
             else:
                 for report_type, report_count in ip_reports.items():
