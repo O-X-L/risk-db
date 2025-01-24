@@ -94,7 +94,7 @@ Content:
 
 ### HAProxy
 
-See: [Report Script - HAProxy](https://github.com/O-X-L/risk-db/blob/latest/reporting/log_watcher_haproxy.sh)
+See: [Report Script - HAProxy](https://github.com/O-X-L/risk-db/blob/latest/reporting/log_watcher_haproxy.sh) & [Report Script - HAProxy JSON Log-Format](https://github.com/O-X-L/risk-db/blob/latest/reporting/log_watcher_haproxy.sh)
 
 #### Logs
 
