@@ -91,7 +91,7 @@ def report() -> Response:
 
     r = {
         'ip': data['ip'], 'cat': data['cat'].lower(), 'time': int(time()),
-        'v': 4 if valid_ip4(data['ip']) else 6, 'cmt': None, 'token': None, 'by': _get_src_ip,
+        'v': 4 if valid_ip4(data['ip']) else 6, 'cmt': None, 'token': None, 'by': _get_src_ip(),
     }
 
     if 'cmt' in data:
