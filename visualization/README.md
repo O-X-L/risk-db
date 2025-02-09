@@ -1,5 +1,9 @@
 # Data Visualization
 
+You can find basic visualization examples for the latest data here: [www.risk.oxl.app](https://www.risk.oxl.app)
+
+----
+
 ## World Map
 
 It uses this javascript library: [StephanWagner/svgMap](https://github.com/StephanWagner/svgMap)
