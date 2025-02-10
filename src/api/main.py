@@ -68,7 +68,7 @@ def _get_src_ip() -> str:
 # curl -XPOST https://risk.oxl.app/api/report --data '{"ip": "1.1.1.1", "cat": "bot"}' -H 'Content-Type: application/json'
 @app.route('/api/report', methods=['POST'])
 def report() -> Response:
-    if 'Content-Type' not in request.headers or request.headers['Content-Type'] != 'application/json':
+    if 'Content-Type' not in request.headers or not request.headers['Content-Type'].startswith('application/json'):
         return _response_json(code=400, data={'msg': 'Expected JSON'})
 
     data = request.get_json()
