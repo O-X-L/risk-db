@@ -5,7 +5,7 @@ CATEGORIES = ['bot', 'probe', 'rate', 'attack', 'crawler']
 
 BASE_PATH = Path('/tmp/risk-db')
 MMDB_DESCRIPTION = 'OXL RISK-Database - risk.oxl.app (CC BY-SA 4.0)'
-REPORT_COOLDOWN = 60
+REPORT_COOLDOWN = 10
 ASN_JSON_FILE = Path('/tmp/asn_full.json')  # source: https://github.com/O-X-L/geoip-asn
 ASN_MMDB_FILE = BASE_PATH / 'oxl_geoip_asn.mmdb'  # source: https://github.com/O-X-L/geoip-asn
 SRC_PATH = Path(__file__).resolve().parent

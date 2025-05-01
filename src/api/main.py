@@ -73,12 +73,14 @@ def report() -> Response:
 
     data = request.get_json()
 
+    data['ip_an'] = 0
     if 'ip' in data:
         if data['ip'].startswith('::ffff:'):
             data['ip'] = data['ip'][7:]
 
         if data['ip'].endswith('.x'):
             data['ip'] = f"{data['ip'][:-1]}0"
+            data['ip_an'] = 1
 
     if 'ip' not in data or not valid_public_ip(data['ip']):
         return _response_json(code=400, data={'msg': 'Invalid IP provided'})
@@ -90,7 +92,7 @@ def report() -> Response:
         )
 
     r = {
-        'ip': data['ip'], 'cat': data['cat'].lower(), 'time': int(time()),
+        'ip': data['ip'], 'cat': data['cat'].lower(), 'time': int(time()), 'ip_an': data['ip_an'],
         'v': 4 if valid_ip4(data['ip']) else 6, 'cmt': None, 'token': None, 'by': _get_src_ip(),
     }
 
