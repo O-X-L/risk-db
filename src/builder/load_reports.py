@@ -4,6 +4,7 @@ from ipaddress import ip_address, AddressValueError
 from config import SRC_PATH, REPORT_COOLDOWN
 
 
+# pylint: disable=R0915
 def load_reports() -> list[dict]:
     reports = []
     last_hits = {}
