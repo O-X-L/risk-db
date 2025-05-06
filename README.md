@@ -105,9 +105,9 @@ cat risk_asn_kind.json | jq 'keys[]'
 cat risk_net4_med.json | jq 'map_values(select(.reputation == "bad")) | keys[]'
 
 # Only get ASN's that are flagged a certain kind
-cat risk_asn_kind.json | jq -r 'map_values(select(.kind.scanner == true)) | keys[]' | sort
+cat risk_asn_kind.json | jq -r 'map_values(select(.kind.scanner == true)) | to_entries[] | {asn: .key, name: .value.info.org.name}'
 # or
-cat risk_ip4_med.json | jq -r 'keys[] | map_values(select(.kind.hosting == true)) | keys[]' | sort
+cat risk_ip4_med.json | jq -r 'map_values(select(.kind.hosting == true)) | to_entries[] | {asn: .key, name: .value.info.org.name}'
 ```
 
 ----
