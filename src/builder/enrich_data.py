@@ -18,6 +18,9 @@ def lookup_ptrs(reports: list[dict]) -> dict:
 
     def _ptr_lookup(ip: str):
         try:
+            if ip in ptrs:
+                return
+
             ptr = resolve_dns(ip, t='PTR')[0]
             with ptr_cache_lock:
                 ptrs[ip] = ptr
