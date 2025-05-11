@@ -30,7 +30,7 @@ NET_JSON_FILES = {
 RISK_CATEGORIES = ['bot', 'attack', 'crawler', 'rate', 'hosting', 'vpn', 'proxy', 'probe']
 RISK_REPORT_DIR = BASE_DIR / 'reports'
 TOKENS = []
-NET_SIZE = {4: '24', 6: '64'}
+NET_SIZE = {4: '24', 6: '56'}
 report_lock = Lock()
 
 

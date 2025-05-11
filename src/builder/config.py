@@ -41,4 +41,4 @@ NETWORK_REPUTATION_IPS = {
         'info': 3
     },
 }
-NET_SIZE = {'4': '24', '6': '64'}
+NET_SIZE = {'4': '24', '6': '56'}
