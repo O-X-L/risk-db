@@ -4,7 +4,7 @@
 
 This project wants to help admins/systems flag large quantities of bad traffic.
 
-Most generic attacks and bots originate from **cloud-providers, datacenters or other providers with lax security**.
+Most generic attacks and bots originate from **cloud-providers, datacenters and other threat-actors**.
 
 By flagging clients originating from these sources you can achieve a nice security improvement.
 
