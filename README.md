@@ -43,23 +43,19 @@ You might want to **flag** traffic from those sources and restrict their access 
 
 ----
 
-## Alternative Solutions
-
-This project is still in an early stage.
-
-You may also want to check out these projects: (*not open/free data*)
-
-* [CrowdSec](https://www.crowdsec.net/)
-* [AbuseIP-DB](https://www.abuseipdb.com/)
-* [IPInfo Privacy-DB](https://ipinfo.io/products/proxy-vpn-detection-api)
-* [nitefood/asn CLI-Tools](https://github.com/nitefood/asn)
-
-----
-
 ## Download Databases
 
 [![Database Updated At](https://risk.oxl.app/file/updated_at.svg)](https://risk.oxl.app/file/updated_at.svg)
 
+**ASN**: [JSON](https://risk.oxl.app/file/risk_asn_med.json.zip)
+
+**Networks**: [IPv4](https://risk.oxl.app/file/risk_net4_med.json.zip), [IPv6](https://risk.oxl.app/file/risk_net6_med.json.zip)
+
+**IPs**: [IPv4 JSON](https://risk.oxl.app/file/risk_ip4_med.json.zip), [IPv4 MMDB](https://risk.oxl.app/file/risk_ip4_med.mmdb.zip), [IPv6 JSON](https://risk.oxl.app/file/risk_ip6_med.json.zip), [IPv6 MMDB](https://risk.oxl.app/file/risk_ip6_med.mmdb.zip)
+
+You can find the raw report-data here: [O-X-L/risk-db-archive](https://github.com/O-X-L/risk-db-archive)
+
+<details>
 Databases marked with the key `all` include all reports.
 
 The ones marked with `med` (*default*) and `high` only include reports from reporters that have a certain level of reputation.
@@ -87,6 +83,8 @@ We recommend the use of our [GeoIP-ASN Database](https://github.com/O-X-L/geoip-
 * [Reports of IPv6 in JSON-format](https://risk.oxl.app/file/risk_ip6_med.json.zip) / [All](https://risk.oxl.app/file/risk_ip6_all.json.zip) / [High](https://risk.oxl.app/file/risk_ip6_high.json.zip)
 
 * [Reports of IPv6 in MMDB-format](https://risk.oxl.app/file/risk_ip6_med.mmdb.zip) / [All](https://risk.oxl.app/file/risk_ip6_all.mmdb.zip) / [High](https://risk.oxl.app/file/risk_ip6_high.mmdb.zip)
+
+</details>
 
 **Limits**:
 
@@ -195,6 +193,19 @@ See: [Graylog Alert Reporting](https://github.com/O-X-L/risk-db/blob/latest/repo
 #### Fail2Ban
 
 TBD
+
+----
+
+## Alternative Solutions
+
+This project is still in an early stage.
+
+You may also want to check out these projects: (*not open/free data*)
+
+* [CrowdSec](https://www.crowdsec.net/)
+* [AbuseIP-DB](https://www.abuseipdb.com/)
+* [IPInfo Privacy-DB](https://ipinfo.io/products/proxy-vpn-detection-api)
+* [nitefood/asn CLI-Tools](https://github.com/nitefood/asn)
 
 ----
 
