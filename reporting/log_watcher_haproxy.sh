@@ -123,4 +123,4 @@ function read_log_line() {
   done
 }
 
-tail "$LOG_FILE" -n0 -f | read_log_line
+tail "$LOG_FILE" -n0 -F | read_log_line
