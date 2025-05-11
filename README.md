@@ -15,8 +15,8 @@ If you (*just*) want to keep track of abusers internally - you could also host y
 You can find basic visualization examples for the latest data here: [www.risk.oxl.app](https://www.risk.oxl.app)
 
 <a href="https://github.com/O-X-L/risk-db/blob/latest/visualization">
-  <img src="https://raw.githubusercontent.com/O-X-L/risk-db/refs/heads/latest/visualization/world_map_example.webp" alt="World Map Example" width="800"/>
-  <img src="https://raw.githubusercontent.com/O-X-L/risk-db/refs/heads/latest/visualization/asn_chart_example.webp" alt="ASN Chart Example" width="800"/>
+  <img src="https://raw.githubusercontent.com/O-X-L/risk-db/refs/heads/latest/visualization/world_map_example.webp" alt="World Map Example" width="90%"/>
+  <img src="https://raw.githubusercontent.com/O-X-L/risk-db/refs/heads/latest/visualization/asn_chart_example.webp" alt="ASN Chart Example" width="70%"/>
 </a>
 
 ----
