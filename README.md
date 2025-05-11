@@ -84,13 +84,6 @@ We recommend the use of our [GeoIP-ASN Database](https://github.com/O-X-L/geoip-
 
 * [Reports of IPv6 in MMDB-format](https://risk.oxl.app/file/risk_ip6_med.mmdb.zip) / [All](https://risk.oxl.app/file/risk_ip6_all.mmdb.zip) / [High](https://risk.oxl.app/file/risk_ip6_high.mmdb.zip)
 
-</details>
-
-**Limits**:
-
-* Without token: 2 Downloads per IP & day
-* With token: 5 Downloads per IP & day
-
 **Tip**:
 
 You can use `jq` to easily filter the JSON data:
@@ -107,6 +100,13 @@ cat risk_asn_kind.json | jq -r 'map_values(select(.kind.scanner == true)) | to_e
 # or
 cat risk_ip4_med.json | jq -r 'map_values(select(.kind.hosting == true)) | to_entries[] | {asn: .key, name: .value.info.org.name}'
 ```
+
+</details>
+
+**API Limits**:
+
+* Without token: 2 Downloads per IP & day
+* With token: 5 Downloads per IP & day
 
 ----
 
@@ -132,7 +132,7 @@ curl https://risk.oxl.app/api/asn/<ASN>
 curl https://risk.oxl.app/api/asn/16509
 ```
 
-**Limits**:
+**API Limits**:
 
 * Without token:
   * 500 Requests per IP & 10 min
