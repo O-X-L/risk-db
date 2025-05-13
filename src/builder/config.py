@@ -1,11 +1,15 @@
 from pathlib import Path
+from datetime import timedelta
+from ipaddress import ip_network
 
 INFO_CATEGORIES = ['hosting', 'vpn', 'proxy']
 CATEGORIES = ['bot', 'probe', 'rate', 'attack', 'crawler']
 
 BASE_PATH = Path('/tmp/risk-db')
-MMDB_DESCRIPTION = 'OXL RISK-Database - risk.oxl.app (CC BY-SA 4.0)'
+MMDB_DESCRIPTION = 'OXL RISK-Database - risk.oxl.app (BSD-3-Clause)'
 REPORT_COOLDOWN = 10
+REPORT_DAYS = timedelta(days=30)  # sliding window
+PATH_REPORTS = 'examples/'
 ASN_JSON_FILE = Path('/tmp/asn_full.json')  # source: https://github.com/O-X-L/geoip-asn
 ASN_MMDB_FILE = BASE_PATH / 'oxl_geoip_asn.mmdb'  # source: https://github.com/O-X-L/geoip-asn
 SRC_PATH = Path(__file__).resolve().parent
@@ -23,6 +27,7 @@ CRAWLER_PTRS = [
 SCANNER_PTRS = [
     'scan', 'security', 'censys', 'shodan',
 ]
+CACHE_FILE_PTR = '/tmp/oxl-riskdb-cache-ptr.json'
 REPORTER_REPUTATION = {  # redacted for security reasons
     'med': 998,
     'high': 999,
@@ -42,3 +47,10 @@ NETWORK_REPUTATION_IPS = {
     },
 }
 NET_SIZE = {'4': '24', '6': '56'}
+HOSTING_ASN_FIND = ['host', 'cloud', 'server']
+
+# per example: CDN's will be false-positive reports
+_IGNORE_NETS_IP4 = []
+IGNORE_NETS_IP4 = [ip_network(n) for n in _IGNORE_NETS_IP4]
+_IGNORE_NETS_IP6 = []
+IGNORE_NETS_IP6 = [ip_network(n) for n in _IGNORE_NETS_IP6]
