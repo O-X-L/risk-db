@@ -30,7 +30,8 @@ def main():
     with open(args.file_net, 'r', encoding='utf-8') as f:
         raw = json_loads(f.read())
 
-    sorted_nets = dict(sorted(raw.items(), key=lambda item: item[1]['all'], reverse=True))
+    # sort by 'all' (max reports) or 'reported_ips' (worst reputation)
+    sorted_nets = dict(sorted(raw.items(), key=lambda item: item[1]['reported_ips'], reverse=True))
     i = 0
 
     with mmdb_database(args.asn_db) as m:
