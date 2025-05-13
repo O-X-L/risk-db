@@ -12,12 +12,12 @@ The databases created from the gathered data will be and stay open-source!
 
 If you (*just*) want to keep track of abusers internally - you could also host your dedicated instance of [this app](https://github.com/O-X-L/risk-db/blob/latest/src).
 
-You can find basic visualization examples for the latest data here: [www.risk.oxl.app](https://www.risk.oxl.app)
-
 <a href="https://github.com/O-X-L/risk-db/blob/latest/visualization">
-  <img src="https://raw.githubusercontent.com/O-X-L/risk-db/refs/heads/latest/visualization/world_map_example.webp" alt="World Map Example" width="90%"/>
-  <img src="https://raw.githubusercontent.com/O-X-L/risk-db/refs/heads/latest/visualization/asn_chart_example.webp" alt="ASN Chart Example" width="70%"/>
+  <img src="https://raw.githubusercontent.com/O-X-L/risk-db/refs/heads/latest/visualization/world_map_example.webp" alt="World Map Example" width="70%"/>
+  <img src="https://raw.githubusercontent.com/O-X-L/risk-db/refs/heads/latest/visualization/asn_chart_example.webp" alt="ASN Chart Example" width="50%"/>
 </a>
+
+You can find basic visualization examples for the latest data here: [www.risk.oxl.app](https://www.risk.oxl.app)
 
 ----
 
