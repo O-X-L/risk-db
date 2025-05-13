@@ -56,6 +56,8 @@ def _reports_by_day(tmp_dir: str) -> dict[list[dict]]:
                 if r[k] == '':
                     continue
 
+                r[k] = r[k].replace(',', ';')
+
                 if r[k] not in dedupe_map[k]:
                     dedupe_map[k].append(r[k])
 
