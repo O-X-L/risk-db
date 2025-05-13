@@ -1,5 +1,6 @@
 from threading import Lock
 from json import loads as json_loads
+from json import dumps as json_dumps
 from os import system as os_shell
 from ipaddress import ip_address
 
@@ -15,6 +16,9 @@ ptr_cache_lock = Lock()
 
 def lookup_ptrs(reports: list[dict]) -> dict:
     ptrs = {}
+    if Path(CACHE_FILE_PTR).is_file():
+        with open(CACHE_FILE_PTR, 'r', encoding='utf-8') as f:
+            ptrs = json_loads(f.read())
 
     def _ptr_lookup(ip: str):
         try:
@@ -29,6 +33,10 @@ def lookup_ptrs(reports: list[dict]) -> dict:
             pass
 
     process_list_in_threads(callback=_ptr_lookup, to_process=list(reports), key='ip', parallel=PTR_LOOKUP_THREADS)
+
+    with open(CACHE_FILE_PTR, 'w', encoding='utf-8') as f:
+        f.write(json_dumps(ptrs))
+
     return ptrs
 
 
