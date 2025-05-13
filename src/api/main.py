@@ -26,6 +26,13 @@ NET_JSON_FILES = {
     4: BASE_DIR / 'risk_net4_med.json',
     6: BASE_DIR / 'risk_net6_med.json',
 }
+KIND_FILES = {
+    'hosting': BASE_DIR / 'kind' / 'hosting.txt',
+    'isp': BASE_DIR / 'kind' / 'isp.txt',
+    'vpn': BASE_DIR / 'kind' / 'vpn.txt',
+    'crawler': BASE_DIR / 'kind' / 'crawler.txt',
+    'scanner': BASE_DIR / 'kind' / 'scanner.txt',
+}
 
 RISK_CATEGORIES = ['bot', 'attack', 'crawler', 'rate', 'hosting', 'vpn', 'proxy', 'probe']
 RISK_REPORT_DIR = BASE_DIR / 'reports'
@@ -173,6 +180,17 @@ def check_asn(nr) -> Response:
         return _response_json(code=404, data={'msg': 'Provided ASN not reported'})
 
 
+@app.route('/api/list/asn/<kind>', methods=['GET'])
+def list_asn_kind(kind: str) -> Response:
+    if not kind in ASN_KIND_DATA:
+        return _response_json(code=400, data={'msg': 'Invalid KIND provided'})
+
+    if len(ASN_KIND_DATA[kind]) == 0:
+        return _response_json(code=404, data={'msg': 'Temporary lookup failure'})
+
+    return _response_json(code=200, data={'asn': ASN_KIND_DATA[kind]})
+
+
 @app.route('/')
 def catch_base():
     return redirect(f"/api/ip/{_get_src_ip()}", code=302)
@@ -184,6 +202,37 @@ def catch_all(path):
     return redirect(f"/api/ip/{_get_src_ip()}", code=302)
 
 
+def _init_asn_kind() -> dict:
+    data = {}
+
+    # static lists
+    for k in KIND_FILES:
+        data[k] = []
+        if KIND_FILES[k].is_file():
+            with open(KIND_FILES[k], 'r', encoding='utf-8') as f:
+                data[k] = [l.strip() for l in f.readlines()]
+
+    # dynamically detected ones
+    for asn, v in ASN_DATA.items():
+        for k in KIND_FILES:
+            if k in v['kind'] and v['kind'][k]:
+                data[k].append(asn)
+
+    for k in KIND_FILES:
+        d = list(set(data[k]))
+        for i, n in enumerate(d):
+            try:
+                d[i] = int(n)
+
+            except ValueError:
+                pass
+
+        d.sort()
+        data[k] = d
+
+    return data
+
+
 if __name__ == '__main__':
     with open(ASN_JSON_FILE, 'r', encoding='utf-8') as f:
         ASN_DATA = json_loads(f.read())
@@ -193,5 +242,7 @@ if __name__ == '__main__':
     for _ipv, file in NET_JSON_FILES.items():
         with open(file, 'r', encoding='utf-8') as f:
             NET_DATA[_ipv] = json_loads(f.read())
+
+    ASN_KIND_DATA = _init_asn_kind()
 
     serve(app, host='127.0.0.1', port=8000)
