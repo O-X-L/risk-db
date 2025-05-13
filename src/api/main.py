@@ -35,7 +35,7 @@ report_lock = Lock()
 
 
 def _safe_comment(cmt: str) -> str:
-    return regex_replace(r'[^\sa-zA-Z0-9_=+.-]', '', cmt)[:50]
+    return regex_replace(r"[^\sa-zA-Z0-9_=+.-|\/']", '', cmt)[:100]
 
 
 def _response_json(code: int, data: dict) -> Response:
