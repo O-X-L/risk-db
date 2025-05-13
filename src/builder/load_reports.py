@@ -1,3 +1,5 @@
+# pylint: disable=R0915
+
 from os import listdir
 from json import loads as json_loads
 from ipaddress import ip_address, AddressValueError

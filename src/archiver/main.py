@@ -9,7 +9,7 @@ from os import system as shell
 from operator import itemgetter
 from ipaddress import ip_network
 
-from config import REPO_ARCHIVE, HEADERS_ARCHIVE_CSV, ARCHIVE_DEDUPE_FIELDS, GIT_TOKEN
+from .config import REPO_ARCHIVE, HEADERS_ARCHIVE_CSV, ARCHIVE_DEDUPE_FIELDS, GIT_TOKEN
 from ..builder.util import log
 from ..builder.config import NET_SIZE
 from ..builder.load_reports import load_all_reports

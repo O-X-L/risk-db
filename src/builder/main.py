@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
-from util import log
-from load_reports import load_reports
-from reputation import reports_by_reporter_reputation, reports_by_network_reputation
-from enrich_data import lookup_ptrs, load_lookup_lists
-from build import build_dbs_ip_asn, build_dbs_net
+from .util import log
+from .load_reports import load_reports
+from .reputation import reports_by_reporter_reputation, reports_by_network_reputation
+from .enrich_data import lookup_ptrs, load_lookup_lists
+from .build import build_dbs_ip_asn, build_dbs_net
 
 # todo: solution for IP-reputation history
 # todo: make use of reports containing info-categories
