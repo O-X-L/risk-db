@@ -106,6 +106,10 @@ See:
 * [Report Script - HAProxy](https://github.com/O-X-L/risk-db/blob/latest/reporting/log_watcher_haproxy.sh)
 * [Report Script - HAProxy JSON Log-Format](https://github.com/O-X-L/risk-db/blob/latest/reporting/log_watcher_haproxy_json.sh)
 
+If possible you should also add the User-Agent and a client-fingerprint (*p.e. JA4*) to the reports.
+
+For JA4 see: [O-X-L/haproxy-ja4](https://github.com/O-X-L/haproxy-ja4)
+
 <details>
 
 #### Logs
