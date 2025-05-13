@@ -103,7 +103,7 @@ cat risk_ip4_med.json | jq -r 'map_values(select(.kind.hosting == true)) | to_en
 
 </details>
 
-**API Limits**:
+**Download Limits**:
 
 * Without token: 2 Downloads per IP & day
 * With token: 5 Downloads per IP & day
