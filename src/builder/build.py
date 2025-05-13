@@ -100,8 +100,10 @@ def build_dbs_ip_asn(reports: dict, ptrs: dict, lookup_lists: dict, networks: di
 
                     if not asn_reports[asn]['kind']['hosting']:
                         asn_org = str(asn_reports[asn]['info']['org']).lower()
-                        if asn_org.find('cloud') != -1 or asn_org.find('host') != -1:
-                            asn_reports[asn]['kind']['hosting'] = True
+                        for f in HOSTING_ASN_FIND:
+                            if asn_org.find(f) != -1:
+                                asn_reports[asn]['kind']['hosting'] = True
+                                break
 
                 except KeyError as e:
                     print(f'ERROR: Failed to lookup metadata of ASN {asn} (KeyError: {e})')
