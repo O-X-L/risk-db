@@ -1,7 +1,7 @@
 from time import time
 from ipaddress import IPv4Address, AddressValueError, IPv4Interface, IPv6Interface
 
-from config import NET_SIZE
+from .config import NET_SIZE
 
 start_time = time()
 

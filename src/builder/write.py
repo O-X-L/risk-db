@@ -3,8 +3,8 @@ from os import remove as remove_file
 
 from mmdb_writer import MMDBWriter
 
-from config import *
-from util import log
+from .config import *
+from .util import log
 
 
 # pylint: disable=R0915

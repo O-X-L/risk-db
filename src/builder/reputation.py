@@ -1,5 +1,5 @@
-from config import *
-from util import get_ip_version, get_network_address
+from .config import *
+from .util import get_ip_version, get_network_address
 
 
 # pylint: disable=W0613

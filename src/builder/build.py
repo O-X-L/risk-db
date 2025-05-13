@@ -4,10 +4,10 @@ from mmdb_writer import MMDBWriter
 from netaddr import IPSet
 from netaddr.ip import IPNetwork
 
-from config import *
-from util import log
-from enrich_data import ip_asn_info, net_asn_info
-from write import write_ip_asn, write_nets
+from .config import *
+from .util import log
+from .enrich_data import ip_asn_info, net_asn_info
+from .write import write_ip_asn, write_nets
 
 
 # pylint: disable=R0912,R0914,R0915

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# pylint: disable=E0611,E0401,R0912,R0915
+# pylint: disable=R0912,R0915
 
 from time import time
 from hashlib import md5
@@ -10,9 +10,9 @@ from operator import itemgetter
 from ipaddress import ip_network
 
 from config import REPO_ARCHIVE, HEADERS_ARCHIVE_CSV, ARCHIVE_DEDUPE_FIELDS, GIT_TOKEN
-from builder.util import log
-from builder.config import NET_SIZE
-from builder.load_reports import load_all_reports
+from ..builder.util import log
+from ..builder.config import NET_SIZE
+from ..builder.load_reports import load_all_reports
 
 
 # NOTE: de-duplicating raw-report values to make the archive more compact

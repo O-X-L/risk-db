@@ -8,7 +8,7 @@ from oxl_utils.ps import process_list_in_threads
 from oxl_utils.net import resolve_dns
 from maxminddb import open_database as mmdb_database
 
-from config import *
+from .config import *
 
 
 ptr_cache_lock = Lock()

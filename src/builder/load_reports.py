@@ -3,7 +3,7 @@ from json import loads as json_loads
 from ipaddress import ip_address, AddressValueError
 # from datetime import datetime
 
-from config import REPORT_COOLDOWN, IGNORE_NETS_IP6, IGNORE_NETS_IP4, PATH_REPORTS
+from .config import REPORT_COOLDOWN, IGNORE_NETS_IP6, IGNORE_NETS_IP4, PATH_REPORTS
 # REPORT_DAYS
 
 SKIP_REASONS_DEFAULT = {'no_by': 0, 'no_cat': 0, 'bad_ip': 0, 'cooldown': 0, 'ignored': 0}
