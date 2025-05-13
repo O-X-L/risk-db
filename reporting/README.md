@@ -110,6 +110,8 @@ If possible you should also add the User-Agent and a client-fingerprint (*p.e. J
 
 For JA4 see: [O-X-L/haproxy-ja4](https://github.com/O-X-L/haproxy-ja4)
 
+NOTE: If you are behind a CDN - you will have to report the forwarded-for IP-addresses.
+
 <details>
 
 #### Logs
