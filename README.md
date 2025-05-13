@@ -134,6 +134,8 @@ curl https://risk.oxl.app/api/asn/16509
 
 **API Limits**:
 
+<details>
+
 * Without token:
   * 500 Requests per IP & 10 min
   * 5000 Requests per IP & day
@@ -142,6 +144,8 @@ curl https://risk.oxl.app/api/asn/16509
 * With token:
   * 5000 Requests per IP & 10 min
   * Anti-DOS
+
+</details>
 
 ----
 
@@ -165,6 +169,8 @@ Available categories are: `bot, probe, rate, attack, crawler, hosting, vpn, prox
 
 **Limits**:
 
+<details>
+
 * Without token:
   * 500 Requests per IP & 10 min
   * 5000 Requests per IP & day
@@ -173,6 +179,8 @@ Available categories are: `bot, probe, rate, attack, crawler, hosting, vpn, prox
 * With token:
   * 5000 Requests per IP & 10 min
   * Anti-DOS
+
+</details>
 
 If you want to get a (free) token for your systems - feel free to contact us at: [risk-db@oxl.at](mailto:risk-db@oxl.at)
 
