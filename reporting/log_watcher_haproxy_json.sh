@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-# dependencies: curl, jq
+# source: https://github.com/O-X-L/risk-db
+
+# dependencies (apt): curl, jq
 
 # see also: https://www.haproxy.com/blog/encoding-haproxy-logs-in-machine-readable-json-or-cbor
 
@@ -18,7 +20,7 @@ FIELD_STATUS='status_code'
 
 # change to the status-code you use when blocking attacks
 BLOCK_STATUS_PROBE='418'
-BLOCK_STATUS_BOT='425'
+BLOCK_STATUS_BOT='403'
 
 TOKEN=''  # optional supply an API token
 EXCLUDE_REGEX='##########'
@@ -104,21 +106,38 @@ function analyze_log_line() {
     return
   fi
 
+  msg='http'
+  # EXAMPLE of pulling user-agent and client-fingerprint from 'http-request capture'
+  #   for basic client-fingerprinting see: https://github.com/O-X-L/haproxy-ja4
+  #
+  #   these vars may be defined globally:
+  # FIELD_CAPTURE='captured_request_headers'  # json field
+  # FIELD_CAPTURE_UA=1  # user-agent = first capture
+  # FIELD_CAPTURE_FP=2  # client fingerprint = second capture
+  #
+  # capture="$(echo "$json" | jq -r ".${FIELD_CAPTURE}")"
+  # ua="$(echo "$capture" | cut -d '|' -f "$FIELD_CAPTURE_UA")"
+  # fp="$(echo "$capture" | cut -d '|' -f "$FIELD_CAPTURE_FP")"
+  # if [[ "$fp" != 'null' ]] && [[ "$fp" != '' ]]
+  # then
+  #   msg="FP: $fp | UA: '$ua'"
+  # fi
+
   if [[ "$status" == '429' ]]
   then
-    report_ip "$ip" 'rate' 'http'
+    report_ip "$ip" 'rate' "$msg"
 
   elif [[ "$status" == "$BLOCK_STATUS_PROBE" ]]
   then
-    report_ip "$ip" 'probe' 'http'
+    report_ip "$ip" 'probe' "$msg"
 
   elif [[ "$status" == "$BLOCK_STATUS_BOT" ]]
   then
-    report_ip "$ip" 'bot' 'http'
+    report_ip "$ip" 'bot' "$msg"
 
   elif [[ "$status" == '400' ]] && echo "$l" | grep -v -q '/api'
   then
-    report_ip "$ip" 'probe' 'http'
+    report_ip "$ip" 'probe' "$msg"
 
   fi
 }

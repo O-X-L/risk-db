@@ -6,6 +6,8 @@ Note: Bash regex does not support PCRE like `\d`, `\s` nor non-greedy `*?`
 
 You can run this script as systemd service:
 
+<details>
+
 * Example: [report_log_watcher.service](https://github.com/O-X-L/risk-db/blob/latest/reporting/log_watcher_APP.service)
 * Copy the scripts to `/usr/local/bin/` (*or wherever you want them to be*)
 * Enable/Start:
@@ -18,7 +20,7 @@ You can run this script as systemd service:
 
 ----
 
-## Service User
+### Service User
   
 You can run the service/script as unprivileged user if you give that user read-privileges on the target log-files.
 
@@ -30,6 +32,8 @@ You can add the user like this:
 useradd abuse-reporter --shell /usr/sbin/nologin
 usermod -a -G adm abuse-reporter
 ```
+
+</details>
 
 ----
 
@@ -46,6 +50,8 @@ See the scripts for examples.
 ### NFTables Firewall
 
 See: [Report Script - NFTables](https://github.com/O-X-L/risk-db/blob/latest/reporting/log_watcher_nftables.sh)
+
+<details>
 
 #### Logs
 
@@ -72,7 +78,7 @@ then /var/log/nftables.log
 
 #### Logrotate
 
-File: `/etc/logrotate.d/haproxy`
+File: `/etc/logrotate.d/nftables`
 
 Content:
 
@@ -90,11 +96,17 @@ Content:
 }
 ```
 
+</details>
+
 ----
 
 ### HAProxy
 
-See: [Report Script - HAProxy](https://github.com/O-X-L/risk-db/blob/latest/reporting/log_watcher_haproxy.sh) & [Report Script - HAProxy JSON Log-Format](https://github.com/O-X-L/risk-db/blob/latest/reporting/log_watcher_haproxy.sh)
+See:
+* [Report Script - HAProxy](https://github.com/O-X-L/risk-db/blob/latest/reporting/log_watcher_haproxy.sh)
+* [Report Script - HAProxy JSON Log-Format](https://github.com/O-X-L/risk-db/blob/latest/reporting/log_watcher_haproxy_json.sh)
+
+<details>
 
 #### Logs
 
@@ -140,3 +152,5 @@ Content:
   endscript
 }
 ```
+
+</details>

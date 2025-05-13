@@ -2,7 +2,7 @@
 
 # source: https://github.com/O-X-L/risk-db
 
-# dependencies: curl
+# dependencies (apt): curl
 
 if [ -z "$1" ] || [ ! -f "$1" ]
 then

@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-# dependencies: curl
+# source: https://github.com/O-X-L/risk-db
+
+# dependencies (apt): curl
 
 if [ -z "$1" ] || [ ! -f "$1" ]
 then
@@ -12,7 +14,7 @@ LOG_FILE="$1"
 
 # change to the status-code you use when blocking attacks
 BLOCK_STATUS_PROBE='418'
-BLOCK_STATUS_BOT='425'
+BLOCK_STATUS_BOT='403'
 
 TOKEN=''  # optional supply an API token
 EXCLUDE_REGEX='##########'
@@ -20,6 +22,7 @@ EXCLUDE_IP_REGEX='192.168.|172.16.|172.17.|172.18.|172.19.|172.20.|172.21.|172.2
 MAX_PARALLEL=10
 
 # NOTE: Bash regex does not support PCRE like '\d' '\s' nor non-greedy '*?'
+# NOTE: HAProxy JSON-logs are easier to parse!
 
 # HAProxy logs
 #   example: HTTP: [::ffff:93.158.91.0]:45081 [06/Oct/2024:23:29:22.354] fe_main~ be_oxl_files/oxl-files1 1/0/1/1/39 200 165442 - - ---- 4/3/0/0/0 0/0
@@ -90,21 +93,25 @@ function analyze_log_line() {
       return
     fi
 
+    msg='http'
+    # NOTE: it is also very useful if you log the user-agent and add it to the report message!
+    #   possibly also client-fingerprints like JA4 could be of use - see: https://github.com/O-X-L/haproxy-ja4
+
     if [[ "$status" == '429' ]]
     then
-      report_ip "$ip" 'rate' 'http'
+      report_ip "$ip" 'rate' "$msg"
 
     elif [[ "$status" == "$BLOCK_STATUS_PROBE" ]]
     then
-      report_ip "$ip" 'probe' 'http'
+      report_ip "$ip" 'probe' "$msg"
 
     elif [[ "$status" == "$BLOCK_STATUS_BOT" ]]
     then
-      report_ip "$ip" 'bot' 'http'
+      report_ip "$ip" 'bot' "$msg"
 
     elif [[ "$status" == '400' ]] && echo "$l" | grep -v -q '/api'
     then
-      report_ip "$ip" 'probe' 'http'
+      report_ip "$ip" 'probe' "$msg"
 
     fi
   fi
