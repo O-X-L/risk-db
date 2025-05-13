@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# pylint: disable=E0611,E0401,R0912,R0915
+
 from time import time
 from hashlib import md5
 from datetime import datetime
@@ -78,7 +80,7 @@ def _reports_by_day(tmp_dir: str) -> dict[list[dict]]:
 
 def _write_reports(reports: dict[list[dict]], tmp_dir: str):
     for y_m_d in reports:
-        y, m, d = y_m_d.split('_')
+        y, m, _ = y_m_d.split('_')
         tmp_dir_mon = f'{tmp_dir}/{y}/{m}'
         shell(f'mkdir -p {tmp_dir_mon}')
         with open(f'{tmp_dir_mon}/{y_m_d}.csv', 'w', encoding='utf-8') as f:
