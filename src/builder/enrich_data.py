@@ -27,7 +27,7 @@ def lookup_ptrs(reports: list[dict]) -> dict:
 
             ptr = resolve_dns(ip, t='PTR')[0]
             with ptr_cache_lock:
-                ptrs[ip] = ptr
+                ptrs[ip] = ptr.strip()
 
         except IndexError:
             pass
@@ -91,6 +91,10 @@ def ip_asn_info(ip: str, reports: dict, lookup_lists: dict, ptrs: dict) -> dict:
             'tor': ip in lookup_lists['tor'],
             'crawler': False,
             'scanner': False,
+            'bot': False,
+            'proxy': False,
+            'dynamic': False,
+            'maybe_hacked': False,
         },
         'url': {
             'asn': f'https://risk.oxl.app/api/asn/{asn}',
@@ -104,13 +108,38 @@ def ip_asn_info(ip: str, reports: dict, lookup_lists: dict, ptrs: dict) -> dict:
         if not d['kind']['tor'] and d['ptr'].find('tor-exit') != -1:
             d['kind']['tor'] = True
 
-        for crawler_ptr in CRAWLER_PTRS:
-            if d['ptr'].find(crawler_ptr) != -1:
-                d['kind']['crawler'] = True
+        if not d['kind']['tor']:
+            for bot_ptr in BOT_PTRS:
+                if d['ptr'].find(bot_ptr) != -1:
+                    d['kind']['bot'] = True
+                    break
 
-        for scanner_ptr in SCANNER_PTRS:
-            if d['ptr'].find(scanner_ptr) != -1:
-                d['kind']['scanner'] = True
+            for dyn_ptr in DYNAMIC_PTRS:
+                if d['ptr'].find(dyn_ptr) != -1:
+                    d['kind']['dynamic'] = True
+                    break
+
+        if not d['kind']['dynamic']:
+            for crawler_ptr in CRAWLER_PTRS:
+                if d['ptr'].find(crawler_ptr) != -1:
+                    d['kind']['crawler'] = True
+                    break
+
+            for scanner_ptr in SCANNER_PTRS:
+                if d['ptr'].find(scanner_ptr) != -1:
+                    d['kind']['scanner'] = True
+                    break
+
+            for proxy_ptr in PROXY_PTRS:
+                if d['ptr'].find(proxy_ptr) != -1:
+                    d['kind']['proxy'] = True
+                    break
+
+        if not d['kind']['dynamic'] and not d['kind']['bot']:
+            for hack_ptr in HACKED_PTRS:
+                if d['ptr'].find(hack_ptr) != -1:
+                    d['kind']['maybe_hacked'] = True
+                    break
 
     d_small = {**reports, 'ptr': ptrs[ip] if ip in ptrs else None}
 

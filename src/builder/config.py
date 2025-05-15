@@ -22,10 +22,25 @@ PTR_LOOKUP_THREADS = 50
 MIN_IP_REPORTS = 5
 TOR_EXIT_NODE_LIST = 'https://check.torproject.org/torbulkexitlist'
 CRAWLER_PTRS = [
-    'bot', 'google', 'bing', 'yahoo', 'yandex', 'openai',
+    'bot', 'google', 'bing', 'yahoo', 'yandex', 'openai', 'crawl', 'search.msn.com',
 ]
 SCANNER_PTRS = [
-    'scan', 'security', 'censys', 'shodan',
+    'scan', 'security', 'censys', 'shodan', 'monitoring', 'research',
+    'binaryedge.ninja', 'onyphe.net', 'stretchoid', 'criminalip',
+]
+BOT_PTRS = [
+    'amazonaws.com', 'akamaitechnologies.com', 'linodeusercontent.com', 'googleusercontent.com', 'web.vodafone.de',
+    'hosting', 'host', 'dedicated', 'srv', 'baremetal',
+]
+PROXY_PTRS = [
+    'proxy', 'privacy', 'tor', 'anonym',
+]
+DYNAMIC_PTRS = [
+    'dynamic', '.dyn.', 'starlinkisp.net', 'dsl', 'customers', 'mobil', 'mob-', 'wireless', 'cable', 'pool',
+    'tele', '.nat.', 'nat-',
+]
+HACKED_PTRS = [
+    'mail', 'smtp', 'owa', 'remote', 'mx', 'cam', 'vpn',
 ]
 CACHE_FILE_PTR = '/tmp/oxl-riskdb-cache-ptr.json'
 REPORTER_REPUTATION = {  # redacted for security reasons
