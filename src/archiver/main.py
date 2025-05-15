@@ -24,6 +24,10 @@ def _reports_by_day(tmp_dir: str) -> dict[list[dict]]:
 
     for raw_reports in load_all_reports():
         for r in raw_reports:
+            for k, v in r.items():
+                if v is None:
+                    r[k] = ''
+
             r['user'] = ''
             if 'token' in r:
                 if r['token'] is not None:
