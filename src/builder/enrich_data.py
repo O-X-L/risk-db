@@ -10,6 +10,7 @@ from maxminddb import open_database as mmdb_database
 
 from .config import *
 
+# pylint: disable=R0912,R0915
 
 ptr_cache_lock = Lock()
 
