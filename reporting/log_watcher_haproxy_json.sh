@@ -118,7 +118,7 @@ function analyze_log_line() {
   # capture="$(echo "$json" | jq -r ".${FIELD_CAPTURE}")"
   # ua="$(echo "$capture" | cut -d '|' -f "$FIELD_CAPTURE_UA")"
   # fp="$(echo "$capture" | cut -d '|' -f "$FIELD_CAPTURE_FP")"
-  # if [[ "$fp" != 'null' ]] && [[ "$fp" != '' ]]
+  # if { [[ "$ua" == 'null' ]] ||  [[ "$ua" == '' ]] ; } && [[ "$fp" == 'null' ]] ||  [[ "$fp" == '' ]]
   # then
   #   msg="FP: $fp | UA: '$ua'"
   # fi
