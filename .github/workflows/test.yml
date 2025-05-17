@@ -34,9 +34,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -r src/riskdb/builder/requirements.txt
-          pip install -r src/riskdb/api/requirements.txt
-          sudo apt install curl
+          pip install -r src/riskdb/builder/requirements.txt >/dev/null
+          pip install -r src/riskdb/api/requirements.txt >/dev/null
+          sudo apt install curl >/dev/null
         shell: bash
 
       - name: Preparing testdata
@@ -58,6 +58,7 @@ jobs:
       - name: Starting API
         run: |
           timeout 10 python3 src/riskdb/api/main.py &
+          sleep 2
           
           curl --fail -v http://localhost:8000/api/asn/398324
           curl --fail -v http://localhost:8000/api/ip/51.158.160.67
