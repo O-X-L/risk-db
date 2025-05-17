@@ -19,6 +19,18 @@ If you (*just*) want to keep track of abusers internally - you could also host y
 
 You can find basic visualization examples for the latest data here: [www.risk.oxl.app](https://www.risk.oxl.app)
 
+---
+
+## Repositories
+
+### Raw Data
+
+You can find the raw report-data here: [O-X-L/risk-db-archive](https://github.com/O-X-L/risk-db-archive)
+
+### Simple Lists
+
+You can find simple IP-/Network-/ASN-Lists here: [O-X-L/risk-db-lists](https://github.com/O-X-L/risk-db-lists)
+
 ----
 
 ## Contribute
@@ -41,6 +53,8 @@ You might want to **flag** traffic from those sources and restrict their access 
 * Add that flag to your logs so you can use it to analyze the traffic
 * Deny access to administrative locations
 
+Be aware that we cannot verify if reports are false-positives. We currently only keep track of simple reporter-reputation metrics.
+
 ----
 
 ## Download Databases
@@ -52,8 +66,6 @@ You might want to **flag** traffic from those sources and restrict their access 
 **Networks**: [IPv4](https://risk.oxl.app/file/risk_net4_med.json.zip), [IPv6](https://risk.oxl.app/file/risk_net6_med.json.zip)
 
 **IPs**: [IPv4 JSON](https://risk.oxl.app/file/risk_ip4_med.json.zip), [IPv4 MMDB](https://risk.oxl.app/file/risk_ip4_med.mmdb.zip), [IPv6 JSON](https://risk.oxl.app/file/risk_ip6_med.json.zip), [IPv6 MMDB](https://risk.oxl.app/file/risk_ip6_med.mmdb.zip)
-
-You can find the raw report-data here: [O-X-L/risk-db-archive](https://github.com/O-X-L/risk-db-archive)
 
 <details>
 Databases marked with the key `all` include all reports.
