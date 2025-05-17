@@ -17,7 +17,7 @@ on:
       # - 'requirements_lint.txt'
 
 jobs:
-  lint:
+  test:
     runs-on: ubuntu-latest
     timeout-minutes: 1
 

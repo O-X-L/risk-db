@@ -1,6 +1,7 @@
 # Open IP, Network & ASN Risk-Databases
 
 [![Lint](https://github.com/O-X-L/risk-db/actions/workflows/lint.yml/badge.svg)](https://github.com/O-X-L/risk-db/actions/workflows/lint.yml)
+[![Test](https://github.com/O-X-L/risk-db/actions/workflows/test.yml/badge.svg)](https://github.com/O-X-L/risk-db/actions/workflows/test.yml)
 
 This project wants to help admins/systems flag large quantities of bad traffic.
 
