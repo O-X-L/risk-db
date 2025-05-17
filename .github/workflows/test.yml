@@ -41,7 +41,10 @@ jobs:
 
       - name: Preparing testdata
         run: |
-          unzip testdata/*
+          unzip testdata/asn_full.json.zip
+          unzip testdata/asn_ipv4_full.mmdb.zip
+          unzip testdata/asn_ipv6_full.mmdb.zip
+          
           mkdir -p $HOME/Downloads
           mv testdata/*.json $HOME/Downloads/
           mv testdata/*.mmdb $HOME/Downloads/
