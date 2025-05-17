@@ -46,8 +46,8 @@ jobs:
           unzip -o testdata/asn_ipv6_full.mmdb.zip
           
           mkdir -p $HOME/Downloads
-          mv testdata/*.json $HOME/Downloads/
-          mv testdata/*.mmdb $HOME/Downloads/
+          mv *.json $HOME/Downloads/
+          mv *.mmdb $HOME/Downloads/
         shell: bash
 
       - name: Running Builder
