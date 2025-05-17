@@ -1,0 +1,66 @@
+---
+
+name: Test
+
+on:
+  push:
+    branches: [latest, main]
+    paths:
+      - '**.py'
+      - '.github/workflows/test.yml'
+      # - 'requirements_lint.txt'
+  pull_request:
+    branches: [latest, main]
+    paths:
+      - '**.py'
+      - '.github/workflows/test.yml'
+      # - 'requirements_lint.txt'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Install python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install -r src/riskdb/builder/requirements.txt
+          pip install -r src/riskdb/api/requirements.txt
+          sudo apt install curl
+        shell: bash
+
+      - name: Preparing testdata
+        run: |
+          unzip testdata/*
+          mkdir -p $HOME/Downloads
+          mv testdata/*.json $HOME/Downloads/
+          mv testdata/*.mmdb $HOME/Downloads/
+        shell: bash
+
+      - name: Running Builder
+        run: |
+          python3 src/riskdb/builder/main.py
+        shell: bash
+
+      - name: Starting API
+        run: |
+          timeout 10 python3 src/riskdb/api/main.py &
+          
+          curl --fail -v http://localhost:8000/api/asn/398324
+          curl --fail -v http://localhost:8000/api/ip/51.158.160.67
+          curl --fail -v http://localhost:8000/api/net/162.142.125.44
+          curl --fail -v http://localhost:8000/api/list/asn/vpn
+          curl --fail -v http://localhost:8000/api/list/asn/hosting >/dev/null
+
+          exit 0
+        shell: bash

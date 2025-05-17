@@ -1,43 +1,40 @@
 #!/usr/bin/env python3
 
-from ipaddress import IPv4Interface, IPv6Interface
-from re import sub as regex_replace
+# pylint: disable=E0606,C0413
+
+from time import time
+from hashlib import md5
+from pathlib import Path
 from threading import Lock
+from datetime import datetime
+from socket import gethostname
+from sys import path as sys_path
+from re import sub as regex_replace
 from json import dumps as json_dumps
 from json import loads as json_loads
-from time import time
-from socket import gethostname
-from pathlib import Path
-from datetime import datetime
+from ipaddress import ip_address, ip_network
 
-from flask import Flask, request, Response, json, redirect
-from waitress import serve
+sys_path.append(str(Path(__file__).parent.parent.parent))
+
 import maxminddb
-from oxl_utils.valid.net import valid_ip4, valid_public_ip, valid_asn, get_ipv
+from waitress import serve
+from flask import Flask, request, Response, json, redirect
+from oxl_utils.valid.net import valid_public_ip, valid_asn, get_ipv
+
+from riskdb.config import BUILD_DIR, KIND_FILES, REPORT_DIR, RISK_CATEGORIES, NET_SIZE, USER_TOKENS, \
+    EXCLUDE_NETS_IP4, EXCLUDE_NETS_IP6
 
 app = Flask('risk-db')
-BASE_DIR = Path('/var/local/lib/risk-db')
 RISKY_DB_FILE = {
-    4: BASE_DIR / 'risk_ip4_med.mmdb',
-    6: BASE_DIR / 'risk_ip6_med.mmdb',
+    4: BUILD_DIR / 'risk_ip4_med.mmdb',
+    6: BUILD_DIR / 'risk_ip6_med.mmdb',
 }
-ASN_JSON_FILE = BASE_DIR / 'risk_asn_med.json'
+ASN_JSON_FILE = BUILD_DIR / 'risk_asn_med.json'
 NET_JSON_FILES = {
-    4: BASE_DIR / 'risk_net4_med.json',
-    6: BASE_DIR / 'risk_net6_med.json',
-}
-KIND_FILES = {
-    'hosting': BASE_DIR / 'kind' / 'hosting.txt',
-    'isp': BASE_DIR / 'kind' / 'isp.txt',
-    'vpn': BASE_DIR / 'kind' / 'vpn.txt',
-    'crawler': BASE_DIR / 'kind' / 'crawler.txt',
-    'scanner': BASE_DIR / 'kind' / 'scanner.txt',
+    4: BUILD_DIR / 'risk_net4_med.json',
+    6: BUILD_DIR / 'risk_net6_med.json',
 }
 
-RISK_CATEGORIES = ['bot', 'attack', 'crawler', 'rate', 'hosting', 'vpn', 'proxy', 'probe']
-RISK_REPORT_DIR = BASE_DIR / 'reports'
-TOKENS = []
-NET_SIZE = {4: '24', 6: '56'}
 report_lock = Lock()
 
 
@@ -81,14 +78,14 @@ def report() -> Response:
 
     data = request.get_json()
 
-    data['ip_an'] = 0
+    data['an'] = 0
     if 'ip' in data:
         if data['ip'].startswith('::ffff:'):
             data['ip'] = data['ip'][7:]
 
         if data['ip'].endswith('.x'):
             data['ip'] = f"{data['ip'][:-1]}0"
-            data['ip_an'] = 1
+            data['an'] = 1
 
     if 'ip' not in data or not valid_public_ip(data['ip']):
         return _response_json(code=400, data={'msg': 'Invalid IP provided'})
@@ -99,18 +96,32 @@ def report() -> Response:
             data={'msg': f'Invalid Category provided - must be one of: {RISK_CATEGORIES}'},
         )
 
+    ip = ip_address(data['ip'])
+    if data['ip'].find('.') != -1:
+        to_ignore = EXCLUDE_NETS_IP4
+
+    else:
+        to_ignore = EXCLUDE_NETS_IP6
+
+    for net in to_ignore:
+        if ip in net:
+            return _response_json(
+                code=400,
+                data={'msg': 'The reported IP was excluded'},
+            )
+
     r = {
-        'ip': data['ip'], 'cat': data['cat'].lower(), 'time': int(time()), 'ip_an': data['ip_an'],
-        'v': 4 if valid_ip4(data['ip']) else 6, 'cmt': None, 'token': None, 'by': _get_src_ip(),
+        'ip': data['ip'], 'cat': data['cat'].lower(), 'time': int(time()), 'an': data['an'],
+        'cmt': None, 'token': None, 'by': _get_src_ip(),
     }
 
     if 'cmt' in data:
         r['cmt'] = _safe_comment(data['cmt'])
 
-    if 'Token' in request.headers and request.headers['Token'] in TOKENS:
-        r['token'] = request.headers['Token']
+    if 'Token' in request.headers and request.headers['Token'] in USER_TOKENS:
+        r['token'] = md5(request.headers['Token'].encode('utf-8')).hexdigest()[:6]
 
-    out_file = RISK_REPORT_DIR / f'{datetime.now().strftime("%Y-%m-%d")}_{gethostname()}.txt'
+    out_file = REPORT_DIR / f'{datetime.now().strftime("%Y-%m-%d")}_{gethostname()}.txt'
     with report_lock:
         with open(out_file, 'a+', encoding='utf-8') as fo:
             fo.write(json_dumps(r) + '\n')
@@ -143,21 +154,16 @@ def check_net(ip) -> Response:
     if ip.startswith('::ffff:'):
         ip = ip[7:]
 
-    if ip.find('/') != -1:
-        ip = ip.split('/', 1)[0]
+    for sep in ['|', '-', '/']:
+        if ip.find(sep) != -1:
+            ip = ip.split(sep, 1)[0]
 
     if not valid_public_ip(ip):
         return _response_json(code=400, data={'msg': 'Invalid IP provided'})
 
     ipv = get_ipv(ip)
 
-    if ipv == 4:
-        net = IPv4Interface(f"{ip}/{NET_SIZE[ipv]}").network.network_address.compressed
-
-    else:
-        net = IPv6Interface(f"{ip}/{NET_SIZE[ipv]}").network.network_address.compressed
-
-    net = f"{net}/{NET_SIZE[ipv]}"
+    net = str(ip_network(f"{ip}/{NET_SIZE[ipv]}", strict=False))
 
     try:
         # pylint: disable=E0606
@@ -206,16 +212,16 @@ def _init_asn_kind() -> dict:
     data = {}
 
     # static lists
-    for k in KIND_FILES:
+    for k, v in KIND_FILES.items():
         data[k] = []
-        if KIND_FILES[k].is_file():
-            with open(KIND_FILES[k], 'r', encoding='utf-8') as f:
-                data[k] = [l.strip() for l in f.readlines()]
+        if v.is_file():
+            with open(v, 'r', encoding='utf-8') as _f:
+                data[k] = [l.strip() for l in _f.readlines()]
 
     # dynamically detected ones
     for asn, v in ASN_DATA.items():
         for k in KIND_FILES:
-            if k in v['kind'] and v['kind'][k]:
+            if k in v['kind']:
                 data[k].append(asn)
 
     for k in KIND_FILES:

@@ -442,6 +442,7 @@ disable=raw-checker-failed,
         C0114, C0115, C0116,  # inline docs
         W0401, W0614,  # wildcard import for config
         W0511,  # todos
+        R0801, R0903,  # objects
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option

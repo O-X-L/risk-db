@@ -9,10 +9,10 @@ from os import system as shell
 from operator import itemgetter
 from ipaddress import ip_network
 
-from .config import REPO_ARCHIVE, HEADERS_ARCHIVE_CSV, ARCHIVE_DEDUPE_FIELDS, GIT_TOKEN
-from ..builder.util import log
-from ..builder.config import NET_SIZE
-from ..builder.load_reports import load_all_reports
+from riskdb.config import NET_SIZE
+from riskdb.archiver.config import REPO_ARCHIVE, HEADERS_ARCHIVE_CSV, ARCHIVE_DEDUPE_FIELDS, GIT_TOKEN
+from riskdb.builder.util import log
+from riskdb.builder.load_reports import FileLoader
 
 
 # NOTE: de-duplicating raw-report values to make the archive more compact
@@ -22,54 +22,57 @@ def _reports_by_day(tmp_dir: str) -> dict[list[dict]]:
     dedupe_map = {k: [] for k in ARCHIVE_DEDUPE_FIELDS}
     shell(f'mkdir -p {tmp_dir_dedupe}')
 
-    for raw_reports in load_all_reports():
-        for r in raw_reports:
-            for k, v in r.items():
-                if v is None:
-                    r[k] = ''
+    for r in FileLoader():
+        for k, v in r.items():
+            if v is None:
+                r[k] = ''
 
-            r['user'] = ''
-            if 'token' in r:
-                if r['token'] is not None:
+        r['user'] = ''
+        if 'token' in r:
+            if r['token'] is not None:
+                if len(r['token']) == 6:
+                    r['user'] = r['token']
+
+                else:
                     r['user'] = md5(r['token'].encode('utf-8')).hexdigest()[:6]
 
-                r.pop('token')
+            r.pop('token')
 
-            if 'v' in r:
-                r.pop('v')
+        if 'v' in r:
+            r.pop('v')
 
-            day = datetime.fromtimestamp(r['time']).strftime('%Y_%m_%d')
-            if day not in reports:
-                reports[day] = []
+        day = datetime.fromtimestamp(r['time']).strftime('%Y_%m_%d')
+        if day not in reports:
+            reports[day] = []
 
-            if 'ip_an' not in r:
-                r['ip_an'] = ''
+        if 'an' not in r:
+            r['an'] = ''
 
-            if 'fp' not in r:
-                r['fp'] = ''
+        if 'fp' not in r:
+            r['fp'] = ''
 
-            if r['by'].find(':') != -1:
-                cidr = NET_SIZE['6']
+        if r['by'].find(':') != -1:
+            cidr = NET_SIZE['6']
 
-            else:
-                cidr = NET_SIZE['4']
+        else:
+            cidr = NET_SIZE['4']
 
-            r['by'] = str(ip_network(f"{r['by']}/{cidr}", strict=False)).split('/', 1)[0]
-            if r['by'] in ['::', '::1', '127.0.0.0']:
-                r['by'] = ''
+        r['by'] = str(ip_network(f"{r['by']}/{cidr}", strict=False)).split('/', 1)[0]
+        if r['by'] in ['::', '::1', '127.0.0.0']:
+            r['by'] = ''
 
-            for k in ARCHIVE_DEDUPE_FIELDS:
-                if r[k] == '':
-                    continue
+        for k in ARCHIVE_DEDUPE_FIELDS:
+            if r[k] == '':
+                continue
 
-                r[k] = r[k].replace(',', ';')
+            r[k] = r[k].replace(',', ';')
 
-                if r[k] not in dedupe_map[k]:
-                    dedupe_map[k].append(r[k])
+            if r[k] not in dedupe_map[k]:
+                dedupe_map[k].append(r[k])
 
-                r[k] = dedupe_map[k].index(r[k])
+            r[k] = dedupe_map[k].index(r[k])
 
-            reports[day].append(r)
+        reports[day].append(r)
 
     for k in ARCHIVE_DEDUPE_FIELDS:
         with open(f'{tmp_dir_dedupe}/field_{k}.csv', 'w', encoding='utf-8') as f:
@@ -92,7 +95,7 @@ def _write_reports(reports: dict[list[dict]], tmp_dir: str):
             for r in reports[y_m_d]:
                 f.write(
                     f"{r['time']},"
-                    f"{r['ip']},{r['ip_an']},{r['cat']},{r['cmt']},"
+                    f"{r['ip']},{r['an']},{r['cat']},{r['cmt']},"
                     f"{r['by']},{r['user']},{r['fp']}\n"
                 )
 
