@@ -17,6 +17,7 @@ KIND_FILES = {
     'crawler': BASE_DIR / 'kind' / 'crawler.txt',
     'scanner': BASE_DIR / 'kind' / 'scanner.txt',
     'proxy': BASE_DIR / 'kind' / 'proxy.txt',
+    'education': BASE_DIR / 'kind' / 'education.txt',
 }
 
 RISK_CATEGORIES = ['bot', 'attack', 'crawler', 'rate', 'hosting', 'vpn', 'proxy', 'probe']

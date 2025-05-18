@@ -14,6 +14,7 @@ from riskdb.builder.obj.asn import ASN
 from riskdb.builder.obj.report import Report
 from riskdb.builder.obj.reporter import Reporter
 from riskdb.builder.obj.network import Network, get_network_cidr
+from riskdb.builder.util import log
 
 SKIP_REASONS_DEFAULT = {'no_cat': 0, 'bad_ip': 0, 'cooldown': 0, 'ignored': 0, 'bad_json': 0}
 
@@ -101,6 +102,7 @@ class FileLoader:
 
 
 def build_objects(loader: FileLoader, lookup_lists: dict, ptrs: dict):
+    i = 0
     asns = {}
     ips = {}
     nets = {}
@@ -108,6 +110,7 @@ def build_objects(loader: FileLoader, lookup_lists: dict, ptrs: dict):
 
     with mmdb_database(ASN_MMDB_FILE_IP4) as asn_db_ip4, mmdb_database(ASN_MMDB_FILE_IP6) as asn_db_ip6:
         for raw in loader:
+            i += 1
             r = Report(raw=raw, reporters=reporters)
             if r.ipv == 4:
                 asn = asn_db_ip4.get(r.ip)
@@ -119,7 +122,7 @@ def build_objects(loader: FileLoader, lookup_lists: dict, ptrs: dict):
                 asn = int(asn['asn'])
                 # ipinfo-db: asn = int(asn['asn'][2:])
 
-            except (TypeError, ValueError):
+            except (TypeError, ValueError, KeyError):
                 asn = 0
 
             if asn not in asns:
@@ -146,5 +149,7 @@ def build_objects(loader: FileLoader, lookup_lists: dict, ptrs: dict):
         v.update_kind()
         # print(nets[n])
 
-    print("INFO - Reports skipped:", loader.skip_reasons)
+    log(f"INFO: {i} reports loaded | "
+        f"ASN {len(asns):_} | Networks {len(nets):_} | IPs {len(ips):_} | "
+        f"Skipped: {loader.skip_reasons}")
     return asns, nets, ips

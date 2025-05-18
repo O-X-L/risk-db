@@ -2,6 +2,7 @@
 
 from riskdb.config import RISK_CATEGORIES
 from riskdb.builder.obj.report import Report
+from riskdb.builder.util import log
 
 ASN_KINDS = ['hosting', 'vpn', 'scanner', 'crawler']
 ASN_FIND = {
@@ -19,7 +20,7 @@ class ASN:
             self.info = self._init_info(lookup_lists)
 
         except KeyError as e:
-            print(f'WARN: Failed to lookup metadata of ASN {self.id} (KeyError: {e})')
+            log(f'WARN: Failed to lookup metadata of ASN {self.id} (KeyError: {e})')
             self.info = {}
 
     def dump(self, min_legitimacy: int = 0) -> dict:

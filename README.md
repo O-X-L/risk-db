@@ -38,6 +38,8 @@ You can find simple IP-/Network-/ASN-Lists here: [O-X-L/risk-db-lists](https://g
 
 Contributions like [reporting issues](https://github.com/O-X-L/risk-db/issues/new), [engaging in discussions](https://github.com/O-X-L/risk-db/discussions) or [PRs](https://github.com/O-X-L/risk-db/pulls) are welcome!
 
+See also: [Example](https://github.com/O-X-L/risk-db/blob/latest/src/README.md)
+
 ----
 
 ## Usage

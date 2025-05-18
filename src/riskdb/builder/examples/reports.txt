@@ -52,9 +52,9 @@
 {"ip": "45.84.89.3", "cat": "probe", "time": 1728770322, "cmt": "fw", "token": "f7e052", "by": "", "an": 0}
 {"ip": "198.235.24.176", "cat": "bot", "time": 1728770322, "cmt": "http", "token": "f7e052", "by": "", "an": 0}
 {"ip": "35.203.211.142", "cat": "probe", "time": 1728770323, "cmt": "fw", "token": "f7e052", "by": "", "an": 0}
-{"ip": "8.209.96.38", "cat": "probe", "time": 1728770326, "cmt": "fw", "token": "f7e052", "by": "", "an": 0}
-{"ip": "80.75.212.9", "cat": "probe", "time": 1728770328, "cmt": "fw", "token": "f7e052", "by": "", "an": 0}
-{"ip": "92.249.48.232", "cat": "probe", "time": 1728770329, "cmt": "fw", "token": "f7e052", "by": "", "an": 0}
+{"ip": "8.209.96.0", "cat": "probe", "time": 1728770326, "cmt": "fw", "token": "f7e052", "by": "", "an": 1}
+{"ip": "80.75.212.0", "cat": "probe", "time": 1728770328, "cmt": "fw", "token": "f7e052", "by": "", "an": 1}
+{"ip": "92.249.48.0", "cat": "probe", "time": 1728770329, "cmt": "fw", "token": "f7e052", "by": "", "an": 1}
 {"ip": "43.153.220.12", "cat": "probe", "time": 1728770332, "cmt": "fw", "token": "f7e052", "by": "", "an": 0}
 {"ip": "50.115.181.35", "cat": "probe", "time": 1728770338, "cmt": "fw", "token": "f7e052", "by": "", "an": 0}
 {"ip": "80.75.212.9", "cat": "probe", "time": 1728770341, "cmt": "fw", "token": "f7e052", "by": "", "an": 0}

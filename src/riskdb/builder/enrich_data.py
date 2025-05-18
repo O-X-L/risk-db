@@ -38,7 +38,9 @@ def load_lookup_lists() -> dict:
         lookup_lists['tor'] = []
         for ip in f.readlines():
             try:
-                lookup_lists['tor'].append(ip_address(ip.strip()))
+                ip = ip.strip()
+                ip_address(ip)
+                lookup_lists['tor'].append(ip)
 
             except AddressValueError:
                 continue
@@ -48,17 +50,14 @@ def load_lookup_lists() -> dict:
         lookup_lists['asn'] = json_loads(f.read())
 
     # creation of these files has yet to be automated
-    with open(KIND_FILES['hosting'], 'r', encoding='utf-8') as f:
-        lookup_lists['hosting'] = [int(asn.strip()) for asn in f.readlines()]
+    for k, v in KIND_FILES.items():
+        if not Path(v).is_file():
+            log(f'WARN: Failed to load lookup-list of kind {k}')
+            lookup_lists[k] = []
+            continue
 
-    with open(KIND_FILES['vpn'], 'r', encoding='utf-8') as f:
-        lookup_lists['vpn'] = [int(asn.strip()) for asn in f.readlines()]
-
-    with open(KIND_FILES['scanner'], 'r', encoding='utf-8') as f:
-        lookup_lists['scanner'] = [int(asn.strip()) for asn in f.readlines()]
-
-    with open(KIND_FILES['crawler'], 'r', encoding='utf-8') as f:
-        lookup_lists['crawler'] = [int(asn.strip()) for asn in f.readlines()]
+        with open(v, 'r', encoding='utf-8') as f:
+            lookup_lists[k] = [int(l.strip()) for l in f.readlines()]
 
     return lookup_lists
 
@@ -77,7 +76,7 @@ def _load_ptr_cache() -> dict:
                         ptrs[ip] = ptr_ts['p']
 
             except (JSONDecodeError, ValueError, KeyError, TypeError) as e:
-                print(f'WARN: Failed to load PTR-cache (Error: {e})')
+                log(f'WARN: Failed to load PTR-cache (Error: {e})')
                 pass
 
     return ptrs
@@ -191,3 +190,7 @@ def query_ptrs(loader: FileLoader) -> dict:
     wait_for_threads(threads, timeout=60)
     _save_ptr_cache(ptrs)
     return ptrs
+
+
+def get_ptrs_from_cache() -> dict:
+    return _load_ptr_cache()
