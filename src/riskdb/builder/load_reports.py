@@ -149,7 +149,7 @@ def build_objects(loader: FileLoader, lookup_lists: dict, ptrs: dict):
         v.update_kind()
         # print(nets[n])
 
-    log(f"INFO: {i} reports loaded | "
+    log(f"INFO: {i:_} reports loaded | "
         f"ASN {len(asns):_} | Networks {len(nets):_} | IPs {len(ips):_} | "
         f"Skipped: {loader.skip_reasons}")
     return asns, nets, ips
