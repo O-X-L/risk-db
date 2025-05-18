@@ -1,5 +1,5 @@
 from os import environ
-# from datetime import timedelta
+from datetime import timedelta
 
 from riskdb.config import DL_DIR
 
@@ -15,7 +15,7 @@ ASN_MMDB_FILE_IP6 = DL_DIR / 'asn_ipv6_full.mmdb'  # https://geoip.oxl.app/file/
 
 MMDB_DESCRIPTION = 'OXL RISK-Database - risk.oxl.app (BSD-3-Clause)'
 REPORT_COOLDOWN = 10  # sec
-# REPORT_DAYS = timedelta(days=30)  # sliding window
+REPORT_DAYS = timedelta(days=30)  # sliding window
 TOR_EXIT_NODE_LIST = 'https://check.torproject.org/torbulkexitlist'
 
 PTR_LOOKUP_THREADS = 50

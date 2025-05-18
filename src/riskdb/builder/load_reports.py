@@ -1,6 +1,7 @@
 # pylint: disable=R0915
 
 from os import listdir
+from datetime import datetime
 from json import JSONDecodeError
 from json import loads as json_loads
 from ipaddress import ip_address, AddressValueError
@@ -8,7 +9,7 @@ from ipaddress import ip_address, AddressValueError
 from maxminddb import open_database as mmdb_database
 
 from riskdb.config import EXCLUDE_NETS_IP4, EXCLUDE_NETS_IP6, REPORT_DIR, USER_TOKENS
-from riskdb.builder.config import REPORT_COOLDOWN, ASN_MMDB_FILE_IP4, ASN_MMDB_FILE_IP6
+from riskdb.builder.config import REPORT_COOLDOWN, ASN_MMDB_FILE_IP4, ASN_MMDB_FILE_IP6, REPORT_DAYS
 from riskdb.builder.obj.ip import IP
 from riskdb.builder.obj.asn import ASN
 from riskdb.builder.obj.report import Report
@@ -17,6 +18,7 @@ from riskdb.builder.obj.network import Network, get_network_cidr
 from riskdb.builder.util import log
 
 SKIP_REASONS_DEFAULT = {'no_cat': 0, 'bad_ip': 0, 'cooldown': 0, 'ignored': 0, 'bad_json': 0}
+SLIDING_WINDOW_START = datetime.now() - REPORT_DAYS
 
 
 class ReportLoader:
@@ -85,12 +87,31 @@ class ReportLoader:
 
 
 class FileLoader:
-    def __init__(self, path: str = REPORT_DIR):
+    def __init__(self, path: str = REPORT_DIR, sliding_window: bool = False, match_date: datetime = None):
         self.path = path
+        self.match_date = match_date
+        self.sliding_window = sliding_window
         self.skip_reasons = SKIP_REASONS_DEFAULT.copy()
 
     def load(self):
         for file in listdir(REPORT_DIR):
+            file_path = REPORT_DIR / file
+            if self.sliding_window or self.match_date is not None:
+                ct = datetime.fromtimestamp(file_path.stat().st_ctime)
+
+                if self.sliding_window and ct < SLIDING_WINDOW_START:
+                    continue
+
+                # only get reports of that day (even if we created the file later on)
+                if self.match_date is not None:
+                    y = str(self.match_date.year).zfill(2)
+                    m = str(self.match_date.month).zfill(2)
+                    d = str(self.match_date.day).zfill(2)
+                    ys1, ys2 = f'{y}-{m}-{d}', f'{y}_{m}_{d}'
+                    if (ct.year != y or ct.month != m or ct.day != d) and \
+                            file.find(ys1) == -1 and file.find(ys2) == -1:
+                        continue
+
             loader = ReportLoader(f'{REPORT_DIR}/{file}')
             yield from loader
 

@@ -1,14 +1,19 @@
-from os import system as shell
+from pathlib import Path
 from datetime import datetime
+from os import system as shell
 
+from riskdb.config import MODE_TEST
 from riskdb.archiver.config import GIT_TOKEN
 
 
-def git_clone(repo: str, tmp_dir: str):
+def git_clone(repo: str, tmp_dir: Path):
     shell(f'git clone https://{repo} {tmp_dir} >/dev/null')
 
 
-def git_commit_and_push(user: str, cmt: str, repo: str, tmp_dir: str):
+def git_commit_and_push(user: str, cmt: str, repo: str, tmp_dir: Path):
+    if MODE_TEST == '1':
+        return
+
     today = datetime.now().strftime('%Y-%m-%d')
     shell(
         f"cd {tmp_dir} && "
@@ -22,5 +27,8 @@ def git_commit_and_push(user: str, cmt: str, repo: str, tmp_dir: str):
 
 
 def git_check_token():
+    if MODE_TEST == '1':
+        return
+
     if GIT_TOKEN is None or not GIT_TOKEN.startswith('ghp_'):
         raise PermissionError('Required GIT-Token was not supplied!')

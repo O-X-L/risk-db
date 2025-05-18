@@ -5,29 +5,28 @@
 from time import time
 from hashlib import md5
 from pathlib import Path
-from datetime import datetime
 from os import system as shell
 from operator import itemgetter
 from sys import path as sys_path
 from ipaddress import ip_network
+from datetime import datetime, timedelta
 
 sys_path.append(str(Path(__file__).parent.parent.parent))
 
 from riskdb.config import NET_SIZE
-from riskdb.archiver.config import REPO_ARCHIVE, HEADERS_ARCHIVE_CSV, ARCHIVE_DEDUPE_FIELDS
 from riskdb.builder.util import log
 from riskdb.builder.load_reports import FileLoader
 from riskdb.archiver.util import git_commit_and_push, git_clone, git_check_token
+from riskdb.archiver.config import REPO_ARCHIVE, HEADERS_ARCHIVE_CSV, ARCHIVE_DEDUPE_FIELDS, ARCHIVE_START_DATE
 
 
-# NOTE: de-duplicating raw-report values to make the archive more compact
-def _reports_by_day(tmp_dir: str) -> dict[list[dict]]:
-    reports = {}
-    tmp_dir_dedupe = f'{tmp_dir}/dedupe'
-    dedupe_map = {k: [] for k in ARCHIVE_DEDUPE_FIELDS}
-    shell(f'mkdir -p {tmp_dir_dedupe}')
+def _generate_archive_for_day(date: datetime, dedupe_map: dict, tmp_dir: Path) -> dict:
+    reports = []
+    for r in FileLoader(sliding_window=False, match_date=date):
+        rdate = datetime.fromtimestamp(r['time'])
+        if rdate.year != date.year or rdate.month != date.month or rdate.day != date.day:
+            continue
 
-    for r in FileLoader():
         for k, v in r.items():
             if v is None:
                 r[k] = ''
@@ -46,25 +45,19 @@ def _reports_by_day(tmp_dir: str) -> dict[list[dict]]:
         if 'v' in r:
             r.pop('v')
 
-        day = datetime.fromtimestamp(r['time']).strftime('%Y_%m_%d')
-        if day not in reports:
-            reports[day] = []
-
         if 'an' not in r:
             r['an'] = ''
 
-        if 'fp' not in r:
-            r['fp'] = ''
+        if r['by'] != '':
+            if r['by'].find(':') != -1:
+                cidr = NET_SIZE['6']
 
-        if r['by'].find(':') != -1:
-            cidr = NET_SIZE['6']
+            else:
+                cidr = NET_SIZE['4']
 
-        else:
-            cidr = NET_SIZE['4']
-
-        r['by'] = str(ip_network(f"{r['by']}/{cidr}", strict=False)).split('/', 1)[0]
-        if r['by'] in ['::', '::1', '127.0.0.0']:
-            r['by'] = ''
+            r['by'] = str(ip_network(f"{r['by']}/{cidr}", strict=False)).split('/', 1)[0]
+            if r['by'] in ['::', '::1', '127.0.0.0']:
+                r['by'] = ''
 
         for k in ARCHIVE_DEDUPE_FIELDS:
             if r[k] == '':
@@ -77,32 +70,49 @@ def _reports_by_day(tmp_dir: str) -> dict[list[dict]]:
 
             r[k] = dedupe_map[k].index(r[k])
 
-        reports[day].append(r)
+        reports.append(r)
 
+    reports = sorted(reports, key=itemgetter('time'))
+
+    if len(reports) == 0:
+        return dedupe_map
+
+    y = str(date.year).zfill(2)
+    m = str(date.month).zfill(2)
+    d = str(date.day).zfill(2)
+    tmp_dir_mon = tmp_dir / y / m
+    shell(f'mkdir -p {tmp_dir_mon}')
+    with open(f'{tmp_dir_mon}/{y}_{m}_{d}.csv', 'w', encoding='utf-8') as f:
+        f.write(f"{','.join(HEADERS_ARCHIVE_CSV)}\n")
+        for r in reports:
+            f.write(
+                f"{r['time']},"
+                f"{r['ip']},{r['an']},{r['cat']},{r['cmt']},"
+                f"{r['by']},{r['user']}\n"
+            )
+
+    return dedupe_map
+
+
+# todo: multi-threading
+def _generate_archive(tmp_dir: Path):
+    today = datetime.now()
+    date = ARCHIVE_START_DATE
+    dedupe_map = {k: [] for k in ARCHIVE_DEDUPE_FIELDS}
+
+    while date.year < today.year or date.month < today.month or date.day <= today.day:
+        log(f'Generating archive for day: '
+            f'{str(date.year).zfill(2)}-{str(date.month).zfill(2)}-{str(date.day).zfill(2)}')
+        dedupe_map = _generate_archive_for_day(date=date, dedupe_map=dedupe_map, tmp_dir=tmp_dir)
+        date += timedelta(days=1)
+
+    log('Writing dedupe-maps')
+    tmp_dir_dedupe = tmp_dir / 'dedupe'
+    shell(f'mkdir -p {tmp_dir_dedupe}')
     for k in ARCHIVE_DEDUPE_FIELDS:
         with open(f'{tmp_dir_dedupe}/field_{k}.csv', 'w', encoding='utf-8') as f:
             f.write('Key,Value\n')
             f.write('\n'.join([f'{i},{v}' for i, v in enumerate(dedupe_map[k])]))
-
-    for day in reports:
-        reports[day] = sorted(reports[day], key=itemgetter('time'))
-
-    return reports
-
-
-def _write_reports(reports: dict[list[dict]], tmp_dir: str):
-    for y_m_d in reports:
-        y, m, _ = y_m_d.split('_')
-        tmp_dir_mon = f'{tmp_dir}/{y}/{m}'
-        shell(f'mkdir -p {tmp_dir_mon}')
-        with open(f'{tmp_dir_mon}/{y_m_d}.csv', 'w', encoding='utf-8') as f:
-            f.write(f"{','.join(HEADERS_ARCHIVE_CSV)}\n")
-            for r in reports[y_m_d]:
-                f.write(
-                    f"{r['time']},"
-                    f"{r['ip']},{r['an']},{r['cat']},{r['cmt']},"
-                    f"{r['by']},{r['user']},{r['fp']}\n"
-                )
 
     git_commit_and_push(user='Report Updater', cmt='Report updates', repo=REPO_ARCHIVE, tmp_dir=tmp_dir)
 
@@ -110,14 +120,10 @@ def _write_reports(reports: dict[list[dict]], tmp_dir: str):
 def main():
     log('Prepare Repository')
     git_check_token()
-    tmp_dir = f'/tmp/risk_db_archive_{int(time())}'
+    tmp_dir = Path(f'/tmp/risk_db_archive_{int(time())}')
     git_clone(repo=REPO_ARCHIVE, tmp_dir=tmp_dir)
 
-    log('Loading & Sorting Reports by Day')
-    reports_by_day = _reports_by_day(tmp_dir)
-
-    log('Write Reports')
-    _write_reports(reports_by_day, tmp_dir)
+    _generate_archive(tmp_dir)
 
 
 if __name__ == '__main__':

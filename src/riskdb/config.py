@@ -2,6 +2,8 @@ from os import environ
 from pathlib import Path
 from ipaddress import ip_network
 
+MODE_TEST = environ.get('RISKDB_TEST', '0')
+
 USER_TOKENS = [
     'ceaf6e70-71c7-4415-92c0-2be6ea5f743b',  # dummy test-token
 ]
