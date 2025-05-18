@@ -11,15 +11,15 @@ from maxminddb import open_database as mmdb_database
 
 SRC_PATH = Path(__file__).resolve().parent
 HIGHLIGHT_TOP_N = 20
-CATEGORIES = ['all', 'bot', 'probe', 'rate', 'attack', 'crawler']
+CATEGORIES = ['sum', 'bot', 'probe', 'rate', 'attack', 'crawler']
 
 # todo: add change to last month
 DATA = {
     'targetElementID': 'svgMap',
     'data': {
-        'applyData': 'all',
+        'applyData': 'sum',
         'data': {
-            'all': {
+            'sum': {
                 'name': 'Reported abuse originating from this country',
                 'format': '{0}',
                 'thousandSeparator': '.',
@@ -70,25 +70,24 @@ def main():
 
     with mmdb_database(args.country_db) as m:
         for ipv, ipv_db in {'ip4': raw4, 'ip6': raw6}.items():
-            for ips in ipv_db.values():
-                for ip, reports in ips.items():
-                    ip_md = m.get(ip)
-                    if ip_md['country'] not in DATA['data']['values']:
-                        DATA['data']['values'][ip_md['country']] = {c: 0 for c in CATEGORIES}
-                        DATA['data']['values'][ip_md['country']]['ip4'] = 0
-                        DATA['data']['values'][ip_md['country']]['ip6'] = 0
+            for ip, v in ipv_db.items():
+                ip_md = m.get(ip)
+                if ip_md['country'] not in DATA['data']['values']:
+                    DATA['data']['values'][ip_md['country']] = {c: 0 for c in CATEGORIES}
+                    DATA['data']['values'][ip_md['country']]['ip4'] = 0
+                    DATA['data']['values'][ip_md['country']]['ip6'] = 0
 
-                    for c in CATEGORIES:
-                        if c in reports:
-                            DATA['data']['values'][ip_md['country']][c] += reports[c]
+                for c in CATEGORIES:
+                    if c in v['reports']:
+                        DATA['data']['values'][ip_md['country']][c] += v['reports'][c]
 
-                    DATA['data']['values'][ip_md['country']][ipv] += reports['all']
+                DATA['data']['values'][ip_md['country']][ipv] += v['reports']['sum']
 
-    DATA['data']['values'] = dict(sorted(DATA['data']['values'].items(), key=lambda item: item[1]['all'], reverse=True))
+    DATA['data']['values'] = dict(sorted(DATA['data']['values'].items(), key=lambda item: item[1]['sum'], reverse=True))
     with open(SRC_PATH / 'world_map.json', 'w', encoding='utf-8') as f:
         top_country_values = list(DATA['data']['values'].values())
-        DATA['data']['data']['all']['thresholdMax'] = top_country_values[0]['all']
-        DATA['data']['data']['all']['thresholdMin'] = top_country_values[HIGHLIGHT_TOP_N]['all']
+        DATA['data']['data']['sum']['thresholdMax'] = top_country_values[0]['sum']
+        DATA['data']['data']['sum']['thresholdMin'] = top_country_values[HIGHLIGHT_TOP_N]['sum']
         f.write(json_dumps(DATA, indent=4))
 
 

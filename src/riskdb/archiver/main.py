@@ -124,4 +124,7 @@ def main():
 
 
 if __name__ == '__main__':
+    if GIT_TOKEN is None:
+        raise PermissionError('Required GIT-Token was not supplied!')
+
     main()

@@ -11,7 +11,7 @@ from maxminddb import open_database as mmdb_database
 
 SRC_PATH = Path(__file__).resolve().parent
 TOP_N = 30
-CATEGORIES = ['all', 'bot', 'probe', 'rate', 'attack', 'crawler']
+CATEGORIES = ['sum', 'bot', 'probe', 'rate', 'attack', 'crawler']
 
 # todo: add change to last month
 DATA = {
@@ -30,7 +30,7 @@ def main():
     with open(args.file_net, 'r', encoding='utf-8') as f:
         raw = json_loads(f.read())
 
-    # sort by 'all' (max reports) or 'reported_ips' (worst reputation)
+    # sort by 'sum' (max reports) or 'reported_ips' (worst reputation)
     sorted_nets = dict(sorted(raw.items(), key=lambda item: item[1]['reported_ips'], reverse=True))
     i = 0
 
