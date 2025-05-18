@@ -95,6 +95,6 @@ if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument('-4', '--file-ip4', help='IPv4 JSON file to parse', default='risk_ip4_med.json')
     parser.add_argument('-6', '--file-ip6', help='IPv6 JSON file to parse', default='risk_ip6_med.json')
-    parser.add_argument('-c', '--country-db', help='MMDB country data to use (IPInfo)', default='country_asn.mmdb')
+    parser.add_argument('-c', '--country-db', help='MMDB country data to use (IPInfo)', default='ipinfo_lite.mmdb')
     args = parser.parse_args()
     main()

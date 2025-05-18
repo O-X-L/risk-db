@@ -10,6 +10,9 @@
             .bubble {
                 overflow: hidden;
             }
+            .bubble:hover {
+                cursor: pointer;
+            }
 
             .bubble-asn {
                 font-weight: bold;
@@ -69,6 +72,11 @@
                 "#E37F6F", "#C5824E", "#FDCA29", "#D99620", "#E7C014", "#F9C630", "#F6BC55", "#B9AB58", "#DB8E94",
                 "#D27E7E",
             ];
+            const URL_KEY_MAP = {
+                'oxl_geoip': 'OXL GeoIP',
+                'ipinfo': 'IPInfo',
+                'shodan': 'Shodan',
+            };
 
             function numberWithDot(x) {
                 return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -88,23 +96,17 @@
                 }
                 infoContainer.innerHTML += `<b>IPv4 Addresses</b>: ${numberWithDot(infos.info.ipv4)}<br>`;
                 infoContainer.innerHTML += `<b>IPv6 Addresses</b>: ${numberWithDot(infos.info.ipv6)}<br>`;
-                let kinds = [];
-                for (let [k, v] of Object.entries(infos.kind)) {
-                    if (v === true) {
-                        kinds.push(k);
-                    }
+                if (infos.kind.length > 0) {
+                    infoContainer.innerHTML += `<b>Kind</b>: ${infos.kind.join(', ')}<br>`;
                 }
-                if (kinds.length > 0) {
-                    infoContainer.innerHTML += `<b>Kind</b>: ${kinds.join(', ')}<br>`;
-                }
-                let urls = [`<a href="https://risk.oxl.app/api/asn/${infos.asn}">oxl_riskdb</a>`];
+                let urls = [`<a href="https://risk.oxl.app/api/asn/${infos.asn}">OXL RiskDB</a>`];
                 for (let [k, v] of Object.entries(infos.info.url)) {
-                    urls.push(`<a href="${v}">${k}</a>`);
+                    urls.push(`<a href="${v}">${URL_KEY_MAP[k]}</a>`);
                 }
                 infoContainer.innerHTML += `<b>URLs</b>: ${urls.join(', ')}<br><hr>`;
-                infoContainer.innerHTML += `<small><b>Relative Reports</b>: ${infos.reports.rel_by_ip4} (by IPv4)</small><br>`;
+                infoContainer.innerHTML += `<small><b>Relative Reports</b>: ${infos.reports.relative_by_ipv4} (by IPv4)</small><br>`;
                 for (let [k, v] of Object.entries(infos.reports)) {
-                    if (k == 'rel_by_ip4') {
+                    if (k == 'relative_by_ipv4') {
                         continue;
                     }
                     infoContainer.innerHTML += `<small><b>Reports ${k}</b>: ${numberWithDot(v)}</small><br>`;
@@ -118,11 +120,11 @@
                     for (let [asn, values] of Object.entries(resp)) {
                         data.push({
                             asn: asn, info: values.info, kind: values.kind, reports: values.reports,
-                            sortBy: values.reports.all,
+                            sortBy: values.reports.sum,
                         })
                     }
 
-                    const sortedData = data.sort((a, b) => b.reports.all - a.reports.all).slice(0, TOP_N);
+                    const sortedData = data.sort((a, b) => b.reports.sum - a.reports.sum).slice(0, TOP_N);
                     console.log(sortedData);
 
                     const colorScale = d3.scaleOrdinal()
@@ -165,7 +167,7 @@
                         .text(d => JSON.stringify(d.data));
 
                     for (let b of document.querySelectorAll(".bubble")) {
-                        b.addEventListener("mouseover", showASNInfos);
+                        b.addEventListener("click", showASNInfos);
                     }
 
                 });

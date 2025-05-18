@@ -11,7 +11,6 @@ from maxminddb import open_database as mmdb_database
 
 SRC_PATH = Path(__file__).resolve().parent
 TOP_N = 30
-CATEGORIES = ['sum', 'bot', 'probe', 'rate', 'attack', 'crawler']
 
 # todo: add change to last month
 DATA = {
@@ -49,20 +48,17 @@ def main():
                 'name': net,
                 'asn': asn,
                 'as_name': as_name,
-                'url': {
-                    'riskdb_asn': f'https://risk.oxl.app/api/asn/{asn}',
-                    'riskdb_net': f'https://risk.oxl.app/api/net/{ip}',
-                    'ipinfo': f'https://ipinfo.io/{ip}',
-                    'ipinfo_asn': f'https://ipinfo.io/AS{asn}',
-                },
                 **infos,
             }
+            data['url']['net'] = f'https://risk.oxl.app/api/net/{asn}'
+            data['url']['ipinfo_asn'] = f'https://ipinfo.io/AS{asn}'
+            reports = data.pop('reports')
+            data = {**data, **reports}
 
-            if 'country' in ip_md:
-                data['country'] = ip_md['country']
+            if 'country_code' in ip_md:
+                data['country'] = ip_md['country_code']
 
             DATA['children'].append(data)
-
             i += 1
 
     with open(SRC_PATH / 'net_tree.json', 'w', encoding='utf-8') as f:
@@ -71,7 +67,7 @@ def main():
 
 if __name__ == '__main__':
     parser = ArgumentParser()
-    parser.add_argument('-a', '--asn-db', help='MMDB ASN data to use (OXL/IPInfo)', default='country_asn.mmdb')
+    parser.add_argument('-a', '--asn-db', help='MMDB ASN data to use (OXL/IPInfo)', default='ipinfo_lite.mmdb')
     parser.add_argument('-n', '--file-net', help='IPv4 or IPv6 JSON file to parse', default='risk_net4_med.json')
     args = parser.parse_args()
     main()

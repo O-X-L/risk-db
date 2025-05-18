@@ -19,7 +19,7 @@ Usage:
   * Generate the JSON file
 
       ```bash
-      python3 world_map.py -c ~/Downloads/country_asn.mmdb -4 ~/Downloads/risk_ip4_med.json -6 ~/Downloads/risk_ip6_med.json
+      python3 world_map.py -c ~/Downloads/ipinfo_lite.mmdb -4 ~/Downloads/risk_ip4_med.json -6 ~/Downloads/risk_ip6_med.json
       ```
 
 2. For testing - run the minimal python3 webserver to enable JS to access the JSON file:
@@ -69,7 +69,7 @@ Usage:
   * Generate the JSON file
 
       ```bash
-      python3 net_tree.py -a ~/Downloads/country_asn.mmdb -n ~/Downloads/risk_net4_med.json
+      python3 net_tree.py -a ~/Downloads/ipinfo_lite.mmdb -n ~/Downloads/risk_net4_med.json
       ```
 
 2. For testing - run the minimal python3 webserver to enable JS to access the JSON file:

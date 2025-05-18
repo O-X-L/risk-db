@@ -17,6 +17,9 @@
                 font-weight: bold;
                 transform
             }
+            .net:hover {
+                cursor: pointer;
+            }
 
             .net-cidr {
                 display: inline-block;
@@ -58,7 +61,7 @@
             const WIDTH = window.innerWidth;
             const HEIGHT = window.innerHeight - 50;
             const NET_PAD = 5;
-            const CATEGORIES = ['all', 'bot', 'probe', 'rate', 'attack', 'crawler'];
+            const CATEGORIES = ['sum', 'bot', 'probe', 'rate', 'attack', 'crawler'];
             const COLORSCHEME = [
                 // red-ish
                 "#B93022", "#FF383D", "#D32669", "#C43F03", "#E70291", "#E211C0", "#6A3D52", "#C75839", "#E7A8B0",
@@ -70,6 +73,13 @@
                 "#E37F6F", "#C5824E", "#FDCA29", "#D99620", "#E7C014", "#F9C630", "#F6BC55", "#B9AB58", "#DB8E94",
                 "#D27E7E",
             ];
+            const URL_KEY_MAP_NET = {
+                'asn': 'OXL RiskDB ASN',
+                'net': 'OXL RiskDB Network',
+                'ipinfo_1': 'IPInfo Network-IP',
+                'ipinfo_2': 'IPInfo Network-Range',
+                'ipinfo_asn': 'IPInfo ASN',
+            }
 
             function numberWithDot(x) {
                 return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -87,6 +97,9 @@
                 infoContainer.innerHTML += `<b>Reputation</b>: ${infos.reputation.toUpperCase()}<br>`;
                 infoContainer.innerHTML += `<b>ASN</b>: ${infos.asn}<br>`;
                 infoContainer.innerHTML += `<b>Org</b>: ${infos.as_name}<br>`;
+                if (infos.kind.length > 0) {
+                    infoContainer.innerHTML += `<b>Kind</b>: ${infos.kind.join(', ')}<br>`;
+                }
 
                 if (infos.country !== undefined) {
                     infoContainer.innerHTML += `<b>Country</b>: ${infos.country}<br>`;
@@ -114,7 +127,7 @@
                         .parentId(function(d) { if (d.name == 'root') { return null } else { return 'root' }; })
                         (data.children);
 
-                    root.sum(function(d) { return +d.all })
+                    root.sum(function(d) { return +d.sum })
 
                     d3.treemap()
                         .size([WIDTH, HEIGHT])
@@ -159,7 +172,7 @@
                         let c = n.querySelectorAll("text")[0];
                         c.setAttribute("transform", `translate(${r.x.baseVal.value + NET_PAD}, ${r.y.baseVal.value + NET_PAD + 30})`);
 
-                        n.addEventListener("mouseover", showNetInfos);
+                        n.addEventListener("click", showNetInfos);
                     }
 
                 });
