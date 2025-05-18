@@ -8,7 +8,8 @@ from sys import path as sys_path
 sys_path.append(str(Path(__file__).parent.parent.parent))
 
 from riskdb.builder.util import log
-from riskdb.builder.load_reports import FileLoader, query_ptrs, load_lookup_lists, build_objects
+from riskdb.builder.load_reports import FileLoader, build_objects
+from riskdb.builder.enrich_data import query_ptrs, load_lookup_lists
 
 from riskdb.builder.write_net import build_dbs_net
 from riskdb.builder.write_asn import build_dbs_asn

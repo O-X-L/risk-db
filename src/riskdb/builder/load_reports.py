@@ -1,22 +1,14 @@
 # pylint: disable=R0915
 
 from os import listdir
-from os import system as os_shell
-from time import sleep
-from pathlib import Path
-from threading import Lock, Thread
 from json import JSONDecodeError
 from json import loads as json_loads
-from json import dumps as json_dumps
 from ipaddress import ip_address, AddressValueError
 
-from oxl_utils.net import resolve_dns
-from oxl_utils.ps import wait_for_threads
 from maxminddb import open_database as mmdb_database
 
-from riskdb.config import EXCLUDE_NETS_IP4, EXCLUDE_NETS_IP6, KIND_FILES, REPORT_DIR, USER_TOKENS
-from riskdb.builder.config import REPORT_COOLDOWN, CACHE_FILE_PTR, ASN_JSON_FILE, \
-    TOR_EXIT_NODE_LIST, PTR_LOOKUP_THREADS, ASN_MMDB_FILE_IP4, ASN_MMDB_FILE_IP6
+from riskdb.config import EXCLUDE_NETS_IP4, EXCLUDE_NETS_IP6, REPORT_DIR, USER_TOKENS
+from riskdb.builder.config import REPORT_COOLDOWN, ASN_MMDB_FILE_IP4, ASN_MMDB_FILE_IP6
 from riskdb.builder.obj.ip import IP
 from riskdb.builder.obj.asn import ASN
 from riskdb.builder.obj.report import Report
@@ -24,8 +16,6 @@ from riskdb.builder.obj.reporter import Reporter
 from riskdb.builder.obj.network import Network, get_network_cidr
 
 SKIP_REASONS_DEFAULT = {'no_cat': 0, 'bad_ip': 0, 'cooldown': 0, 'ignored': 0, 'bad_json': 0}
-
-ptr_cache_lock = Lock()
 
 
 class ReportLoader:
@@ -110,80 +100,6 @@ class FileLoader:
         return self.load()
 
 
-def query_ptrs(loader: FileLoader) -> dict:
-    ptrs = {}
-    if Path(CACHE_FILE_PTR).is_file():
-        with open(CACHE_FILE_PTR, 'r', encoding='utf-8') as f:
-            ptrs = json_loads(f.read())
-
-    def _ptr_lookup(ip: str):
-        try:
-            if ip in ptrs:
-                return
-
-            ptr = resolve_dns(ip, t='PTR')[0]
-            with ptr_cache_lock:
-                ptrs[ip] = ptr.strip()
-
-        except IndexError:
-            pass
-
-    threads = []
-    for r in loader:
-        # wait for thread-queue
-        while True:
-            finished = [t for t in threads if not t.is_alive()]
-            for t in finished:
-                threads.remove(t)
-
-            if len(threads) < PTR_LOOKUP_THREADS:
-                break
-
-            sleep(0.1)
-
-        t = Thread(
-            target=_ptr_lookup,
-            kwargs={'ip': r['ip']},
-        )
-        threads.append(t)
-        t.start()
-
-    wait_for_threads(threads, timeout=60)
-
-    with open(CACHE_FILE_PTR, 'w', encoding='utf-8') as f:
-        f.write(json_dumps(ptrs))
-
-    return ptrs
-
-
-def load_lookup_lists() -> dict:
-    lookup_lists = {}
-    tor_exit_node_file = '/tmp/tor_exit_nodes.txt'
-    os_shell(f'wget -q -O {tor_exit_node_file} {TOR_EXIT_NODE_LIST}')
-
-    with open(tor_exit_node_file, 'r', encoding='utf-8') as f:
-        lookup_lists['tor'] = [ip_address(ip.strip()) for ip in f.readlines()]
-
-    # source: https://github.com/O-X-L/geoip-asn
-    with open(ASN_JSON_FILE, 'r', encoding='utf-8') as f:
-        lookup_lists['asn'] = json_loads(f.read())
-
-    # creation of these files has yet to be automated
-    with open(KIND_FILES['hosting'], 'r', encoding='utf-8') as f:
-        lookup_lists['hosting'] = [int(asn.strip()) for asn in f.readlines()]
-
-    with open(KIND_FILES['vpn'], 'r', encoding='utf-8') as f:
-        lookup_lists['vpn'] = [int(asn.strip()) for asn in f.readlines()]
-
-    with open(KIND_FILES['scanner'], 'r', encoding='utf-8') as f:
-        lookup_lists['scanner'] = [int(asn.strip()) for asn in f.readlines()]
-
-    with open(KIND_FILES['crawler'], 'r', encoding='utf-8') as f:
-        lookup_lists['crawler'] = [int(asn.strip()) for asn in f.readlines()]
-
-    return lookup_lists
-
-
 def build_objects(loader: FileLoader, lookup_lists: dict, ptrs: dict):
     asns = {}
     ips = {}
@@ -201,8 +117,9 @@ def build_objects(loader: FileLoader, lookup_lists: dict, ptrs: dict):
 
             try:
                 asn = int(asn['asn'])
+                # ipinfo-db: asn = int(asn['asn'][2:])
 
-            except TypeError:
+            except (TypeError, ValueError):
                 asn = 0
 
             if asn not in asns:

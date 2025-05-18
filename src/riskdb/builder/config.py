@@ -1,3 +1,4 @@
+from os import environ
 # from datetime import timedelta
 
 from riskdb.config import DL_DIR
@@ -15,10 +16,17 @@ ASN_MMDB_FILE_IP6 = DL_DIR / 'asn_ipv6_full.mmdb'  # https://geoip.oxl.app/file/
 MMDB_DESCRIPTION = 'OXL RISK-Database - risk.oxl.app (BSD-3-Clause)'
 REPORT_COOLDOWN = 10  # sec
 # REPORT_DAYS = timedelta(days=30)  # sliding window
-# MIN_IP_REPORTS = 5
-PTR_LOOKUP_THREADS = 50
 TOR_EXIT_NODE_LIST = 'https://check.torproject.org/torbulkexitlist'
-CACHE_FILE_PTR = '/tmp/oxl-riskdb-cache-ptr.json'
+
+PTR_LOOKUP_THREADS = 50
+PTR_CACHE_DAYS = 30
+PTR_STATUS_COUNT = 10_000
+PTR_NAMESERVERS = [
+    '1.1.1.1', '8.8.8.8', '1.0.0.1', '8.8.4.4',
+    '2606:4700:4700::1111', '2001:4860:4860::8888', '2606:4700:4700::1001', '2001:4860:4860::8844',
+]
+PTR_MAX_QUERY_RETRIES = 3  # lower to get faster query-times and lower error-rates
+CACHE_FILE_PTR = f"{environ['HOME']}/.cache/oxl-riskdb-cache-ptr.json"
 
 DB_LEVELS = {
     0: 'all',
