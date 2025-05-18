@@ -2,6 +2,8 @@
 
 # data to visualize with d3js: https://observablehq.com/@d3/treemap/2
 
+# pylint: disable=R0915
+
 from argparse import ArgumentParser
 from json import loads as json_loads
 from json import dumps as json_dumps
