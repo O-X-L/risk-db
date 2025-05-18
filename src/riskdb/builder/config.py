@@ -25,7 +25,7 @@ PTR_NAMESERVERS = [
     '1.1.1.1', '8.8.8.8', '1.0.0.1', '8.8.4.4',
     '2606:4700:4700::1111', '2001:4860:4860::8888', '2606:4700:4700::1001', '2001:4860:4860::8844',
 ]
-PTR_MAX_QUERY_RETRIES = 3  # lower to get faster query-times and lower error-rates
+PTR_MAX_QUERY_RETRIES = 2  # lower to get faster query-times and lower error-rates
 CACHE_FILE_PTR = f"{environ['HOME']}/.cache/oxl-riskdb-cache-ptr.json"
 
 DB_LEVELS = {
