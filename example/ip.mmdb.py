@@ -1,3 +1,5 @@
+# pylint: disable=C0301
+
 from maxminddb import open_database as mmdb_database
 
 with mmdb_database('risk_ip4_med.mmdb') as db:

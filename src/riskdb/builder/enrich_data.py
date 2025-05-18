@@ -21,7 +21,7 @@ from riskdb.builder.config import CACHE_FILE_PTR, ASN_JSON_FILE, TOR_EXIT_NODE_L
 
 now = int(time())
 ptr_cache_lock = Lock()
-ptr_cache_sec = PTR_CACHE_DAYS * 24 * 60 * 60
+PTR_CACHE_SEC = PTR_CACHE_DAYS * 24 * 60 * 60
 
 dns_resolver = Resolver(configure=False)
 dns_resolver.lifetime = 1.0
@@ -72,12 +72,11 @@ def _load_ptr_cache() -> dict:
                     if 't' not in ptr_ts or not isinstance(ptr_ts['t'], int) or 'p' not in ptr_ts:
                         continue
 
-                    if (ptr_ts['t'] + ptr_cache_sec) > now:
+                    if (ptr_ts['t'] + PTR_CACHE_SEC) > now:
                         ptrs[ip] = ptr_ts['p']
 
             except (JSONDecodeError, ValueError, KeyError, TypeError) as e:
                 log(f'WARN: Failed to load PTR-cache (Error: {e})')
-                pass
 
     return ptrs
 
@@ -98,7 +97,7 @@ def _save_ptr_cache(ptrs: dict):
         if ip not in current or 't' not in current[ip] or not isinstance(current[ip]['t'], int):
             ts = now
 
-        elif (current[ip]['t'] + ptr_cache_sec) > now:
+        elif (current[ip]['t'] + PTR_CACHE_SEC) > now:
             # was just updated
             ts = now
 
