@@ -1,0 +1,201 @@
+{
+  "147.185.133.0/24": {
+    "reports": {
+      "bot": 26,
+      "probe": 16504,
+      "sum": 16530
+    },
+    "reported_ips": 254,
+    "reputation": "bad",
+    "kind": [
+      "hosting"
+    ],
+    "url": {
+      "asn": "https://risk.oxl.app/api/asn/396982",
+      "ipinfo_1": "https://ipinfo.io/147.185.133.0",
+      "ipinfo_2": "https://ipinfo.io/AS396982/147.185.133.0/24"
+    },
+    "asn": 396982
+  },
+  "193.163.125.0/24": {
+    "reports": {
+      "probe": 88324,
+      "sum": 88324
+    },
+    "reported_ips": 252,
+    "reputation": "bad",
+    "kind": [
+      "hosting",
+      "scanner"
+    ],
+    "url": {
+      "asn": "https://risk.oxl.app/api/asn/211298",
+      "ipinfo_1": "https://ipinfo.io/193.163.125.0",
+      "ipinfo_2": "https://ipinfo.io/AS211298/193.163.125.0/24"
+    },
+    "asn": 211298
+  },
+  "185.247.137.0/24": {
+    "reports": {
+      "bot": 508,
+      "probe": 1214,
+      "sum": 1722
+    },
+    "reported_ips": 252,
+    "reputation": "bad",
+    "kind": [
+      "hosting",
+      "scanner",
+      "proxy"
+    ],
+    "url": {
+      "asn": "https://risk.oxl.app/api/asn/211298",
+      "ipinfo_1": "https://ipinfo.io/185.247.137.0",
+      "ipinfo_2": "https://ipinfo.io/AS211298/185.247.137.0/24"
+    },
+    "asn": 211298
+  },
+  "87.236.176.0/24": {
+    "reports": {
+      "bot": 532,
+      "probe": 1231,
+      "sum": 1763
+    },
+    "reported_ips": 251,
+    "reputation": "bad",
+    "kind": [
+      "hosting",
+      "scanner",
+      "proxy"
+    ],
+    "url": {
+      "asn": "https://risk.oxl.app/api/asn/211298",
+      "ipinfo_1": "https://ipinfo.io/87.236.176.0",
+      "ipinfo_2": "https://ipinfo.io/AS211298/87.236.176.0/24"
+    },
+    "asn": 211298
+  },
+  "194.187.178.0/24": {
+    "reports": {
+      "probe": 941,
+      "sum": 941
+    },
+    "reported_ips": 250,
+    "reputation": "bad",
+    "kind": [
+      "hosting"
+    ],
+    "url": {
+      "asn": "https://risk.oxl.app/api/asn/208843",
+      "ipinfo_1": "https://ipinfo.io/194.187.178.0",
+      "ipinfo_2": "https://ipinfo.io/AS208843/194.187.178.0/24"
+    },
+    "asn": 208843
+  },
+  "194.187.177.0/24": {
+    "reports": {
+      "probe": 959,
+      "sum": 959
+    },
+    "reported_ips": 249,
+    "reputation": "bad",
+    "kind": [
+      "hosting"
+    ],
+    "url": {
+      "asn": "https://risk.oxl.app/api/asn/208843",
+      "ipinfo_1": "https://ipinfo.io/194.187.177.0",
+      "ipinfo_2": "https://ipinfo.io/AS208843/194.187.177.0/24"
+    },
+    "asn": 208843
+  },
+  "194.187.176.0/24": {
+    "reports": {
+      "probe": 930,
+      "sum": 930
+    },
+    "reported_ips": 248,
+    "reputation": "bad",
+    "kind": [
+      "hosting"
+    ],
+    "url": {
+      "asn": "https://risk.oxl.app/api/asn/208843",
+      "ipinfo_1": "https://ipinfo.io/194.187.176.0",
+      "ipinfo_2": "https://ipinfo.io/AS208843/194.187.176.0/24"
+    },
+    "asn": 208843
+  },
+  "162.216.150.0/24": {
+    "reports": {
+      "bot": 25,
+      "probe": 1519,
+      "sum": 1544
+    },
+    "reported_ips": 247,
+    "reputation": "bad",
+    "kind": [
+      "hosting"
+    ],
+    "url": {
+      "asn": "https://risk.oxl.app/api/asn/396982",
+      "ipinfo_1": "https://ipinfo.io/162.216.150.0",
+      "ipinfo_2": "https://ipinfo.io/AS396982/162.216.150.0/24"
+    },
+    "asn": 396982
+  },
+  "147.185.132.0/24": {
+    "reports": {
+      "bot": 416,
+      "probe": 22526,
+      "sum": 22942
+    },
+    "reported_ips": 245,
+    "reputation": "bad",
+    "kind": [
+      "hosting"
+    ],
+    "url": {
+      "asn": "https://risk.oxl.app/api/asn/396982",
+      "ipinfo_1": "https://ipinfo.io/147.185.132.0",
+      "ipinfo_2": "https://ipinfo.io/AS396982/147.185.132.0/24"
+    },
+    "asn": 396982
+  },
+  "35.203.210.0/24": {
+    "reports": {
+      "bot": 24,
+      "probe": 1343,
+      "sum": 1367
+    },
+    "reported_ips": 245,
+    "reputation": "bad",
+    "kind": [
+      "hosting"
+    ],
+    "url": {
+      "asn": "https://risk.oxl.app/api/asn/396982",
+      "ipinfo_1": "https://ipinfo.io/35.203.210.0",
+      "ipinfo_2": "https://ipinfo.io/AS396982/35.203.210.0/24"
+    },
+    "asn": 396982
+  },
+  "162.216.149.0/24": {
+    "reports": {
+      "bot": 13,
+      "probe": 1477,
+      "sum": 1490
+    },
+    "reported_ips": 245,
+    "reputation": "bad",
+    "kind": [
+      "hosting"
+    ],
+    "url": {
+      "asn": "https://risk.oxl.app/api/asn/396982",
+      "ipinfo_1": "https://ipinfo.io/162.216.149.0",
+      "ipinfo_2": "https://ipinfo.io/AS396982/162.216.149.0/24"
+    },
+    "asn": 396982
+  }
+}

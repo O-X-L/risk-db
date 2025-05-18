@@ -62,11 +62,11 @@ Be aware that we cannot verify if reports are false-positives. We currently only
 
 [![Database Updated At](https://risk.oxl.app/file/updated_at.svg)](https://risk.oxl.app/file/updated_at.svg)
 
-**ASN**: [JSON](https://risk.oxl.app/file/risk_asn_med.json.zip)
+**ASN**: [JSON](https://risk.oxl.app/file/risk_asn_med.json.zip) ([Example](https://github.com/O-X-L/risk-db/blob/latest/example/asn.json))
 
-**Networks**: [IPv4](https://risk.oxl.app/file/risk_net4_med.json.zip), [IPv6](https://risk.oxl.app/file/risk_net6_med.json.zip)
+**Networks**: [IPv4](https://risk.oxl.app/file/risk_net4_med.json.zip), [IPv6](https://risk.oxl.app/file/risk_net6_med.json.zip) ([Example](https://github.com/O-X-L/risk-db/blob/latest/example/net.json))
 
-**IPs**: [IPv4 JSON](https://risk.oxl.app/file/risk_ip4_med.json.zip), [IPv4 MMDB](https://risk.oxl.app/file/risk_ip4_med.mmdb.zip), [IPv6 JSON](https://risk.oxl.app/file/risk_ip6_med.json.zip), [IPv6 MMDB](https://risk.oxl.app/file/risk_ip6_med.mmdb.zip)
+**IPs**: [IPv4 JSON](https://risk.oxl.app/file/risk_ip4_med.json.zip), [IPv4 MMDB](https://risk.oxl.app/file/risk_ip4_med.mmdb.zip), [IPv6 JSON](https://risk.oxl.app/file/risk_ip6_med.json.zip), [IPv6 MMDB](https://risk.oxl.app/file/risk_ip6_med.mmdb.zip) (Examples: [JSON](https://github.com/O-X-L/risk-db/blob/latest/example/ip.json), [MMDB](https://github.com/O-X-L/risk-db/blob/latest/example/ip.mmdb.py))
 
 <details>
 Databases marked with the key `all` include all reports.

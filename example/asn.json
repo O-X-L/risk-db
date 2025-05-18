@@ -1,0 +1,164 @@
+{
+  "16509": {
+    "kind": [
+      "hosting"
+    ],
+    "reports": {
+      "bot": 848046,
+      "probe": 1585439,
+      "rate": 372,
+      "attack": 82,
+      "relative_by_ipv4": 0.01451,
+      "sum": 2433939
+    },
+    "info": {
+      "name": "Amazon.com",
+      "org": {
+        "name": "Amazon.com, Inc.",
+        "country": "",
+        "state": "",
+        "website": "https://www.amazon.com"
+      },
+      "contacts": {},
+      "ipv4": 167736576,
+      "ipv6": 81090821015464675567618364538880,
+      "url": {
+        "oxl_geoip": "https://geoip.oxl.app/api/asn/16509",
+        "ipinfo": "https://ipinfo.io/AS16509",
+        "shodan": "https://www.shodan.io/search?query=asn%3A%22AS16509%22"
+      }
+    }
+  },
+  "14618": {
+    "kind": [
+      "hosting"
+    ],
+    "reports": {
+      "bot": 12504,
+      "probe": 319462,
+      "rate": 475,
+      "attack": 683,
+      "relative_by_ipv4": 0.01823,
+      "sum": 333124
+    },
+    "info": {
+      "name": "Amazon AES",
+      "org": {
+        "name": "Amazon.com, Inc.",
+        "country": "",
+        "state": "",
+        "website": ""
+      },
+      "contacts": {},
+      "ipv4": 18277632,
+      "ipv6": 1501404869931455254830365278208,
+      "url": {
+        "oxl_geoip": "https://geoip.oxl.app/api/asn/14618",
+        "ipinfo": "https://ipinfo.io/AS14618",
+        "shodan": "https://www.shodan.io/search?query=asn%3A%22AS14618%22"
+      }
+    }
+  },
+  "398324": {
+    "kind": [
+      "hosting",
+      "scanner"
+    ],
+    "reports": {
+      "bot": 1245,
+      "probe": 278336,
+      "relative_by_ipv4": 109.16868,
+      "sum": 279581
+    },
+    "info": {
+      "name": "Censys",
+      "org": {
+        "name": "Censys",
+        "country": "US",
+        "state": "MI",
+        "website": "http://censys.io"
+      },
+      "contacts": {},
+      "ipv4": 2560,
+      "ipv6": 3626777458843887524118528,
+      "url": {
+        "oxl_geoip": "https://geoip.oxl.app/api/asn/398324",
+        "ipinfo": "https://ipinfo.io/AS398324",
+        "shodan": "https://www.shodan.io/search?query=asn%3A%22AS398324%22"
+      }
+    }
+  },
+  "8075": {
+    "kind": [
+      "hosting"
+    ],
+    "reports": {
+      "bot": 41678,
+      "probe": 230774,
+      "rate": 14,
+      "attack": 335,
+      "relative_by_ipv4": 0.00429,
+      "sum": 272801
+    },
+    "info": {
+      "name": "Microsoft",
+      "org": {
+        "name": "Microsoft Corporation",
+        "country": "",
+        "state": "",
+        "website": "http://www.microsoft.com"
+      },
+      "contacts": {
+        "noc": {
+          "name": "NOC",
+          "phone": "+14257052686",
+          "email": "ioc@microsoft.com",
+          "url": ""
+        },
+        "policy": {
+          "name": "Peering Requests",
+          "phone": "",
+          "email": "peering@microsoft.com",
+          "url": ""
+        }
+      },
+      "ipv4": 63592192,
+      "ipv6": 11096993644071357183788075450368,
+      "url": {
+        "oxl_geoip": "https://geoip.oxl.app/api/asn/8075",
+        "ipinfo": "https://ipinfo.io/AS8075",
+        "shodan": "https://www.shodan.io/search?query=asn%3A%22AS8075%22"
+      }
+    }
+  },
+  "45102": {
+    "kind": [
+      "hosting"
+    ],
+    "reports": {
+      "bot": 4196,
+      "probe": 254579,
+      "rate": 6,
+      "attack": 396,
+      "relative_by_ipv4": 0.06296,
+      "sum": 259177
+    },
+    "info": {
+      "name": "Alibaba",
+      "org": {
+        "name": "Alibaba Group",
+        "country": "",
+        "state": "",
+        "website": "http://alibabagroup.com/"
+      },
+      "contacts": {},
+      "ipv4": 4116480,
+      "ipv6": 1129085940635639834750230724608,
+      "url": {
+        "oxl_geoip": "https://geoip.oxl.app/api/asn/45102",
+        "ipinfo": "https://ipinfo.io/AS45102",
+        "shodan": "https://www.shodan.io/search?query=asn%3A%22AS45102%22"
+      }
+    }
+  }
+}
