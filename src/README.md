@@ -15,3 +15,23 @@ Feel free to share your opinion about possible optimizations/extensions.
 ## Docker
 
 Dockerized services will be added later on.
+
+## Troubleshooting
+
+### Open-Files Limit
+
+If you see this error: `OSError: [Errno 24] Too many open files`
+
+You can try to increase the limit of the current user like this: `ulimit -n 2048`
+
+You can check your systems hard and soft limits like this: `ulimit -Hn` & `ulimit -Sn`
+
+Or in a systemd-service you can set it like this:
+
+```
+# .service file
+[Service]
+LimitNOFILE=10000
+```
+
+After that - you'll need to reload it: `systemctl daemon-reload`
