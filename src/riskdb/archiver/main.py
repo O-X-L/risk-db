@@ -1,18 +1,23 @@
 #!/usr/bin/env python3
 
-# pylint: disable=R0912,R0915
+# pylint: disable=R0912,R0915,C0413
 
 from time import time
 from hashlib import md5
+from pathlib import Path
 from datetime import datetime
 from os import system as shell
 from operator import itemgetter
+from sys import path as sys_path
 from ipaddress import ip_network
 
+sys_path.append(str(Path(__file__).parent.parent.parent))
+
 from riskdb.config import NET_SIZE
-from riskdb.archiver.config import REPO_ARCHIVE, HEADERS_ARCHIVE_CSV, ARCHIVE_DEDUPE_FIELDS, GIT_TOKEN
+from riskdb.archiver.config import REPO_ARCHIVE, HEADERS_ARCHIVE_CSV, ARCHIVE_DEDUPE_FIELDS
 from riskdb.builder.util import log
 from riskdb.builder.load_reports import FileLoader
+from riskdb.archiver.util import git_commit_and_push, git_clone, git_check_token
 
 
 # NOTE: de-duplicating raw-report values to make the archive more compact
@@ -99,22 +104,14 @@ def _write_reports(reports: dict[list[dict]], tmp_dir: str):
                     f"{r['by']},{r['user']},{r['fp']}\n"
                 )
 
-    today = datetime.now().strftime('%Y-%m-%d')
-    shell(
-        f"cd {tmp_dir} && "
-        f"git config user.name 'Report Updater' && "
-        f"git config user.email 'rath@oxl.at' && "
-        f"git add --all >/dev/null && "
-        f"git commit -m 'Report updates {today}' >/dev/null && "
-        f"git push https://{GIT_TOKEN}@{REPO_ARCHIVE} >/dev/null &&"
-        f"cd && rm -rf {tmp_dir}"
-    )
+    git_commit_and_push(user='Report Updater', cmt='Report updates', repo=REPO_ARCHIVE, tmp_dir=tmp_dir)
 
 
 def main():
     log('Prepare Repository')
+    git_check_token()
     tmp_dir = f'/tmp/risk_db_archive_{int(time())}'
-    shell(f'git clone https://{REPO_ARCHIVE} {tmp_dir} >/dev/null')
+    git_clone(repo=REPO_ARCHIVE, tmp_dir=tmp_dir)
 
     log('Loading & Sorting Reports by Day')
     reports_by_day = _reports_by_day(tmp_dir)
@@ -124,7 +121,4 @@ def main():
 
 
 if __name__ == '__main__':
-    if GIT_TOKEN is None:
-        raise PermissionError('Required GIT-Token was not supplied!')
-
     main()
