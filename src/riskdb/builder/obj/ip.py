@@ -6,6 +6,7 @@ from riskdb.builder.obj.report import Report
 # pylint: disable=R0801,R0915,R0912
 
 IP_KIND_DYNAMIC = 'dynamic'
+IP_KIND_MAYBE_HACKED = 'maybe_hacked'
 PTR_FIND = {
     'crawler': [
         'bot', 'google', 'bing', 'yahoo', 'yandex', 'openai', 'crawl', 'search.msn.com',
@@ -25,7 +26,7 @@ PTR_FIND = {
         'dynamic', '.dyn.', 'starlinkisp.net', 'dsl', 'customers', 'mobil', 'mob-', 'wireless', 'cable', 'pool',
         'tele', '.nat.', 'nat-',
     ],
-    'maybe_hacked': [
+    IP_KIND_MAYBE_HACKED: [
         'mail', 'smtp', 'owa', 'remote', 'mx', 'cam', 'vpn',
     ],
 }
@@ -135,6 +136,14 @@ class IP:
                 'shodan': f'https://www.shodan.io/host/{self.ip}',
             },
         }
+
+    def update_kind(self):
+        if IP_KIND_MAYBE_HACKED not in self.kind:
+            for r in self.reports:
+                c = r.comment.lower()
+                if c.find('wordpress') != -1 and c.find('https') != -1:
+                    self.kind.append(IP_KIND_MAYBE_HACKED)
+                    break
 
     @property
     def report_count(self) -> int:
