@@ -6,7 +6,6 @@ from riskdb.builder.obj.report import Report
 # pylint: disable=R0801,R0915,R0912
 
 IP_KIND_DYNAMIC = 'dynamic'
-IP_KINDS = [IP_KIND_DYNAMIC, 'proxy', 'tor', 'maybe_hacked']
 PTR_FIND = {
     'crawler': [
         'bot', 'google', 'bing', 'yahoo', 'yandex', 'openai', 'crawl', 'search.msn.com',
@@ -22,7 +21,7 @@ PTR_FIND = {
     'proxy': [
         'proxy', 'privacy', 'tor', 'anonym',
     ],
-    'dynamic': [
+    IP_KIND_DYNAMIC: [
         'dynamic', '.dyn.', 'starlinkisp.net', 'dsl', 'customers', 'mobil', 'mob-', 'wireless', 'cable', 'pool',
         'tele', '.nat.', 'nat-',
     ],
@@ -30,6 +29,8 @@ PTR_FIND = {
         'mail', 'smtp', 'owa', 'remote', 'mx', 'cam', 'vpn',
     ],
 }
+IP_KINDS = list(PTR_FIND.keys())
+IP_KINDS.append('tor')
 
 
 class IP:
