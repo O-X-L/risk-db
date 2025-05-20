@@ -79,7 +79,8 @@ Databases:
                 "website": {
                   "type": "string"
                 }
-              }
+              },
+              "required": []
             },
             "contacts": {
               "type": "object",
@@ -100,7 +101,8 @@ Databases:
                     "url": {
                       "type": "string"
                     }
-                  }
+                  },
+                  "required": []
                 },
                 "noc": {
                   "type": "object",
@@ -117,7 +119,8 @@ Databases:
                     "url": {
                       "type": "string"
                     }
-                  }
+                  },
+                  "required": []
                 },
                 "policy": {
                   "type": "object",
@@ -134,8 +137,10 @@ Databases:
                     "url": {
                       "type": "string"
                     }
-                  }
-                }
+                  },
+                  "required": []
+                },
+                "required": []
               }
             },
             "ipv4": {
