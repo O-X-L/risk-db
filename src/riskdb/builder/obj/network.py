@@ -3,10 +3,11 @@ from ipaddress import ip_network
 from riskdb.config import RISK_CATEGORIES, NET_SIZE
 
 from riskdb.builder.obj.asn import ASN
-from riskdb.builder.obj.ip import IP, IP_KINDS
+from riskdb.builder.obj.ip import IP, IP_KIND_DYNAMIC
 
 # pylint: disable=R0801
 
+KIND_IP_INHERITANCE = [IP_KIND_DYNAMIC]
 KIND_IP_INHERITANCE_THRESHOLD = 0.3  # at least 30% of IPs
 REPUTATION_IPS = {
     '4': {
@@ -88,17 +89,17 @@ class Network:
         # inherit kinds from child-IPs
 
         ip_count = 0
-        ip_kinds = {k: 0 for k in IP_KINDS}
+        ip_kinds = {k: 0 for k in KIND_IP_INHERITANCE}
         for ip in self.ips:
             ip_count += 1
-            for k in IP_KINDS:
+            for k in KIND_IP_INHERITANCE:
                 if k in ip.kind:
                     ip_kinds[k] += 1
 
         if ip_count == 0:
             return
 
-        for k in IP_KINDS:
+        for k in KIND_IP_INHERITANCE:
             if k in self.kind:
                 continue
 

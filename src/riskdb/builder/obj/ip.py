@@ -5,7 +5,8 @@ from riskdb.builder.obj.report import Report
 
 # pylint: disable=R0801,R0915,R0912
 
-IP_KINDS = ['dynamic', 'proxy', 'tor', 'maybe_hacked']
+IP_KIND_DYNAMIC = 'dynamic'
+IP_KINDS = [IP_KIND_DYNAMIC, 'proxy', 'tor', 'maybe_hacked']
 PTR_FIND = {
     'crawler': [
         'bot', 'google', 'bing', 'yahoo', 'yandex', 'openai', 'crawl', 'search.msn.com',
