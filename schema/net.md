@@ -1,4 +1,4 @@
-# Risk-Database - IP Schema
+# Risk-Database - Network Schema
 
 ## Basic
 
