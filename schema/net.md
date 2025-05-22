@@ -1,7 +1,5 @@
 # Risk-Database - Network Schema
 
-## Basic
-
 Databases:
 * `risk_net4_all.json`
 * `risk_net4_med.json`
@@ -10,7 +8,7 @@ Databases:
 * `risk_net6_med.json`
 * `risk_net6_high.json`
 
-### v1.0
+## v1.0
 
 ```json
 {

@@ -1,7 +1,5 @@
 # Risk-Database - IP Schema
 
-## Basic
-
 Databases:
 * `risk_ip4_all.json`
 * `risk_ip4_med.json`
@@ -16,7 +14,7 @@ Databases:
 * `risk_ip4_high.mmdb`
 * `risk_ip6_high.mmdb`
 
-### v1.0
+## v1.0
 
 ```json
 {

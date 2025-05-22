@@ -1,13 +1,11 @@
 # Risk-Database - ASN Schema
 
-## Basic
-
 Databases:
 * `risk_asn_all.json`
 * `risk_asn_med.json`
 * `risk_asn_high.json`
 
-### v1.0
+## v1.0
 
 ```json
 {
