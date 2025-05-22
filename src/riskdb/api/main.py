@@ -10,7 +10,6 @@ from datetime import datetime
 from socket import gethostname
 from sys import path as sys_path
 from re import sub as regex_replace
-from re import compile as regex_compile
 from json import dumps as json_dumps
 from json import loads as json_loads
 from ipaddress import ip_address, ip_network
@@ -23,7 +22,7 @@ from flask import Flask, request, Response, json, redirect
 from oxl_utils.valid.net import valid_public_ip, valid_asn, get_ipv
 
 from riskdb.config import BUILD_DIR, KIND_FILES, REPORT_DIR, RISK_CATEGORIES, NET_SIZE, USER_TOKENS, \
-    EXCLUDE_NETS_IP4, EXCLUDE_NETS_IP6
+    EXCLUDE_NETS_IP4, EXCLUDE_NETS_IP6, JA4_REGEX
 
 app = Flask('risk-db')
 RISKY_DB_FILE = {
@@ -35,7 +34,6 @@ NET_JSON_FILES = {
     4: BUILD_DIR / 'risk_net4_med.json',
     6: BUILD_DIR / 'risk_net6_med.json',
 }
-JA4_REGEX = regex_compile(r'^[tqd](13|12|11|10|s3|s2|00)[di][a-f0-9]{4}[a-z0-9]{2}_[a-f0-9]{12}_[a-f0-9]{12}$')
 
 report_lock = Lock()
 

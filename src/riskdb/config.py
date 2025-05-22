@@ -1,6 +1,7 @@
 from os import environ
 from pathlib import Path
 from ipaddress import ip_network
+from re import compile as regex_compile
 
 MODE_TEST = environ.get('RISKDB_TEST', '0')
 
@@ -36,3 +37,4 @@ _EXCLUDE_NETS_IP6 = [
     '2001:4860:4860::/64'  # google dns
 ]
 EXCLUDE_NETS_IP6 = [ip_network(n) for n in _EXCLUDE_NETS_IP6]
+JA4_REGEX = regex_compile(r'^[tqd](13|12|11|10|s3|s2|00)[di][a-f0-9]{4}[a-z0-9]{2}_[a-f0-9]{12}_[a-f0-9]{12}$')

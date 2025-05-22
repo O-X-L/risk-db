@@ -1,5 +1,6 @@
 # pylint: disable=R0801,R0902
 
+from riskdb.config import JA4_REGEX
 from riskdb.builder.obj.reporter import Reporter, ANONYMOUS
 
 
@@ -10,9 +11,12 @@ class Report:
         self.ip_anonymized = raw['an'] == 1 if 'an' in raw else False
         self.category = raw['cat']
         self.comment = raw['cmt']
+        self.by_ip = raw['by']
         self.user_agent = raw.get('ua', '')
         self.fingerprint_ja4 = raw.get('ja4', '')
-        self.by_ip = raw['by']
+
+        if JA4_REGEX.match(self.fingerprint_ja4) is None:
+            self.fingerprint_ja4 = ''
 
         self.reporter = self._init_reporter(token=raw['token'], reporters=reporters)
         self.legitimacy = self._init_legitimacy()
@@ -31,7 +35,7 @@ class Report:
             l += 5
             l += self.reporter.reputation
 
-        if len(self.comment) > 5:
+        if len(self.comment) > 5 or len(self.user_agent) > 5 or self.fingerprint_ja4 != '':
             l += 1
 
         # todo: extend logic
