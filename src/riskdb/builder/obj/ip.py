@@ -140,7 +140,7 @@ class IP:
     def update_kind(self):
         if IP_KIND_MAYBE_HACKED not in self.kind:
             for r in self.reports:
-                c = r.comment.lower()
+                c = r.comment.lower() + r.user_agent.lower()
                 if c.find('wordpress') != -1 and c.find('https') != -1:
                     self.kind.append(IP_KIND_MAYBE_HACKED)
                     break

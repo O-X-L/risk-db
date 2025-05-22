@@ -56,13 +56,15 @@ function log_report() {
   echo "REPORTING: ${ip} because of ${category}"
 }
 
-# NOTE: you may want to add the user-agent as comment ('cmt' field) if you can extract it from your logs
+# NOTE: you may want to add the user-agent if you can extract it from your logs
 function report_ip_with_msg() {
   ip="$1"
   category="$2"
   comment="$3"
+  user_agent="$4"
+  ja4_fp="$5"
   log_report "$ip" "$category"
-  report_json "{\"ip\": \"${ip}\", \"cat\": \"${category}\", \"cmt\": \"${comment}\"}"
+  report_json "{\"ip\": \"${ip}\", \"cat\": \"${category}\", \"cmt\": \"${comment}\", \"ua\": \"${user_agent}\", \"ja4\": \"${ja4_fp}\"}"
 }
 
 function analyze_log_line() {
@@ -107,6 +109,8 @@ function analyze_log_line() {
   fi
 
   msg='http'
+  ua=''
+  ja4=''
   # EXAMPLE of pulling user-agent and client-fingerprint from 'http-request capture'
   #   for basic client-fingerprinting see: https://github.com/O-X-L/haproxy-ja4
   #
@@ -117,10 +121,14 @@ function analyze_log_line() {
   #
   # capture="$(echo "$json" | jq -r ".${FIELD_CAPTURE}")"
   # ua="$(echo "$capture" | cut -d '|' -f "$FIELD_CAPTURE_UA")"
-  # fp="$(echo "$capture" | cut -d '|' -f "$FIELD_CAPTURE_FP")"
-  # if { [[ "$ua" == 'null' ]] ||  [[ "$ua" == '' ]] ; } && [[ "$fp" == 'null' ]] ||  [[ "$fp" == '' ]]
+  # ja4="$(echo "$capture" | cut -d '|' -f "$FIELD_CAPTURE_FP")"
+  # if [[ "$ua" == 'null' ]]
   # then
-  #   msg="FP: $fp | UA: '$ua'"
+  #   ua=''
+  # fi
+  # if [[ "$ja4" == 'null' ]]
+  # then
+  #   ja4=''
   # fi
 
   if [[ "$status" == '429' ]]

@@ -10,6 +10,7 @@ from datetime import datetime
 from socket import gethostname
 from sys import path as sys_path
 from re import sub as regex_replace
+from re import compile as regex_compile
 from json import dumps as json_dumps
 from json import loads as json_loads
 from ipaddress import ip_address, ip_network
@@ -34,11 +35,16 @@ NET_JSON_FILES = {
     4: BUILD_DIR / 'risk_net4_med.json',
     6: BUILD_DIR / 'risk_net6_med.json',
 }
+JA4_REGEX = regex_compile(r'^[tqd](13|12|11|10|s3|s2|00)[di][a-f0-9]{4}[a-z0-9]{2}_[a-f0-9]{12}_[a-f0-9]{12}$')
 
 report_lock = Lock()
 
 
 def _safe_comment(cmt: str) -> str:
+    cmt = cmt.strip()
+    if cmt.lower() == 'null':
+        return ''
+
     return regex_replace(r"[^\sa-zA-Z0-9_=+.-|\/']", '', cmt)[:100]
 
 
@@ -48,6 +54,14 @@ def _response_json(code: int, data: dict) -> Response:
         status=code,
         mimetype='application/json'
     )
+
+
+def _legitimate_ja4(s: str) -> str:
+    s = s.strip().lower()
+    if JA4_REGEX.match(s) is None:
+        return ''
+
+    return s
 
 
 def _get_src_ip() -> str:
@@ -111,12 +125,19 @@ def report() -> Response:
             )
 
     r = {
-        'ip': data['ip'], 'cat': data['cat'].lower(), 'time': int(time()), 'an': data['an'],
-        'cmt': None, 'token': None, 'by': _get_src_ip(),
+        'ip': data['ip'], 'cat': data['cat'].lower(), 'time': int(time()),
+        'token': '', 'by': _get_src_ip(), 'an': data['an'],
+        'cmt': '', 'ja4': '', 'ua': '',
     }
 
     if 'cmt' in data:
         r['cmt'] = _safe_comment(data['cmt'])
+
+    if 'ua' in data:
+        r['ua'] = _safe_comment(data['ua'])
+
+    if 'ja4' in data:
+        r['ja4'] = _legitimate_ja4(data['ja4'])
 
     if 'Token' in request.headers and request.headers['Token'] in USER_TOKENS:
         r['token'] = md5(request.headers['Token'].encode('utf-8')).hexdigest()[:6]

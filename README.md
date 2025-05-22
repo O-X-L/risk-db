@@ -172,13 +172,18 @@ curl https://risk.oxl.app/api/asn/16509
 You can use our reporting API to report IPs!
 
 ```bash
-# data: "ip": "<IP>", "cat": "<CATEGORY>", "cmt": "<OPTIONAL COMMENT>"
+# data: "ip": "<IP>", "cat": "<CATEGORY>", "cmt": "<OPTIONAL COMMENT>", "ua": "<OPTIONAL HTTP USER-AGENT>", "ja4": "<OPTIONAL JA4-CLIENT-FINGERPRINT>"
 
 # minimal example
 curl -XPOST https://risk.oxl.app/api/report --data '{"ip": "1.1.1.1", "cat": "bot"}' -H 'Content-Type: application/json'
 
-# your reporter-reputation will be better if you add a comment (should not exceed 100 characters)
+# the reports legitimacy will be better if you add a some information (should not exceed 100 characters)
 curl -XPOST https://risk.oxl.app/api/report --data '{"ip": "1.1.1.1", "cat": "attack", "cmt": "Form abuse"}' -H 'Content-Type: application/json'
+## or user-agent
+curl -XPOST https://risk.oxl.app/api/report --data '{"ip": "1.1.1.1", "cat": "attack", "ua": "curl/7.6.1"}' -H 'Content-Type: application/json'
+## or even JA4 client-fingerprint
+curl -XPOST https://risk.oxl.app/api/report --data '{"ip": "1.1.1.1", "cat": "attack", "ua": "curl/7.6.1", "ja4": "t13d3112h2_e8f1e7e78f70_9c4a419d3a15"}' -H 'Content-Type: application/json'
+
 ```
 
 Available categories are: `bot, probe, rate, attack, crawler, hosting, vpn, proxy`

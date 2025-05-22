@@ -87,7 +87,7 @@ def _generate_archive_for_day(date: datetime, dedupe_map: dict, tmp_dir: Path) -
         for r in reports:
             f.write(
                 f"{r['time']},"
-                f"{r['ip']},{r['an']},{r['cat']},{r['cmt']},"
+                f"{r['ip']},{r['an']},{r['cat']},{r['cmt']},{r['ua']},{r['ja4']},"
                 f"{r['by']},{r['user']}\n"
             )
 

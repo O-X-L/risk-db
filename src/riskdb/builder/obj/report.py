@@ -10,6 +10,8 @@ class Report:
         self.ip_anonymized = raw['an'] == 1 if 'an' in raw else False
         self.category = raw['cat']
         self.comment = raw['cmt']
+        self.user_agent = raw.get('ua', '')
+        self.fingerprint_ja4 = raw.get('ja4', '')
         self.by_ip = raw['by']
 
         self.reporter = self._init_reporter(token=raw['token'], reporters=reporters)

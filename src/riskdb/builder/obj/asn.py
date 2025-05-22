@@ -53,14 +53,14 @@ class ASN:
     def _init_info(self, lookup_lists: dict) -> dict:
         r = lookup_lists['asn'][str(self.id)]
         i = {
-            'name': r['info']['name'] if 'name' in r['info'] else '',
+            'name': r['info'].get('name', ''),
             'org': {
-                'name': r['organization']['name'] if 'name' in r['organization'] else '',
-                'country': r['organization']['country'] if 'country' in r['organization'] else '',
-                'state': r['organization']['state'] if 'state' in r['organization'] else '',
-                'website': r['info']['website'] if 'website' in r['info'] else '',
+                'name': r['organization'].get('name', ''),
+                'country': r['organization'].get('country', ''),
+                'state': r['organization'].get('state', ''),
+                'website': r['organization'].get('website', ''),
             },
-            'contacts': r['contacts'] if 'contacts' in r else '',
+            'contacts': r.get('contacts', ''),
             'url': {
                 'oxl_geoip': f'https://geoip.oxl.app/api/asn/{self.id}',
                 'ipinfo': f'https://ipinfo.io/AS{self.id}',

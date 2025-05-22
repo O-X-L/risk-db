@@ -23,7 +23,13 @@ def build_objects(loader: FileLoader, lookup_lists: dict, ptrs: dict):
     with mmdb_database(ASN_MMDB_FILE_IP4) as asn_db_ip4, mmdb_database(ASN_MMDB_FILE_IP6) as asn_db_ip6:
         for raw in loader:
             i += 1
-            r = Report(raw=raw, reporters=reporters)
+            try:
+                r = Report(raw=raw, reporters=reporters)
+
+            except KeyError:
+                # bad data
+                continue
+
             if r.ipv == 4:
                 asn = asn_db_ip4.get(r.ip)
 
