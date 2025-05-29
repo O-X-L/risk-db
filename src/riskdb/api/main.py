@@ -81,7 +81,7 @@ def _get_src_ip() -> str:
     return ip
 
 
-# pylint: disable=R0915
+# pylint: disable=R0915,R0912
 # curl -XPOST https://risk.oxl.app/api/report --data '{"ip": "1.1.1.1", "cat": "bot"}' -H 'Content-Type: application/json'
 @app.route('/api/report', methods=['POST'])
 def report() -> Response:

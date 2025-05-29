@@ -1,14 +1,42 @@
 # pylint: disable=R0801
 
+from riskdb.builder.util import log
 from riskdb.config import RISK_CATEGORIES
 from riskdb.builder.obj.report import Report
-from riskdb.builder.util import log
 
-ASN_KINDS = ['hosting', 'vpn', 'scanner', 'crawler']
+ASN_KINDS = ['hosting', 'vpn', 'scanner', 'crawler', 'isp']
 ASN_FIND = {
     'hosting': ['host', 'cloud', 'server'],
     'isp': ['tel', 'mobil'],
 }
+
+
+def is_asn_org_kind(org: str, kind: str) -> bool:
+    org = str(org).lower()
+    for f in ASN_FIND[kind]:
+        if org.find(f) != -1:
+            return True
+
+    return False
+
+
+def extend_asn_org_kinds(kind: list, info: dict) -> list:
+    if 'hosting' not in kind and is_asn_org_kind(org=info['org'], kind='hosting'):
+        kind.append('hosting')
+
+    if len(kind) == 0 and is_asn_org_kind(org=info['org'], kind='isp'):
+        kind.append('isp')
+
+    return kind
+
+
+def kinds_from_lookup_lists(asn: int, lookup_lists: dict) -> list:
+    k = []
+    for kind in ASN_KINDS:
+        if asn in lookup_lists[kind]:
+            k.append(kind)
+
+    return k
 
 
 class ASN:
@@ -43,12 +71,7 @@ class ASN:
         }
 
     def _init_kind(self, lookup_lists: dict) -> list[str]:
-        k = []
-        for kind in ASN_KINDS:
-            if self.id in lookup_lists[kind]:
-                k.append(kind)
-
-        return k
+        return kinds_from_lookup_lists(asn=self.id, lookup_lists=lookup_lists)
 
     def _init_info(self, lookup_lists: dict) -> dict:
         r = lookup_lists['asn'][str(self.id)]
@@ -74,18 +97,7 @@ class ASN:
         if 'ipv6' in r:
             i['ipv6'] = sum((2 ** (128 - int(net_cidr.split('/', 1)[1]))) for net_cidr in r['ipv6'])
 
-        asn_org = str(i['org']).lower()
-        if 'hosting' not in self.kind:
-            for f in ASN_FIND['hosting']:
-                if asn_org.find(f) != -1:
-                    self.kind.append('hosting')
-                    break
-
-        if len(self.kind) == 0:
-            for f in ASN_FIND['isp']:
-                if asn_org.find(f) != -1:
-                    self.kind.append('isp')
-                    break
+        self.kind = extend_asn_org_kinds(kind=self.kind, info=i)
 
         return i
 

@@ -14,8 +14,8 @@ from dns.resolver import Resolver, NoAnswer, NXDOMAIN, LifetimeTimeout, NoNamese
 from dns.exception import SyntaxError as DNSSyntaxError
 
 from riskdb.builder.util import log
-from riskdb.builder.load_reports import FileLoader
 from riskdb.config import KIND_FILES
+from riskdb.builder.load_reports import FileLoader
 from riskdb.builder.config import CACHE_FILE_PTR, ASN_JSON_FILE, TOR_EXIT_NODE_LIST, PTR_LOOKUP_THREADS, \
     PTR_CACHE_DAYS, PTR_STATUS_COUNT, PTR_NAMESERVERS, PTR_MAX_QUERY_RETRIES
 

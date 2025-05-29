@@ -3,14 +3,14 @@
 from maxminddb import open_database as mmdb_database
 
 from riskdb.config import USER_TOKENS
-from riskdb.builder.config import ASN_MMDB_FILE_IP4, ASN_MMDB_FILE_IP6
+from riskdb.builder.util import log
 from riskdb.builder.obj.ip import IP
 from riskdb.builder.obj.asn import ASN
 from riskdb.builder.obj.report import Report
 from riskdb.builder.obj.reporter import Reporter
-from riskdb.builder.obj.network import Network, get_network_cidr
-from riskdb.builder.util import log
 from riskdb.builder.load_reports import FileLoader
+from riskdb.builder.obj.network import Network, get_network_cidr
+from riskdb.builder.config import ASN_MMDB_FILE_IP4, ASN_MMDB_FILE_IP6
 
 
 def build_objects(loader: FileLoader, lookup_lists: dict, ptrs: dict):
