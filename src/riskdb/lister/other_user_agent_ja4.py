@@ -3,8 +3,8 @@
 from pathlib import Path
 
 from riskdb.builder.util import log
-from riskdb.builder.load_reports import FileLoader
 from riskdb.lister.util import write_list
+from riskdb.builder.load_reports import FileLoader
 
 
 def list_user_agents_ja4(tmp_dir: Path) -> [list, dict]:
