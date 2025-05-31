@@ -1,5 +1,6 @@
 # pylint: disable=R0914
 
+from hashlib import md5
 from pathlib import Path
 from calendar import monthrange
 from datetime import datetime, timedelta
@@ -30,14 +31,19 @@ def _next_month(current: datetime) -> datetime:
 def list_kind(tmp_dir: Path):
     kinds = {
         'asn': {
-            k: [] for k in ASN_KINDS
+            k: set() for k in ASN_KINDS
         },
         'net': {
-            k: [] for k in ASN_KINDS + KIND_IP_INHERITANCE
+            k: set() for k in ASN_KINDS + KIND_IP_INHERITANCE
         },
         'ip': {
-            k: [] for k in list(set(ASN_KINDS + IP_KINDS))
+            k: set() for k in list(set(ASN_KINDS + IP_KINDS))
         },
+    }
+    processed = {
+        'asn': set(),
+        'net': set(),
+        'ip': set(),
     }
 
     log('Building Kind Lists')
@@ -61,24 +67,47 @@ def list_kind(tmp_dir: Path):
         )
 
         asns, nets, ips = build_objects(loader=loader, lookup_lists=lookup_lists, ptrs=ptrs)
+        log(f' > Process ASNs')
         for asn_o in asns.values():
+            if asn_o.id in processed['asn']:
+                continue
+
+            processed['asn'].add(asn_o.id)
+
             for k in asn_o.kind:
                 if asn_o.id not in kinds['asn'][k]:
-                    kinds['asn'][k].append(asn_o.id)
+                    kinds['asn'][k].add(asn_o.id)
 
+        log(f' > Process Nets')
         for net_o in nets.values():
+            cache_key = f"{net_o.net_cidr}_{'-'.join(net_o.kind)}"
+            cache_key = md5(cache_key.encode('utf-8')).hexdigest()[:6]
+            if cache_key in processed['net']:
+                continue
+
+            processed['net'].add(cache_key)
+
             for k in net_o.kind:
                 if net_o.net_cidr not in kinds['net'][k]:
-                    kinds['net'][k].append(net_o.net_cidr)
+                    kinds['net'][k].add(net_o.net_cidr)
 
+        log(f' > Process IPs')
         for ip_o in ips.values():
+            cache_key = md5(ip_o.ip.encode('utf-8')).hexdigest()[:6]
+            if cache_key in processed['ip']:
+                continue
+
+            processed['ip'].add(cache_key)
+
             for k in ip_o.kind:
                 if ip_o.ip not in kinds['ip'][k]:
-                    kinds['ip'][k].append(ip_o.ip)
+                    kinds['ip'][k].add(ip_o.ip)
 
         del asns, nets, ips
         window_start = _next_month(window_start)
 
     for t, kind_lists in kinds.items():
         for k, l in kind_lists.items():
+            l = list(l)
+            l.sort()
             write_list(d=t, file=f'kind_{k}.txt', lines=l, tmp_dir=tmp_dir)

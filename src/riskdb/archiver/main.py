@@ -100,9 +100,8 @@ def _generate_archive(tmp_dir: Path):
     date = ARCHIVE_START_DATE
     dedupe_map = {k: [] for k in ARCHIVE_DEDUPE_FIELDS}
 
-    while date.year < today.year or date.month < today.month or date.day <= today.day:
-        log(f'Generating archive for day: '
-            f'{str(date.year).zfill(2)}-{str(date.month).zfill(2)}-{str(date.day).zfill(2)}')
+    while date < today or (date.year == today.year and date.month == today.month and date.day == today.day):
+        log(f' > {str(date.year).zfill(2)}-{str(date.month).zfill(2)}-{str(date.day).zfill(2)}')
         dedupe_map = _generate_archive_for_day(date=date, dedupe_map=dedupe_map, tmp_dir=tmp_dir)
         date += timedelta(days=1)
 

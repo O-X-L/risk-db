@@ -69,6 +69,7 @@ class ReportLoader:
         return r
 
     def read(self):
+        # todo: catch and retry on 'OSError: [Errno 24] Too many open files'
         with open(self.file, 'r', encoding='utf-8') as file:
             for line in file:
                 report = self.process(line)
