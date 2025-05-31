@@ -1,4 +1,4 @@
-# pylint: disable=R0914
+# pylint: disable=R0914,R0912,R0915
 
 from hashlib import md5
 from pathlib import Path
@@ -67,7 +67,7 @@ def list_kind(tmp_dir: Path):
         )
 
         asns, nets, ips = build_objects(loader=loader, lookup_lists=lookup_lists, ptrs=ptrs)
-        log(f' > Process ASNs')
+        log(' > Process ASNs')
         for asn_o in asns.values():
             if asn_o.id in processed['asn']:
                 continue
@@ -78,7 +78,7 @@ def list_kind(tmp_dir: Path):
                 if asn_o.id not in kinds['asn'][k]:
                     kinds['asn'][k].add(asn_o.id)
 
-        log(f' > Process Nets')
+        log(' > Process Nets')
         for net_o in nets.values():
             cache_key = f"{net_o.net_cidr}_{'-'.join(net_o.kind)}"
             cache_key = md5(cache_key.encode('utf-8')).hexdigest()[:6]
@@ -91,7 +91,7 @@ def list_kind(tmp_dir: Path):
                 if net_o.net_cidr not in kinds['net'][k]:
                     kinds['net'][k].add(net_o.net_cidr)
 
-        log(f' > Process IPs')
+        log(' > Process IPs')
         for ip_o in ips.values():
             cache_key = md5(ip_o.ip.encode('utf-8')).hexdigest()[:6]
             if cache_key in processed['ip']:
