@@ -22,7 +22,7 @@ TOP_N = {
 
 
 def _get_most_reported(kind: str, reports_by: dict) -> list:
-    return sorted(reports_by[kind].items(), key=lambda item: item[1], reverse=True)[:max(TOP_N[kind]) + 1]
+    return sorted(reports_by[kind].items(), key=lambda item: item[1], reverse=True)[:max(TOP_N[kind])]
 
 
 def list_most_reported(tmp_dir: Path):
@@ -119,5 +119,5 @@ def list_most_reported(tmp_dir: Path):
             write_list(d=t, file=f'top_{top_n}{a}.txt', lines=l[:top_n], tmp_dir=tmp_dir)
             write_list(
                 d=t, file=f'top_{top_n}{a}.csv', tmp_dir=tmp_dir,
-                lines=[f'{k},{v}' for k, v in dict(r[:top_n + 1]).items()],
+                lines=[f'{k},{v}' for k, v in dict(r[:top_n]).items()],
             )
