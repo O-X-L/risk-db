@@ -5,9 +5,6 @@ from re import compile as regex_compile
 
 MODE_TEST = environ.get('RISKDB_TEST', '0')
 
-USER_TOKENS = [
-    'ceaf6e70-71c7-4415-92c0-2be6ea5f743b',  # dummy test-token
-]
 BASE_DIR = Path(__file__).parent / 'builder'
 REPORT_DIR = BASE_DIR / 'examples'
 BUILD_DIR = BASE_DIR / 'build'

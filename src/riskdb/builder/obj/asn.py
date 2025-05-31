@@ -4,14 +4,14 @@ from riskdb.builder.util import log
 from riskdb.config import RISK_CATEGORIES
 from riskdb.builder.obj.report import Report
 
-ASN_KINDS = ['hosting', 'vpn', 'scanner', 'crawler', 'isp']
+ASN_KINDS = ['hosting', 'vpn', 'scanner', 'crawler', 'isp', 'education']
 ASN_FIND = {
     'hosting': ['host', 'cloud', 'server'],
     'isp': ['tel', 'mobil'],
 }
 
 
-def is_asn_org_kind(org: str, kind: str) -> bool:
+def _is_asn_org_kind(org: str, kind: str) -> bool:
     org = str(org).lower()
     for f in ASN_FIND[kind]:
         if org.find(f) != -1:
@@ -20,17 +20,17 @@ def is_asn_org_kind(org: str, kind: str) -> bool:
     return False
 
 
-def extend_asn_org_kinds(kind: list, info: dict) -> list:
-    if 'hosting' not in kind and is_asn_org_kind(org=info['org'], kind='hosting'):
+def _extend_asn_org_kinds(kind: list, info: dict) -> list:
+    if 'hosting' not in kind and _is_asn_org_kind(org=info['org'], kind='hosting'):
         kind.append('hosting')
 
-    if len(kind) == 0 and is_asn_org_kind(org=info['org'], kind='isp'):
+    if len(kind) == 0 and _is_asn_org_kind(org=info['org'], kind='isp'):
         kind.append('isp')
 
     return kind
 
 
-def kinds_from_lookup_lists(asn: int, lookup_lists: dict) -> list:
+def _kinds_from_lookup_lists(asn: int, lookup_lists: dict) -> list:
     k = []
     for kind in ASN_KINDS:
         if asn in lookup_lists[kind]:
@@ -71,7 +71,7 @@ class ASN:
         }
 
     def _init_kind(self, lookup_lists: dict) -> list[str]:
-        return kinds_from_lookup_lists(asn=self.id, lookup_lists=lookup_lists)
+        return _kinds_from_lookup_lists(asn=self.id, lookup_lists=lookup_lists)
 
     def _init_info(self, lookup_lists: dict) -> dict:
         r = lookup_lists['asn'][str(self.id)]
@@ -97,7 +97,7 @@ class ASN:
         if 'ipv6' in r:
             i['ipv6'] = sum((2 ** (128 - int(net_cidr.split('/', 1)[1]))) for net_cidr in r['ipv6'])
 
-        self.kind = extend_asn_org_kinds(kind=self.kind, info=i)
+        self.kind = _extend_asn_org_kinds(kind=self.kind, info=i)
 
         return i
 

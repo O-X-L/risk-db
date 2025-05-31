@@ -7,4 +7,9 @@ def write_list(d: str, file: str, lines: list[str], tmp_dir: Path):
         path.mkdir()
 
     with open(path /file, 'w', encoding='utf-8') as f:
-        f.write('\n'.join(lines))
+        with open(path / file, 'w', encoding='utf-8') as f:
+            try:
+                f.write('\n'.join(lines))
+
+            except TypeError:
+                f.write('\n'.join([str(l) for l in lines]))

@@ -50,10 +50,10 @@ def _generate_archive_for_day(date: datetime, dedupe_map: dict, tmp_dir: Path) -
 
         if r['by'] != '':
             if r['by'].find(':') != -1:
-                cidr = NET_SIZE['6']
+                cidr = NET_SIZE[6]
 
             else:
-                cidr = NET_SIZE['4']
+                cidr = NET_SIZE[4]
 
             r['by'] = str(ip_network(f"{r['by']}/{cidr}", strict=False)).split('/', 1)[0]
             if r['by'] in ['::', '::1', '127.0.0.0']:

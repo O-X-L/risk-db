@@ -22,10 +22,10 @@ def get_ip_version(ip: str) -> str:
 def get_network_address(ip: str) -> str:
     try:
         IPv4Address(ip)
-        return IPv4Interface(f"{ip}/{NET_SIZE['4']}").network.network_address.compressed
+        return IPv4Interface(f"{ip}/{NET_SIZE[4]}").network.network_address.compressed
 
     except AddressValueError:
-        return IPv6Interface(f"{ip}/{NET_SIZE['6']}").network.network_address.compressed
+        return IPv6Interface(f"{ip}/{NET_SIZE[6]}").network.network_address.compressed
 
 
 # def get_network_cidr(ip: str) -> str:

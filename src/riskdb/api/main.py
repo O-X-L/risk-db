@@ -21,7 +21,8 @@ from waitress import serve
 from flask import Flask, request, Response, json, redirect
 from oxl_utils.valid.net import valid_public_ip, valid_asn, get_ipv
 
-from riskdb.config import BUILD_DIR, KIND_FILES, REPORT_DIR, RISK_CATEGORIES, NET_SIZE, USER_TOKENS, \
+from riskdb.users import USER_TOKENS
+from riskdb.config import BUILD_DIR, KIND_FILES, REPORT_DIR, RISK_CATEGORIES, NET_SIZE, \
     EXCLUDE_NETS_IP4, EXCLUDE_NETS_IP6, JA4_REGEX
 
 app = Flask('risk-db')

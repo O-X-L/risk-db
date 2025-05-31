@@ -2,7 +2,7 @@
 
 from maxminddb import open_database as mmdb_database
 
-from riskdb.config import USER_TOKENS
+from riskdb.users import USERS
 from riskdb.builder.util import log
 from riskdb.builder.obj.ip import IP
 from riskdb.builder.obj.asn import ASN
@@ -18,7 +18,7 @@ def build_objects(loader: FileLoader, lookup_lists: dict, ptrs: dict):
     asns = {}
     ips = {}
     nets = {}
-    reporters = [Reporter(token) for token in USER_TOKENS]
+    reporters = [Reporter(user) for user in USERS]
 
     with mmdb_database(ASN_MMDB_FILE_IP4) as asn_db_ip4, mmdb_database(ASN_MMDB_FILE_IP6) as asn_db_ip6:
         for raw in loader:

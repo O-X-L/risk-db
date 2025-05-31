@@ -5,14 +5,20 @@ from pathlib import Path
 from riskdb.builder.util import log
 from riskdb.lister.util import write_list
 from riskdb.builder.load_reports import FileLoader
+from riskdb.lister.config import LIST_STATUS_COUNT
 
 
-def list_user_agents_ja4(tmp_dir: Path) -> [list, dict]:
+def list_user_agents_ja4(tmp_dir: Path):
     ua_list = []
     ja4_ua = {}
 
     log('Building User-Agent & JA4 Lists')
-    for r in FileLoader():
+    ir = 0
+    for r in FileLoader(sliding_window=False):
+        ir += 1
+        if ir % LIST_STATUS_COUNT == 0:
+            log(f' > {ir:_}')
+
         ua = r.get('ua', None)
         if ua is None or len(ua) < 6:
             continue

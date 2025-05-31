@@ -1,16 +1,17 @@
-# pylint: disable=R0915
+# pylint: disable=R0915,R0917,R0913
 
 from os import listdir
-from datetime import datetime
 from json import JSONDecodeError
 from json import loads as json_loads
+from re import compile as regex_compile
+from datetime import datetime, timedelta
 from ipaddress import ip_address, AddressValueError
 
 from riskdb.config import EXCLUDE_NETS_IP4, EXCLUDE_NETS_IP6, REPORT_DIR
 from riskdb.builder.config import REPORT_COOLDOWN, REPORT_DAYS
 
 SKIP_REASONS_DEFAULT = {'no_cat': 0, 'bad_ip': 0, 'cooldown': 0, 'ignored': 0, 'bad_json': 0}
-SLIDING_WINDOW_START = datetime.now() - REPORT_DAYS
+FILE_DATE_PREFIX = regex_compile(r'^20[0-9]{2}-[01][0-9]-[0-3][0-9]_')
 
 
 class ReportLoader:
@@ -79,29 +80,52 @@ class ReportLoader:
 
 
 class FileLoader:
-    def __init__(self, path: str = REPORT_DIR, sliding_window: bool = False, match_date: datetime = None):
+    def __init__(
+            self, path: str = REPORT_DIR, match_date: datetime = None,
+            sliding_window: bool = False, sliding_window_days: int = REPORT_DAYS,
+            sliding_window_start: datetime = None, sliding_window_end: datetime = None
+    ):
         self.path = path
         self.match_date = match_date
         self.sliding_window = sliding_window
+        if sliding_window_end is None:
+            sliding_window_end = datetime.now()
+
+        self.sliding_window_end = sliding_window_end
+        if sliding_window_start is None:
+            self.sliding_window_start = sliding_window_end - timedelta(days=sliding_window_days)
+
+        else:
+            self.sliding_window_start = sliding_window_start
+
+        if self.sliding_window_start > self.sliding_window_end:
+            raise ValueError('Sliding window starts after it should end!')
+
         self.skip_reasons = SKIP_REASONS_DEFAULT.copy()
 
     def load(self):
         for file in listdir(REPORT_DIR):
+            if file.endswith('.swp') or file.endswith('.tmp'):
+                continue
+
             file_path = REPORT_DIR / file
             if self.sliding_window or self.match_date is not None:
-                ct = datetime.fromtimestamp(file_path.stat().st_ctime)
+                # overrule create-date if date in file-name
+                if FILE_DATE_PREFIX.match(file) is not None:
+                    rts = file.split('_', 1)[0]
+                    rt = datetime.strptime(rts, '%Y-%m-%d')
 
-                if self.sliding_window and ct < SLIDING_WINDOW_START:
+                else:
+                    rt = datetime.fromtimestamp(file_path.stat().st_ctime)
+
+                if self.sliding_window and (rt < self.sliding_window_start or rt > self.sliding_window_end):
                     continue
 
                 # only get reports of that day (even if we created the file later on)
                 if self.match_date is not None:
-                    y = str(self.match_date.year).zfill(2)
-                    m = str(self.match_date.month).zfill(2)
-                    d = str(self.match_date.day).zfill(2)
-                    ys1, ys2 = f'{y}-{m}-{d}', f'{y}_{m}_{d}'
-                    if (ct.year != y or ct.month != m or ct.day != d) and \
-                            file.find(ys1) == -1 and file.find(ys2) == -1:
+                    if rt.year != self.match_date.year or \
+                            rt.month != self.match_date.month or \
+                            rt.day != self.match_date.day:
                         continue
 
             loader = ReportLoader(f'{REPORT_DIR}/{file}')
