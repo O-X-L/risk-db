@@ -21,7 +21,7 @@ Databases:
           "type": "array",
           "minItems": 0,
           "items": {
-            "enum": ["hosting", "vpn", "isp", "scanner"],
+            "enum": ["hosting", "vpn", "scanner", "crawler", "isp", "education"],
             "type": "string"
           }
         },

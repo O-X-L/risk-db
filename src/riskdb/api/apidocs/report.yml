@@ -1,0 +1,63 @@
+---
+
+summary: 'Report an IP that abuses your system'
+
+consumes: ['application/json']
+
+parameters:
+  - in: 'body'
+    name: 'report'
+    description: 'Report an Abuser'
+    schema:
+      $ref: "#/definitions/Report"
+
+definitions:
+  Report:
+    type: 'object'
+    required:
+      - 'ip'
+      - 'cat'
+    properties:
+      ip:
+        type: 'string'
+        description: 'IP of the Abuser'
+      cat:
+        type: 'string'
+        enum: ['bot', 'attack', 'crawler', 'rate', 'hosting', 'vpn', 'proxy', 'probe']
+        description: 'Kind of abuse'
+      cmt:
+        type: 'string'
+        description: 'Comment kind of abuse'
+      ua:
+        type: 'string'
+        description: 'HTTP User-Agent of the Abuser'
+      ja4:
+        type: 'string'
+        description: 'JA4 Client-TLS-Fingerprint of the Abuser'
+      token:
+        type: 'string'
+        description: 'API Token'
+
+  ErrorMsg:
+    type: 'object'
+    properties:
+      msg:
+        type: 'string'
+        description: 'Error Message'
+
+  SuccessMsg:
+    type: 'object'
+    properties:
+      msg:
+        type: 'string'
+        description: 'Success Message'
+
+responses:
+  200:
+    description: 'The abuser was successfully reported'
+    schema:
+      $ref: '#/definitions/SuccessMsg'
+  400:
+    description: 'Invalid JSON/IP/Category provided or IP is excluded'
+    schema:
+      $ref: '#/definitions/ErrorMsg'

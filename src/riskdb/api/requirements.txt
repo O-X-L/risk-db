@@ -2,3 +2,4 @@ flask
 waitress
 maxminddb
 oxl-utils
+flasgger

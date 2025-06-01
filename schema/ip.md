@@ -60,7 +60,10 @@ Databases:
           "type": "array",
           "minItems": 0,
           "items": {
-            "enum": ["hosting", "vpn", "isp", "scanner", "crawler", "dynamic", "proxy", "tor", "maybe_hacked"],
+            "enum": [
+              "hosting", "vpn", "scanner", "crawler", "isp", "education",
+              "dynamic", "proxy", "tor", "maybe_hacked",
+            ],
             "type": "string"
           }
         },

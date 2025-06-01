@@ -1,0 +1,138 @@
+---
+
+summary: 'Check Risk-Database status of an ASN (Internet Provider)'
+
+parameters:
+  - in: 'path'
+    name: 'asn'
+    description: 'AS-Number to query'
+    type: 'string'
+
+definitions:
+  ASNStatus:
+    type: 'object'
+    properties:
+      kind:
+        type: 'array'
+        minItems: 0
+        items:
+          type: 'string'
+          enum: ['hosting', 'vpn', 'scanner', 'crawler', 'isp', 'education']
+      reports:
+        type: 'object'
+        properties:
+          bot:
+            type: 'number'
+          probe:
+            type: 'number'
+          rate:
+            type: 'number'
+          attack:
+            type: 'number'
+          crawler:
+            type: 'number'
+          relative_by_ipv4:
+            type: 'number'
+          sum:
+            type: 'number'
+        required: ['sum', 'relative_by_ipv4']
+      info:
+        type: 'object'
+        description: 'AS information from PeeringDB / OXL GeoIP-Database (if exists)'
+        properties:
+          name:
+            type: 'string'
+          org:
+            type: 'object'
+            properties:
+              name:
+                type: 'string'
+              country:
+                type: 'string'
+              state:
+                type: 'string'
+              website:
+                type: 'string'
+            required: []
+          contacts:
+            type: 'object'
+            description: 'AS contacts from PeeringDB / OXL GeoIP-Database (if exist)'
+            properties:
+              abuse:
+                type: 'object'
+                properties:
+                  email:
+                    type: 'string'
+                  name:
+                    type: 'string'
+                  phone:
+                    type: 'string'
+                  url:
+                    type: 'string'
+                required: []
+              noc:
+                type: 'object'
+                properties:
+                  name:
+                    type: 'string'
+                  phone:
+                    type: 'string'
+                  email:
+                    type: 'string'
+                  url:
+                    type: 'string'
+                required: []
+              policy:
+                type: 'object'
+                properties:
+                  name:
+                    type: 'string'
+                  phone:
+                    type: 'string'
+                  email:
+                    type: 'string'
+                  url:
+                    type: 'string'
+                required: []
+              required: []
+          ipv4:
+            type: 'number'
+            description: 'Number of IPv4 addresses the AS announces via BGP (from OXL GeoIP-Database)'
+          ipv6:
+            type: 'number'
+            description: 'Number of IPv6 addresses the AS announces via BGP (from OXL GeoIP-Database)'
+          url:
+            type: 'object'
+            properties:
+              oxl_geoip:
+                type: 'string'
+                description: 'URL to OXL GeoIP-Database API for detailed AS information'
+              ipinfo:
+                type: 'string'
+                description: 'URL to IPInfo website'
+              shodan:
+                type: 'string'
+                description: 'URL to Shodan.io website'
+            required: ['oxl_geoip', 'ipinfo', 'shodan']
+        required: ['name', 'url']
+
+  ErrorMsg:
+    type: 'object'
+    properties:
+      msg:
+        type: 'string'
+        description: 'Error Message'
+
+responses:
+  200:
+    description: 'Risk-Database status of the provided ASN'
+    schema:
+      $ref: '#/definitions/ASNStatus'
+  400:
+    description: 'Invalid ASN provided'
+    schema:
+      $ref: '#/definitions/ErrorMsg'
+  404:
+    description: 'ASN not reported'
+    schema:
+      $ref: '#/definitions/ErrorMsg'

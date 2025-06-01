@@ -59,13 +59,46 @@ Databases:
           "type": "array",
           "minItems": 0,
           "items": {
-            "enum": ["hosting", "vpn", "isp", "scanner", "dynamic"],
+            "enum": [
+              "hosting", "vpn", "scanner", "crawler", "isp", "education",
+              "dynamic",
+            ],
             "type": "string"
           }
         },
         "asn": {
           "type": "number",
           "description": "AS(N) the IP belongs to (from OXL GeoIP-Database)"
+        },
+        "info": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "object",
+              "properties": {
+                "ipinfo_1": {
+                  "type": "string",
+                  "description": "URL to IPInfo website (Network IP)"
+                },
+                "ipinfo_2": {
+                  "type": "string",
+                  "description": "URL to IPInfo website (Network)"
+                },
+                "asn": {
+                  "type": "string",
+                  "description": "URL to OXL Risk-Database API for AS(N) information"
+                }
+              },
+              "required": [
+                "ipinfo_1",
+                "ipinfo_2",
+                "asn"
+              ]
+            }
+          },
+          "required": [
+            "url"
+          ]
         }
       },
       "required": [
@@ -73,6 +106,7 @@ Databases:
         "reported_ips",
         "reputation",
         "kind",
+        "info",
         "asn"
       ]
     }

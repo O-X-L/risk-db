@@ -18,14 +18,17 @@ sys_path.append(str(Path(__file__).parent.parent.parent))
 
 import maxminddb
 from waitress import serve
+from flasgger import swag_from, Swagger
 from flask import Flask, request, Response, json, redirect
 from oxl_utils.valid.net import valid_public_ip, valid_asn, get_ipv
 
 from riskdb.users import USER_TOKENS
 from riskdb.config import BUILD_DIR, KIND_FILES, REPORT_DIR, RISK_CATEGORIES, NET_SIZE, \
     EXCLUDE_NETS_IP4, EXCLUDE_NETS_IP6, JA4_REGEX
+from riskdb.api.docs import swagger_config, swagger_template
 
-app = Flask('risk-db')
+app = Flask('riskdb')
+swagger = Swagger(app, config=swagger_config, template=swagger_template)
 RISKY_DB_FILE = {
     4: BUILD_DIR / 'risk_ip4_med.mmdb',
     6: BUILD_DIR / 'risk_ip6_med.mmdb',
@@ -85,6 +88,7 @@ def _get_src_ip() -> str:
 # pylint: disable=R0915,R0912
 # curl -XPOST https://risk.oxl.app/api/report --data '{"ip": "1.1.1.1", "cat": "bot"}' -H 'Content-Type: application/json'
 @app.route('/api/report', methods=['POST'])
+@swag_from('apidocs/report.yml')
 def report() -> Response:
     if 'Content-Type' not in request.headers or not request.headers['Content-Type'].startswith('application/json'):
         return _response_json(code=400, data={'msg': 'Expected JSON'})
@@ -150,6 +154,7 @@ def report() -> Response:
 
 
 @app.route('/api/ip/<ip>', methods=['GET'])
+@swag_from('apidocs/check_ip.yml')
 def check(ip) -> Response:
     if ip.startswith('::ffff:'):
         ip = ip[7:]
@@ -170,6 +175,7 @@ def check(ip) -> Response:
 
 
 @app.route('/api/net/<ip>', methods=['GET'])
+@swag_from('apidocs/check_net.yml')
 def check_net(ip) -> Response:
     if ip.startswith('::ffff:'):
         ip = ip[7:]
@@ -194,6 +200,7 @@ def check_net(ip) -> Response:
 
 
 @app.route('/api/asn/<nr>', methods=['GET'])
+@swag_from('apidocs/check_asn.yml')
 def check_asn(nr) -> Response:
     if not valid_asn(nr):
         return _response_json(code=400, data={'msg': 'Invalid ASN provided'})
@@ -207,6 +214,7 @@ def check_asn(nr) -> Response:
 
 
 @app.route('/api/list/asn/<kind>', methods=['GET'])
+@swag_from('apidocs/list_asn_kind.yml')
 def list_asn_kind(kind: str) -> Response:
     if not kind in ASN_KIND_DATA:
         return _response_json(code=400, data={'msg': 'Invalid KIND provided'})
@@ -219,13 +227,13 @@ def list_asn_kind(kind: str) -> Response:
 
 @app.route('/')
 def catch_base():
-    return redirect(f"/api/ip/{_get_src_ip()}", code=302)
+    return redirect('/api/docs/', code=302)
 
 
 @app.route('/<path:path>')
 def catch_all(path):
     del path
-    return redirect(f"/api/ip/{_get_src_ip()}", code=302)
+    return redirect('/api/docs/', code=302)
 
 
 def _init_asn_kind() -> dict:

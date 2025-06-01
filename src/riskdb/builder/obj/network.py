@@ -64,10 +64,12 @@ class Network:
             'reported_ips': ip_count,
             'reputation': reputation,
             'kind': self.kind,
-            'url': {
-                'asn': f'https://risk.oxl.app/api/asn/{self.asn.id}',
-                'ipinfo_1': f'https://ipinfo.io/{self.net_ip}',
-                'ipinfo_2': f'https://ipinfo.io/AS{self.asn.id}/{self.net_cidr}',
+            'info': {
+                'url': {
+                    'asn': f'https://risk.oxl.app/api/asn/{self.asn.id}',
+                    'ipinfo_1': f'https://ipinfo.io/{self.net_ip}',
+                    'ipinfo_2': f'https://ipinfo.io/AS{self.asn.id}/{self.net_cidr}',
+                },
             },
             'asn': self.asn.id,
         }

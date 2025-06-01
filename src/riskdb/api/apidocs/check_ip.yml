@@ -1,0 +1,88 @@
+---
+
+summary: 'Check Risk-Database status of an IP-Address'
+
+parameters:
+  - in: 'path'
+    name: 'ip'
+    description: 'IP to query'
+    type: 'string'
+
+definitions:
+  IPStatus:
+    type: 'object'
+    properties:
+      asn:
+        type: 'number'
+        description: 'AS(N) the IP belongs to (from OXL GeoIP-Database)'
+      kind:
+        type: 'array'
+        minItems: 0
+        items:
+          type: 'string'
+          enum: [
+            'hosting', 'vpn', 'isp', 'scanner', 'crawler', 'education',
+            'dynamic', 'proxy', 'tor', 'maybe_hacked',
+          ]
+        description: 'What the ASN or IP is known for'
+      ptr:
+        type: 'string'
+        description: 'PTR record queried for the IP (if resolved)'
+      reports:
+        type: 'object'
+        properties:
+          bot:
+            type: 'number'
+          probe:
+            type: 'number'
+          rate:
+            type: 'number'
+          attack:
+            type: 'number'
+          crawler:
+            type: 'number'
+          sum:
+            type: 'number'
+        required: ['sum']
+      info:
+        type: 'object'
+        properties:
+          url:
+            type: 'object'
+            properties:
+              net:
+                type: 'string'
+                description: 'URL to OXL Risk-Database API for network information'
+              ipinfo:
+                type: 'string'
+                description: 'URL to IPInfo website'
+              shodan:
+                type: 'string'
+                description: 'URL to Shodan.io website'
+              asn:
+                type: 'string'
+                description: 'URL to OXL Risk-Database API for AS(N) information'
+            required: ['net', 'ipinfo', 'shodan', 'asn']
+        required: ['url']
+    required: ['reports', 'kind', 'info', 'asn']
+
+  ErrorMsg:
+    type: 'object'
+    properties:
+      msg:
+        type: 'string'
+        description: 'Error Message'
+
+responses:
+  200:
+    description: 'Risk-Database status of the provided IP'
+    schema:
+      $ref: '#/definitions/IPStatus'
+  400:
+    description: 'Invalid IP provided'
+    schema:
+      $ref: '#/definitions/ErrorMsg'
+  404:
+    description: 'IP not reported or temporary lookup failure'
+    schema:
+      $ref: '#/definitions/ErrorMsg'

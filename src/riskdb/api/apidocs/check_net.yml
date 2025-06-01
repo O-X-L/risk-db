@@ -1,0 +1,92 @@
+---
+
+summary: 'Check Risk-Database status of a Network'
+
+parameters:
+  - in: 'path'
+    name: 'ip'
+    description: 'IP or Network to query'
+    type: 'string'
+
+definitions:
+  NetStatus:
+    type: 'object'
+    properties:
+      asn:
+        type: 'number'
+        description: 'AS(N) the Network belongs to (from OXL GeoIP-Database)'
+      network:
+        type: 'string'
+        description: 'Network with subnet in CIDR-format'
+      reported_ips:
+        type: 'number'
+        description: 'Count of unique IPs inside the network that were reported'
+      reputation:
+        type: 'string'
+        enum: ['bad', 'warn', 'sus', 'info', 'ok']
+        description: 'Relative reputation of the network measured by reported IPs'
+      kind:
+        type: 'array'
+        minItems: 0
+        items:
+          type: 'string'
+          enum: [
+            'hosting', 'vpn', 'isp', 'scanner', 'crawler', 'education',
+            'dynamic',
+          ]
+        description: 'What the ASN or IP is known for'
+      reports:
+        type: 'object'
+        properties:
+          bot:
+            type: 'number'
+          probe:
+            type: 'number'
+          rate:
+            type: 'number'
+          attack:
+            type: 'number'
+          crawler:
+            type: 'number'
+          sum:
+            type: 'number'
+        required: ['sum']
+      info:
+        type: 'object'
+        properties:
+          url:
+            type: 'object'
+            properties:
+              ipinfo_1:
+                type: 'string'
+                description: 'URL to IPInfo website'
+              ipinfo_2:
+                type: 'string'
+                description: 'URL to IPInfo website'
+              asn:
+                type: 'string'
+                description: 'URL to OXL Risk-Database API for AS(N) information'
+            required: ['ipinfo_1', 'ipinfo_2', 'asn']
+        required: ['url']
+    required: ['reports', 'kind', 'info', 'asn']
+
+  ErrorMsg:
+    type: 'object'
+    properties:
+      msg:
+        type: 'string'
+        description: 'Error Message'
+
+responses:
+  200:
+    description: 'Risk-Database status of the provided Network'
+    schema:
+      $ref: '#/definitions/NetStatus'
+  400:
+    description: 'Invalid IP or Network provided'
+    schema:
+      $ref: '#/definitions/ErrorMsg'
+  404:
+    description: 'Network not reported'
+    schema:
+      $ref: '#/definitions/ErrorMsg'
