@@ -29,7 +29,7 @@ swagger_template = template = {
     "version": "1.0.0"
   },
   # "host": "mysite.com",  # overrides localhost:500
-  "basePath": "/api",  # base bash for blueprint registration
+  # "basePath": "/api",  # base bash for blueprint registration
   "schemes": [
     # "http",
     "https"
