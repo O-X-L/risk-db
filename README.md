@@ -129,7 +129,7 @@ cat risk_ip4_med.json | jq -r 'map_values(select(.kind.hosting == true)) | to_en
 
 [![API Uptime](https://status.oxl.at/api/v1/endpoints/2--oxl-apis_risk-db/uptimes/7d/badge.svg)](https://status.oxl.at/endpoints/2--oxl-apis_risk-db)
 
-[Swagger Docs](https://risk.oxl.app/api/docs/)
+[Swagger API-Docs](https://risk.oxl.app/api/docs/)
 
 * ASN Lists: [Hosting](https://risk.oxl.app/api/list/asn/hosting), [VPN](https://risk.oxl.app/api/list/asn/vpn), [Crawler](https://risk.oxl.app/api/list/asn/crawler), [Scanner](https://risk.oxl.app/api/list/asn/scanner), [ISP](https://risk.oxl.app/api/list/asn/isp) (*extending lists dynamically is still under development..*)
 * [IP Lookup](https://risk.oxl.app/api/ip/69.164.207.190)
