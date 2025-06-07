@@ -26,6 +26,6 @@ def get_asn_organisation(asn_metadata: dict, asn: int, csv: bool = True) -> str:
 
     org = m['info'].get('name', m['organization'].get('name', ''))
     if csv:
-        org = org.replace(',', '')
+        org = org.replace(',', '').replace('"', "'")
 
     return org
