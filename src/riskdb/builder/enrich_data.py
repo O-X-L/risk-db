@@ -29,6 +29,12 @@ dns_resolver.timeout = 1.0
 dns_resolver.nameservers = PTR_NAMESERVERS
 
 
+def load_lookup_list_asn() -> dict:
+    # source: https://github.com/O-X-L/geoip-asn
+    with open(ASN_JSON_FILE, 'r', encoding='utf-8') as f:
+        return json_loads(f.read())
+
+
 def load_lookup_lists() -> dict:
     lookup_lists = {}
     tor_exit_node_file = '/tmp/tor_exit_nodes.txt'
@@ -45,9 +51,7 @@ def load_lookup_lists() -> dict:
             except AddressValueError:
                 continue
 
-    # source: https://github.com/O-X-L/geoip-asn
-    with open(ASN_JSON_FILE, 'r', encoding='utf-8') as f:
-        lookup_lists['asn'] = json_loads(f.read())
+    lookup_lists['asn'] = load_lookup_list_asn()
 
     # creation of these files has yet to be automated
     for k, v in KIND_FILES.items():

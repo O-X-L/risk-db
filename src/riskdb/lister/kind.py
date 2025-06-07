@@ -6,14 +6,14 @@ from calendar import monthrange
 from datetime import datetime, timedelta
 
 from riskdb.builder.util import log
-from riskdb.lister.util import write_list
-from riskdb.builder.build import build_objects
-from riskdb.builder.load_reports import FileLoader
-from riskdb.builder.enrich_data import load_lookup_lists, get_ptrs_from_cache
-from riskdb.builder.obj.asn import ASN_KINDS
-from riskdb.builder.obj.network import KIND_IP_INHERITANCE
 from riskdb.builder.obj.ip import IP_KINDS
+from riskdb.builder.obj.asn import ASN_KINDS
+from riskdb.builder.build import build_objects
 from riskdb.lister.config import LIST_START_DATE
+from riskdb.builder.load_reports import FileLoader
+from riskdb.builder.obj.network import KIND_IP_INHERITANCE
+from riskdb.lister.util import write_list, get_asn_organisation
+from riskdb.builder.enrich_data import load_lookup_lists, get_ptrs_from_cache
 
 END_DATE = datetime.now()
 
@@ -111,3 +111,11 @@ def list_kind(tmp_dir: Path):
             l = list(l)
             l.sort()
             write_list(d=t, file=f'kind_{k}.txt', lines=l, tmp_dir=tmp_dir)
+
+            if t == 'asn':
+                csv = ['ASN,Organization']
+                csv.extend([
+                    f"{k},{get_asn_organisation(lookup_lists['asn'], k)}"
+                    for k in l
+                ])
+                write_list(d=t, file=f'kind_{k}.csv', lines=csv, tmp_dir=tmp_dir)

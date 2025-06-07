@@ -7,9 +7,10 @@ from maxminddb import open_database as mmdb_database
 
 from riskdb.config import NET_SIZE
 from riskdb.builder.util import log
-from riskdb.lister.util import write_list
 from riskdb.builder.load_reports import FileLoader
 from riskdb.lister.config import LIST_STATUS_COUNT
+from riskdb.builder.enrich_data import load_lookup_list_asn
+from riskdb.lister.util import write_list, get_asn_organisation
 from riskdb.builder.config import ASN_MMDB_FILE_IP4, ASN_MMDB_FILE_IP6
 
 TOP_N = {
@@ -35,6 +36,8 @@ def list_most_reported(tmp_dir: Path):
     }
 
     log('Building Most-Reported Lists')
+
+    asn_metadata = load_lookup_list_asn()
 
     ir = 0
     with mmdb_database(ASN_MMDB_FILE_IP4) as asn_db_ip4, mmdb_database(ASN_MMDB_FILE_IP6) as asn_db_ip6:
@@ -117,7 +120,27 @@ def list_most_reported(tmp_dir: Path):
                 a = '_ips_6'
 
             write_list(d=t, file=f'top_{top_n}{a}.txt', lines=l[:top_n], tmp_dir=tmp_dir)
+
+            if t == 'asn':
+                csv = ['ASN,Report count,Organization']
+                csv.extend([
+                    f"{k},{v},{get_asn_organisation(asn_metadata, k)}"
+                    for k, v in dict(r[:top_n]).items()
+                ])
+
+            elif t == 'net':
+                csv = ['Network,Report count']
+
+            else:
+                csv = ['IP,Report count']
+
+            if t != 'asn':
+                csv.extend([
+                    f"{k},{v}"
+                    for k, v in dict(r[:top_n]).items()
+                ])
+
             write_list(
                 d=t, file=f'top_{top_n}{a}.csv', tmp_dir=tmp_dir,
-                lines=[f'{k},{v}' for k, v in dict(r[:top_n]).items()],
+                lines=csv,
             )

@@ -13,3 +13,19 @@ def write_list(d: str, file: str, lines: list[str], tmp_dir: Path):
 
             except TypeError:
                 f.write('\n'.join([str(l) for l in lines]))
+
+
+def get_asn_organisation(asn_metadata: dict, asn: int, csv: bool = True) -> str:
+    asn = str(asn)
+    if asn not in asn_metadata:
+        return ''
+
+    m = asn_metadata[asn]
+    if 'info' not in m:
+        return ''
+
+    org = m['info'].get('name', m['organization'].get('name', ''))
+    if csv:
+        org = org.replace(',', '')
+
+    return org
