@@ -4,7 +4,7 @@ summary: 'Check Risk-Database status of an ASN (Internet Provider)'
 
 parameters:
   - in: 'path'
-    name: 'asn'
+    name: 'nr'
     description: 'AS-Number to query'
     type: 'string'
 
