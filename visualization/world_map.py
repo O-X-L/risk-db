@@ -72,16 +72,16 @@ def main():
         for ipv, ipv_db in {'ip4': raw4, 'ip6': raw6}.items():
             for ip, v in ipv_db.items():
                 ip_md = m.get(ip)
-                if ip_md['country'] not in DATA['data']['values']:
-                    DATA['data']['values'][ip_md['country']] = {c: 0 for c in CATEGORIES}
-                    DATA['data']['values'][ip_md['country']]['ip4'] = 0
-                    DATA['data']['values'][ip_md['country']]['ip6'] = 0
+                if ip_md['country_code'] not in DATA['data']['values']:
+                    DATA['data']['values'][ip_md['country_code']] = {c: 0 for c in CATEGORIES}
+                    DATA['data']['values'][ip_md['country_code']]['ip4'] = 0
+                    DATA['data']['values'][ip_md['country_code']]['ip6'] = 0
 
                 for c in CATEGORIES:
                     if c in v['reports']:
-                        DATA['data']['values'][ip_md['country']][c] += v['reports'][c]
+                        DATA['data']['values'][ip_md['country_code']][c] += v['reports'][c]
 
-                DATA['data']['values'][ip_md['country']][ipv] += v['reports']['sum']
+                DATA['data']['values'][ip_md['country_code']][ipv] += v['reports']['sum']
 
     DATA['data']['values'] = dict(sorted(DATA['data']['values'].items(), key=lambda item: item[1]['sum'], reverse=True))
     with open(SRC_PATH / 'world_map.json', 'w', encoding='utf-8') as f:
