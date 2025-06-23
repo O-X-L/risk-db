@@ -3,7 +3,7 @@ from datetime import datetime
 from os import system as shell
 
 from riskdb.config import MODE_TEST
-from riskdb.archiver.config import GIT_TOKEN
+from riskdb.archiver.config import GIT_TOKEN, GIT_EMAIL
 
 
 def git_clone(repo: str, tmp_dir: Path):
@@ -18,7 +18,7 @@ def git_commit_and_push(user: str, cmt: str, repo: str, tmp_dir: Path):
     shell(
         f"cd {tmp_dir} && "
         f"git config user.name '{user}' && "
-        f"git config user.email 'rath@oxl.at' && "
+        f"git config user.email '{GIT_EMAIL}' && "
         f"git add --all >/dev/null && "
         f"git commit -m '{cmt} {today}' >/dev/null && "
         f"git push https://{GIT_TOKEN}@{repo} >/dev/null &&"
