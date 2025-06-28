@@ -244,7 +244,7 @@ def _init_asn_kind() -> dict:
         data[k] = []
         if v.is_file():
             with open(v, 'r', encoding='utf-8') as _f:
-                for l in f.readlines():
+                for l in _f.readlines():
                     try:
                         data[k].append(int(l.strip()))
 
