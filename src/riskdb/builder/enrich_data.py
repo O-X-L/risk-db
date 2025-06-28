@@ -87,13 +87,18 @@ def load_lookup_lists() -> dict:
 
     # creation of these files has yet to be automated
     for k, v in KIND_FILES.items():
+        lookup_lists[k] = []
         if not Path(v).is_file():
             log(f'WARN: Failed to load lookup-list of kind {k}')
-            lookup_lists[k] = []
             continue
 
         with open(v, 'r', encoding='utf-8') as f:
-            lookup_lists[k] = [int(l.strip()) for l in f.readlines()]
+            for l in f.readlines():
+                try:
+                    lookup_lists[k].append(int(l.strip()))
+
+                except ValueError:
+                    continue
 
     return lookup_lists
 
