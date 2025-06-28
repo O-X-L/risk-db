@@ -244,7 +244,12 @@ def _init_asn_kind() -> dict:
         data[k] = []
         if v.is_file():
             with open(v, 'r', encoding='utf-8') as _f:
-                data[k] = [l.strip() for l in _f.readlines()]
+                for l in f.readlines():
+                    try:
+                        data[k].append(int(l.strip()))
+
+                    except ValueError:
+                        continue
 
     # dynamically detected ones
     for asn, v in ASN_DATA.items():
