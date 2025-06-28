@@ -6,7 +6,7 @@ from riskdb.builder.obj.report import Report
 
 ASN_KINDS = ['hosting', 'vpn', 'scanner', 'crawler', 'isp', 'education']
 ASN_FIND = {
-    'hosting': ['host', 'cloud', 'server', 'datacenter', 'data center'],
+    'hosting': ['host', 'cloud', 'server', 'datacenter', 'data center', 'rack'],
     'isp': ['tel', 'mobil'],
     'education': [
         'university', 'universitat', 'universitaris', 'universitaet', 'universities',
