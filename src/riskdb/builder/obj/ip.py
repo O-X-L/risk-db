@@ -1,3 +1,5 @@
+from netaddr import IPAddress as NetaddrIPAddress
+
 from riskdb.config import RISK_CATEGORIES
 
 from riskdb.builder.obj.asn import ASN
@@ -83,6 +85,11 @@ class IP:
 
         if self.ip in lookup_lists['tor']:
             k.append('tor')
+
+        ip_obj = NetaddrIPAddress(self.ip)
+        for net in lookup_lists['vpns']:
+            if ip_obj in net:
+                k.append('vpn')
 
         if self.ptr is None:
             return k

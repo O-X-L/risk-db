@@ -16,6 +16,12 @@ MMDB_DESCRIPTION = 'OXL RISK-Database - risk.oxl.app (BSD-3-Clause)'
 REPORT_COOLDOWN = 10  # sec
 REPORT_DAYS = 30  # sliding window
 TOR_EXIT_NODE_LIST = 'https://check.torproject.org/torbulkexitlist'
+VPN_URLS = {
+    'apple': 'https://mask-api.icloud.com/egress-ip-ranges.csv',
+    'mullvad': 'https://api.mullvad.net/app/v1/relays',
+    'pia': 'https://raw.githubusercontent.com/Lars-/PIA-servers/refs/heads/master/export.csv',
+}
+DOWNLOAD_TIMEOUT = 5  # do not wait forever if something changed (p.e. firewall blocks download)
 
 PTR_LOOKUP_THREADS = 50
 PTR_CACHE_DAYS = 30

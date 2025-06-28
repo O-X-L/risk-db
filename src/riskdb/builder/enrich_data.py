@@ -12,12 +12,14 @@ from ipaddress import ip_address, AddressValueError
 from oxl_utils.ps import wait_for_threads
 from dns.resolver import Resolver, NoAnswer, NXDOMAIN, LifetimeTimeout, NoNameservers
 from dns.exception import SyntaxError as DNSSyntaxError
+from netaddr.ip import IPNetwork, cidr_merge
+from netaddr.core import AddrFormatError, AddrConversionError
 
 from riskdb.builder.util import log
 from riskdb.config import KIND_FILES
 from riskdb.builder.load_reports import FileLoader
 from riskdb.builder.config import CACHE_FILE_PTR, ASN_JSON_FILE, TOR_EXIT_NODE_LIST, PTR_LOOKUP_THREADS, \
-    PTR_CACHE_DAYS, PTR_STATUS_COUNT, PTR_NAMESERVERS, PTR_MAX_QUERY_RETRIES
+    PTR_CACHE_DAYS, PTR_STATUS_COUNT, PTR_NAMESERVERS, PTR_MAX_QUERY_RETRIES, VPN_URLS, DOWNLOAD_TIMEOUT
 
 now = int(time())
 ptr_cache_lock = Lock()
@@ -33,6 +35,35 @@ def load_lookup_list_asn() -> dict:
     # source: https://github.com/O-X-L/geoip-asn
     with open(ASN_JSON_FILE, 'r', encoding='utf-8') as f:
         return json_loads(f.read())
+
+
+def load_vpn_ips() -> list[IPNetwork]:
+    vpn_file = '/tmp/vpns.txt'
+    os_shell(
+        f"wget -q --connect-timeout={DOWNLOAD_TIMEOUT} -O {vpn_file}.tmp {VPN_URLS['apple']} &&"
+        f"tail -n +2 {vpn_file}.tmp | cut -d ',' -f1 | sort | uniq > {vpn_file}"
+    )
+    os_shell(
+        f"wget -q --connect-timeout={DOWNLOAD_TIMEOUT} -O {vpn_file}.tmp {VPN_URLS['mullvad']} &&"
+        f"jq -r '.[][] | try .[] | try .ipv4_addr_in' < {vpn_file}.tmp | sort | uniq >> {vpn_file} &&"
+        f"jq -r '.[][] | try .[] | try .ipv6_addr_in' < {vpn_file}.tmp | sort | uniq >> {vpn_file}"
+    )
+    os_shell(
+        f"wget -q --connect-timeout={DOWNLOAD_TIMEOUT} -O {vpn_file}.tmp {VPN_URLS['pia']} &&"
+        f"tail -n +2 {vpn_file}.tmp | cut -d ',' -f1 | sort | uniq >> {vpn_file}"
+    )
+
+    # NOTE: using netaddr to allow for subnet-merging where possible
+    nets = []
+    with open(vpn_file, 'r', encoding='utf-8') as f:
+        for net in f.readlines():
+            try:
+                nets.append(IPNetwork(net.strip()))
+
+            except (AddrFormatError, AddrConversionError, ValueError):
+                continue
+
+    return cidr_merge(nets)
 
 
 def load_lookup_lists() -> dict:
@@ -51,6 +82,7 @@ def load_lookup_lists() -> dict:
             except AddressValueError:
                 continue
 
+    lookup_lists['vpns'] = load_vpn_ips()
     lookup_lists['asn'] = load_lookup_list_asn()
 
     # creation of these files has yet to be automated

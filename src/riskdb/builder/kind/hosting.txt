@@ -1,3 +1,4 @@
+# for dynamic/full lists refer to: https://github.com/O-X-L/risk-db-lists/tree/main/asn
 559
 834
 917
