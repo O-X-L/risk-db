@@ -8,6 +8,10 @@ ASN_KINDS = ['hosting', 'vpn', 'scanner', 'crawler', 'isp', 'education']
 ASN_FIND = {
     'hosting': ['host', 'cloud', 'server', 'datacenter', 'data center'],
     'isp': ['tel', 'mobil'],
+    'education': [
+        'university', 'universitat', 'universitaris', 'universitaet', 'universities',
+        'uniwersytet', 'academic', 'institute of technology', 'college',
+    ],
 }
 
 
@@ -23,6 +27,9 @@ def _is_asn_org_kind(org: str, kind: str) -> bool:
 def _extend_asn_org_kinds(kind: list, info: dict) -> list:
     if 'hosting' not in kind and _is_asn_org_kind(org=info['org'], kind='hosting'):
         kind.append('hosting')
+
+    if 'education' not in kind and _is_asn_org_kind(org=info['org'], kind='education'):
+        kind.append('education')
 
     if len(kind) == 0 and _is_asn_org_kind(org=info['org'], kind='isp'):
         kind.append('isp')
