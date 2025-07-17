@@ -26,7 +26,7 @@ def list_user_agents_ja4(tmp_dir: Path):
         ua_list.append(ua)
 
         ja4 = r.get('ja4', None)
-        if ja4 is not None:
+        if ja4 is not None and ja4.strip() != '' and not ja4.startswith('d00'):
             if ja4 in ja4_ua:
                 ja4_ua[ja4].append(ua.replace(',', ';'))
 

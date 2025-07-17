@@ -15,7 +15,7 @@ class Report:
         self.user_agent = raw.get('ua', '')
         self.fingerprint_ja4 = raw.get('ja4', '')
 
-        if JA4_REGEX.match(self.fingerprint_ja4) is None:
+        if JA4_REGEX.match(self.fingerprint_ja4) is None or self.fingerprint_ja4.startswith('d00'):
             self.fingerprint_ja4 = ''
 
         self.reporter = self._init_reporter(token=raw['token'], reporters=reporters)
