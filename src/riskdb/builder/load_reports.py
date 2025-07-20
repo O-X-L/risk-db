@@ -32,6 +32,11 @@ class ReportLoader:
         if r['by'] in ['127.0.0.1', '::1']:
             r['by'] = ''
 
+        # a reporter reporting his own IP
+        if r['by'] == r['ip']:
+            self.skip_reasons['ignored'] += 1
+            return
+
         # make sure we format them the same (remove 0000 from ipv6 and so on..)
         try:
             # pylint: disable=C0103
