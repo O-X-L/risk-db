@@ -132,7 +132,11 @@ def _save_ptr_cache(ptrs: dict):
 
     if cache_file.is_file():
         with open(CACHE_FILE_PTR, 'r', encoding='utf-8') as f:
-            current = json_loads(f.read())
+            try:
+                current = json_loads(f.read())
+
+            except JSONDecodeError:
+                log('WARN: Failed to load PTR-cache')
 
     for ip, ptr in ptrs.items():
         if ip not in current or 't' not in current[ip] or not isinstance(current[ip]['t'], int):
