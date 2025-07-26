@@ -4,3 +4,6 @@ visualization/*.zip
 visualization/LICENSE.txt
 src/riskdb/builder/build/*.json
 src/riskdb/builder/build/*.mmdb
+src/riskdb/dnsbl/*.txt
+src/riskdb/dnsbl/*.json
+src/riskdb/dnsbl/*.zip

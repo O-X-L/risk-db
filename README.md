@@ -188,7 +188,7 @@ curl -XPOST https://risk.oxl.app/api/report --data '{"ip": "1.1.1.1", "cat": "at
 
 ```
 
-Available categories are: `bot, probe, rate, attack, crawler, hosting, vpn, proxy`
+Available categories are: `bot, probe, rate, attack, crawler, spam, malware, hosting, vpn, proxy`
 
 **Limits**:
 

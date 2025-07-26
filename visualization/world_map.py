@@ -11,7 +11,7 @@ from maxminddb import open_database as mmdb_database
 
 SRC_PATH = Path(__file__).resolve().parent
 HIGHLIGHT_TOP_N = 20
-CATEGORIES = ['sum', 'bot', 'probe', 'rate', 'attack', 'crawler']
+CATEGORIES = ['sum', 'bot', 'probe', 'rate', 'attack', 'crawler', 'spam', 'malware']
 
 # todo: add change to last month
 DATA = {
@@ -44,6 +44,14 @@ DATA = {
             },
             'crawler': {
                 'name': 'Reported crawlers',
+                'format': '{0}',
+            },
+            'spam': {
+                'name': 'Reported spam',
+                'format': '{0}',
+            },
+            'malware': {
+                'name': 'Reported malware',
                 'format': '{0}',
             },
             'ip4': {

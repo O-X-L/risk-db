@@ -23,7 +23,7 @@ definitions:
         description: 'IP of the Abuser'
       cat:
         type: 'string'
-        enum: ['bot', 'attack', 'crawler', 'rate', 'hosting', 'vpn', 'proxy', 'probe']
+        enum: ['bot', 'attack', 'crawler', 'rate', 'hosting', 'vpn', 'proxy', 'probe', 'spam', 'malware']
         description: 'Kind of abuse'
       cmt:
         type: 'string'

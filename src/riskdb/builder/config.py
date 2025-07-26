@@ -3,7 +3,7 @@ from os import environ
 from riskdb.config import DL_DIR
 
 INFO_CATEGORIES = ['hosting', 'vpn', 'proxy']
-CATEGORIES = ['bot', 'probe', 'rate', 'attack', 'crawler']
+CATEGORIES = ['bot', 'probe', 'rate', 'attack', 'crawler', 'spam', 'malware']
 
 # source: https://github.com/O-X-L/geoip-asn
 ASN_JSON_FILE = DL_DIR / 'asn_full.json'  # https://geoip.oxl.app/file/asn_full.json.zip
