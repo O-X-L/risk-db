@@ -29,7 +29,6 @@ def main():
     dns_bl = {'nets': [], 'ips': []}
 
     for ipp in ['net4', 'net6']:
-        print(data.keys(), ipp, ipp in data)
         for net, net_info in data[ipp].items():
             if net_info['reputation'] in INCLUDE_NET_REPUTATION:
                 dns_bl['nets'].append(net)
