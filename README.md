@@ -167,6 +167,29 @@ curl https://risk.oxl.app/api/asn/16509
 
 ----
 
+## DNS-BL
+
+You can also query IPs via DNS:
+
+```bash
+# check if IP '38.207.157.50' was reported
+nslookup 50.157.207.38.ip.dnsbl.risk.oxl.app
+
+# check if IP '2604:2dc0:205:e400::' was reported
+nslookup 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.4.e.5.0.2.0.0.c.d.2.4.0.6.2.ip.dnsbl.risk.oxl.app
+
+# or you can use the script
+pip install dnspython
+python3 src/riskdb/dnsbl/query_ip.py 1.2.3.4
+python3 src/riskdb/dnsbl/query_ip.py 2604:2dc0:205:e400::
+```
+
+**Query Limits**: 60/min & 10k/day
+
+For details see: [src/riskdb/dnsbl](https://github.com/O-X-L/risk-db/blob/latest/src/riskdb/dnsbl) and [dnsbl-server](https://github.com/O-X-L/dnsbl-server)
+
+----
+
 ## Report
 
 [![API Uptime](https://status.oxl.at/api/v1/endpoints/2--oxl-apis_risk-db/uptimes/7d/badge.svg)](https://status.oxl.at/endpoints/2--oxl-apis_risk-db)

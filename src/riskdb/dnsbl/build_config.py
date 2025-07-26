@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from sys import argv
 from pathlib import Path
 from json import loads as json_loads
