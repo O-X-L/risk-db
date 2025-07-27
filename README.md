@@ -24,13 +24,13 @@ You can find basic visualization examples for the latest data here: [www.risk.ox
 
 ## Repositories
 
-### Raw Data
-
-You can find the raw report-data here: [O-X-L/risk-db-archive](https://github.com/O-X-L/risk-db-archive)
-
 ### Simple Lists
 
 You can find simple IP-/Network-/ASN-Lists here: [O-X-L/risk-db-lists](https://github.com/O-X-L/risk-db-lists)
+
+### Raw Data
+
+If the raw report-data could be useful for a project of yours - please contact us at: [risk-db@oxl.at](mailto:risk-db@oxl.at)
 
 ----
 
