@@ -21,6 +21,8 @@ from waitress import serve
 from flasgger import swag_from, Swagger
 from flask import Flask, request, Response, json, redirect
 from oxl_utils.valid.net import valid_public_ip, valid_asn, get_ipv
+from dnsbl_check import CheckIP
+from dnsbl_check.provider_config import CUSTOM_PROVIDERS
 
 from riskdb.users import USER_TOKENS
 from riskdb.config import BUILD_DIR, KIND_FILES, REPORT_DIR, RISK_CATEGORIES, NET_SIZE, \
@@ -223,6 +225,23 @@ def list_asn_kind(kind: str) -> Response:
         return _response_json(code=404, data={'msg': 'Temporary lookup failure'})
 
     return _response_json(code=200, data={'asn': ASN_KIND_DATA[kind]})
+
+
+@app.route('/api/dnsbl/ip/<ip>', methods=['GET'])
+@swag_from('apidocs/check_dnsbl_ip.yml')
+def check_dnsbl_ip(ip) -> Response:
+    if not valid_public_ip(ip):
+        return _response_json(code=400, data={'msg': 'Invalid IP provided'})
+
+    provider = CUSTOM_PROVIDERS['ip.dnsbl.risk.oxl.app']()
+
+    with CheckIP(providers=[provider]) as checker:
+        result = checker.check(ip).to_dict()
+
+    return _response_json(code=200, data={
+        'listed': result['detected'],
+        'category': None if len(result['categories']) == 0 else result['categories'][0],
+    })
 
 
 @app.route('/')

@@ -1,0 +1,38 @@
+---
+
+summary: 'Query IP in Risk-Database DNS-BL'
+
+parameters:
+  - in: 'path'
+    name: 'ip'
+    description: 'IP to query'
+    type: 'string'
+
+definitions:
+  IPStatus:
+    type: 'object'
+    properties:
+      listed:
+        type: 'boolean'
+        description: 'If the IP is listed in the DNS-BL'
+      category:
+        type: 'string'
+        description: 'The category the IP for which the IP was reported as'
+    required: ['listed', 'category']
+
+  ErrorMsg:
+    type: 'object'
+    properties:
+      msg:
+        type: 'string'
+        description: 'Error Message'
+
+responses:
+  200:
+    description: 'Risk-Database DNS-BL status of the IP'
+    schema:
+      $ref: '#/definitions/IPStatus'
+  400:
+    description: 'Invalid IP provided'
+    schema:
+      $ref: '#/definitions/ErrorMsg'

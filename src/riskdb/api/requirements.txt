@@ -3,3 +3,4 @@ waitress
 maxminddb
 oxl-utils
 flasgger
+dnsbl-check
