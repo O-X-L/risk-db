@@ -7,3 +7,10 @@ src/riskdb/builder/build/*.mmdb
 src/riskdb/dnsbl/*.txt
 src/riskdb/dnsbl/*.json
 src/riskdb/dnsbl/*.zip
+
+# exclude downloaded test assets used by /example/ip.mmdb.py
+testdata/risk_ip4_med.mmdb.zip
+testdata/risk_ip4_med.json.zip
+testdata/risk_ip4_med.mmdb
+testdata/risk_ip4_med.json
+testdata/LICENSE.txt
