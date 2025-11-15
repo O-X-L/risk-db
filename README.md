@@ -1,5 +1,13 @@
 # Open IP, Network & ASN Risk-Databases
 
+<p align="center">
+    <a title="Support this Project (Donate, Support-Licenses)" href="https://shop.oxl.app/collections/open-source">
+        <img src="https://files.oxl.at/img/badge-oss-support.svg" alt="Support Badge (Donate, Support-Licenses)"/>
+    </a>
+</p>
+
+----
+
 [![Lint](https://github.com/O-X-L/risk-db/actions/workflows/lint.yml/badge.svg)](https://github.com/O-X-L/risk-db/actions/workflows/lint.yml)
 [![Test](https://github.com/O-X-L/risk-db/actions/workflows/test.yml/badge.svg)](https://github.com/O-X-L/risk-db/actions/workflows/test.yml)
 
