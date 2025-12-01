@@ -40,6 +40,11 @@ You can find simple IP-/Network-/ASN-Lists here: [O-X-L/risk-db-lists](https://g
 
 If the raw report-data could be useful for a project of yours - please contact us at: [risk-db@oxl.at](mailto:risk-db@oxl.at)
 
+### Categorizing Bot-Traffic
+
+You can find information about how to categorize bot-traffic here: [O-X-L/open-bot-list](https://github.com/O-X-L/open-bot-list)
+
+
 ----
 
 ## Contribute
