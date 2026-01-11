@@ -88,10 +88,16 @@ function analyze_log_line() {
   fi
 
   json="{$(echo "$l" | cut -d '{' -f2-)"
-  ip="$(echo "$json" | jq -r ".${FIELD_IP}")"
-  status="$(echo "$json" | jq -r ".${FIELD_STATUS}")"
+  ip="$(echo "$json" | jq -r ".${FIELD_IP}" 2>/dev/null || true)"
+  status="$(echo "$json" | jq -r ".${FIELD_STATUS}" 2>/dev/null || true)"
 
-  if [[ "$ip" == 'null' ]] || [[ "$status" == 'null' ]]
+  if [[ "$ip" == '' ]] || [[ "$ip" == 'null' ]] || [[ "$status" == '' ]] || [[ "$status" == 'null' ]]
+  then
+    return
+  fi
+
+  # excludes by status
+  if echo "$status" | grep -Eq '20|30'
   then
     return
   fi
@@ -119,7 +125,7 @@ function analyze_log_line() {
   # FIELD_CAPTURE_UA=1  # user-agent = first capture
   # FIELD_CAPTURE_FP=2  # client fingerprint = second capture
   #
-  # capture="$(echo "$json" | jq -r ".${FIELD_CAPTURE}")"
+  # capture="$(echo "$json" | jq -r ".${FIELD_CAPTURE}" 2>/dev/null || true)"
   # ua="$(echo "$capture" | cut -d '|' -f "$FIELD_CAPTURE_UA")"
   # ja4="$(echo "$capture" | cut -d '|' -f "$FIELD_CAPTURE_FP")"
   # if [[ "$ua" == 'null' ]]

@@ -81,6 +81,12 @@ function analyze_log_line() {
     ip="${BASH_REMATCH[1]}"
     status="${BASH_REMATCH[2]}"
 
+    # excludes by status
+    if echo "$status" | grep -Eq '20|30'
+    then
+      return
+    fi
+
     # excludes by IP
     if echo "$ip" | grep -E -q "$EXCLUDE_IP_REGEX"
     then
