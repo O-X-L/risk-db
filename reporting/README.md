@@ -137,6 +137,19 @@ $AddUnixListenSocket /var/lib/haproxy/dev/log
   /var/log/haproxy.log
   stop
 }
+
+# or for JSON-format from systemd-journal
+template(name="haproxy_json" type="list") {
+    property(name="msg" position.from="2")
+    constant(value="\n")
+}
+
+if $programname == "haproxy" then {
+    if ($msg startswith " {") then {
+        action(type="omfile" file="/var/log/haproxy.log" template="haproxy_json")
+        stop
+    }
+}
 ```
 
 #### Logrotate
