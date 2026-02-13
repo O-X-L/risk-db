@@ -61,7 +61,7 @@ Databases:
           "items": {
             "enum": [
               "hosting", "vpn", "scanner", "crawler", "isp", "education",
-              "dynamic",
+              "dynamic"
             ],
             "type": "string"
           }

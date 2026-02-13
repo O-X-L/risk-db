@@ -1,0 +1,8 @@
+# Root requirements for risk-db
+# Core project dependencies
+-r src/riskdb/api/requirements.txt
+-r src/riskdb/builder/requirements.txt
+-r example/requirements.txt
+
+# Dev / lint tools
+-r requirements_lint.txt
